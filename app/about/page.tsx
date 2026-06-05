@@ -60,6 +60,10 @@ export default function AboutPage() {
       />
 
       <Hero
+        image={{
+          src: "/hero-about.jpg",
+          alt: "Senior pharmaceutical quality and compliance consultant in a modern office",
+        }}
         breadcrumb={[
           { name: "Home", href: "/" },
           { name: "About" },

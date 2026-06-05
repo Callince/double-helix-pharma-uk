@@ -35,6 +35,10 @@ export default function ContactPage() {
       />
 
       <Hero
+        image={{
+          src: "/hero-contact.jpg",
+          alt: "Welcoming modern pharmaceutical consultancy office",
+        }}
         breadcrumb={[{ name: "Home", href: "/" }, { name: "Contact" }]}
         eyebrow="Contact"
         title={

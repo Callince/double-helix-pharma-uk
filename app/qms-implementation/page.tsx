@@ -53,6 +53,10 @@ export default function QmsImplementationPage() {
       />
 
       <Hero
+        image={{
+          src: "/hero-qms.jpg",
+          alt: "Pharmaceutical quality management system documentation and process",
+        }}
         breadcrumb={[
           { name: "Home", href: "/" },
           { name: "Services", href: "/#services" },

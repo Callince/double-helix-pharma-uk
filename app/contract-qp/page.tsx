@@ -66,6 +66,10 @@ export default function ContractQpPage() {
       />
 
       <Hero
+        image={{
+          src: "/hero-contract-qp.jpg",
+          alt: "Qualified Person reviewing pharmaceutical batches for certification and release",
+        }}
         breadcrumb={[
           { name: "Home", href: "/" },
           { name: "Services", href: "/#services" },
