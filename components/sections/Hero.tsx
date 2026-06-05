@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { HelixMotif } from "@/components/ui/HelixMotif";
 import { HeroVisual } from "@/components/three/HeroVisual";
 
 type Cta = { label: string; href: string };
@@ -48,20 +49,28 @@ export function Hero({
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute right-[-10%] top-[-22%] h-[36rem] w-[36rem] rounded-full bg-teal/10 blur-[120px]" />
         <div className="absolute inset-0 opacity-[0.05]" style={dotPattern} />
+        {/* Sub-page heroes: a subtle helix line-art accent instead of the full 3D */}
+        {!panel && (
+          <HelixMotif className="absolute -right-8 top-0 hidden h-full w-56 text-teal/20 lg:block" />
+        )}
       </div>
 
-      {/* Full-bleed 3D DNA model + legibility scrims (every hero) */}
-      <div className="absolute inset-0 z-0">
-        <HeroVisual />
-      </div>
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-[1] lg:hidden" style={scrimMobile} />
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-[1] hidden lg:block" style={scrimDesktop} />
+      {/* Full-bleed 3D DNA model + legibility scrims — landing page only */}
+      {panel && (
+        <>
+          <div className="absolute inset-0 z-0">
+            <HeroVisual />
+          </div>
+          <div aria-hidden className="pointer-events-none absolute inset-0 z-[1] lg:hidden" style={scrimMobile} />
+          <div aria-hidden className="pointer-events-none absolute inset-0 z-[1] hidden lg:block" style={scrimDesktop} />
+        </>
+      )}
 
       <div
         className={`relative z-10 mx-auto flex w-full max-w-[120rem] items-center px-6 sm:px-10 lg:px-16 ${
           panel
             ? "min-h-[calc(100svh-4.5rem)] py-20 lg:py-0"
-            : "min-h-[calc(100svh-4.5rem)] py-16 lg:py-0"
+            : "min-h-[42vh] py-16 lg:min-h-[46vh] lg:py-20"
         }`}
       >
         <div className="max-w-xl lg:max-w-2xl">
