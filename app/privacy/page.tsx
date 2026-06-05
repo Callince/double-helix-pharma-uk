@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { LegalShell } from "@/components/sections/LegalShell";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Privacy Policy",
   description:
     "How Double Helix Pharma UK Ltd collects, uses and protects your personal data under UK GDPR and the Data Protection Act 2018.",
-  alternates: { canonical: "/privacy" },
-};
+  path: "/privacy",
+});
 
 const UPDATED = "5 June 2026";
 

@@ -91,7 +91,7 @@ export const services: Service[] = [
     hasPage: true,
     metaTitle: "GMP & GDP Audit Consulting",
     metaDescription:
-      "Independent GMP & GDP audit consulting — supplier audits, mock inspections, gap assessments and inspection readiness against EU GMP, 21 CFR 210/211 and ICH.",
+      "Independent GMP & GDP audits — supplier audits, mock inspections, gap assessments and inspection readiness to EU GMP, 21 CFR 210/211 and ICH.",
   },
   {
     slug: "contract-qp",
@@ -101,9 +101,9 @@ export const services: Service[] = [
       "Qualified Person batch certification plus Responsible Person (WDA) and Responsible Person for import (RPi) cover.",
     icon: "badge-check",
     hasPage: true,
-    metaTitle: "Contract QP, RP & RPi Services",
+    metaTitle: "Contract QP, RP & RPi Cover",
     metaDescription:
-      "Contract Qualified Person (QP) batch certification and release, plus Responsible Person (RP) and RPi import services for UK and EU pharmaceutical operations.",
+      "Contract Qualified Person (QP) batch certification and release, plus Responsible Person (RP) and RPi import cover for UK and EU pharmaceutical operations.",
   },
   {
     slug: "qms-implementation",
@@ -125,9 +125,9 @@ export const services: Service[] = [
       "Prepare sites, dossiers and teams for MIA/WDA licensing, regulatory inspection and operational go-live.",
     icon: "building",
     hasPage: true,
-    metaTitle: "Site Readiness for MIA & WDA Licensing",
+    metaTitle: "MIA & WDA Site Readiness",
     metaDescription:
-      "MIA/WDA site readiness — licence-application support, facility and quality-system gap assessment, mock pre-licensing inspection and operational go-live for UK pharmaceutical sites.",
+      "MIA/WDA site readiness — licence-application support, facility and QMS gap assessment, mock pre-licensing inspection and operational go-live for UK pharma.",
   },
   {
     slug: "supplier-management",
@@ -137,9 +137,9 @@ export const services: Service[] = [
       "GxP supplier qualification, technical/quality agreements (QTA) and ongoing performance oversight.",
     icon: "link",
     hasPage: true,
-    metaTitle: "Supplier & Vendor Quality Management",
+    metaTitle: "Supplier & Vendor Management",
     metaDescription:
-      "GxP supplier and vendor management — risk-based qualification, technical/quality agreements (QTA), audit programmes and ongoing performance oversight for pharmaceutical supply chains.",
+      "GxP supplier and vendor management — risk-based qualification, technical/quality agreements (QTA), audit programmes and ongoing oversight of your supply chain.",
   },
   {
     slug: "gdp-supply-chain",
@@ -149,9 +149,9 @@ export const services: Service[] = [
       "Transport validation, cold-chain assurance and distribution compliance across the GDP supply chain.",
     icon: "truck",
     hasPage: true,
-    metaTitle: "GDP Transport & Supply Chain Compliance",
+    metaTitle: "GDP Transport & Supply Chain",
     metaDescription:
-      "GDP transport and supply-chain compliance — transport validation, cold-chain and temperature mapping, distribution gap assessments and WDA/RP support to EU GDP standards.",
+      "GDP transport and distribution compliance — transport validation, cold-chain and temperature mapping, gap assessments and WDA/RP support to EU GDP standards.",
   },
 ];
 

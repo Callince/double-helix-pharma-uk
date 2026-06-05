@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { Hero } from "@/components/sections/Hero";
 import { ServiceGrid } from "@/components/sections/ServiceGrid";
 import { Container } from "@/components/ui/Container";
@@ -12,18 +13,12 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { site, services, faqsHome, ctaHref, ctaLabel } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Services — GMP/GDP Audits, Contract QP/RP/RPi & QMS",
+export const metadata: Metadata = pageMeta({
+  title: "GMP Audits, QP & QMS Services",
   description:
-    "Pharmaceutical quality & compliance services: independent GMP/GDP audits, contract QP/RP/RPi cover, QMS/PQS implementation, site readiness, supplier management and GDP supply-chain compliance.",
-  alternates: { canonical: "/services" },
-  openGraph: {
-    title: "Services | Double Helix Pharma UK",
-    description:
-      "Independent GMP/GDP audits, contract QP/RP/RPi cover and inspection-ready quality systems — delivered by one senior Qualified Person.",
-    url: "/services",
-  },
-};
+    "Pharmaceutical quality & compliance services — GMP/GDP audits, contract QP/RP/RPi cover, QMS implementation, site readiness, supplier and GDP compliance.",
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (

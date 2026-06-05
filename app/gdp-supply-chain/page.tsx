@@ -10,20 +10,16 @@ import { RelatedServices } from "@/components/sections/RelatedServices";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/schema";
+import { pageMeta } from "@/lib/seo";
 import { faqsGdp, getService } from "@/lib/site";
 
 const service = getService("gdp-supply-chain")!;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: service.metaTitle,
   description: service.metaDescription,
-  alternates: { canonical: service.href },
-  openGraph: {
-    title: `${service.metaTitle} | Double Helix Pharma UK`,
-    description: service.metaDescription,
-    url: service.href,
-  },
-};
+  path: service.href,
+});
 
 const scope = [
   { title: "Transport validation", body: "Qualify routes, lanes, packaging and vehicles so products stay within their required conditions." },

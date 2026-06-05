@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { Hero } from "@/components/sections/Hero";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
@@ -7,12 +8,12 @@ import { breadcrumbSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
 import { ContactForm } from "./ContactForm";
 
-export const metadata: Metadata = {
-  title: "Contact",
+export const metadata: Metadata = pageMeta({
+  title: "Contact Us",
   description:
-    "Get in touch with Double Helix Pharma UK to discuss GMP/GDP audits, contract QP/RP/RPi cover or quality-system support. We aim to respond within one business day.",
-  alternates: { canonical: "/contact" },
-};
+    "Get in touch with Double Helix Pharma UK to discuss GMP/GDP audits, contract QP/RP/RPi cover or quality-system support. We respond within one business day.",
+  path: "/contact",
+});
 
 const methods = [
   { icon: "mail" as const, label: "Email", value: site.contact.email, href: `mailto:${site.contact.email}` },

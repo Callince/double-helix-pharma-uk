@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { LegalShell } from "@/components/sections/LegalShell";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Website Terms",
+export const metadata: Metadata = pageMeta({
+  title: "Website Terms of Use",
   description:
     "The terms of use governing the Double Helix Pharma UK website, including intellectual property, disclaimers and governing law.",
-  alternates: { canonical: "/terms" },
-};
+  path: "/terms",
+});
 
 const UPDATED = "5 June 2026";
 

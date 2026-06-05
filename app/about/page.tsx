@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import { Hero } from "@/components/sections/Hero";
 import { DosageForms } from "@/components/sections/DosageForms";
@@ -11,12 +12,12 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { personSchema, breadcrumbSchema } from "@/lib/schema";
 import { site, credentials } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata: Metadata = pageMeta({
+  title: "About — Our Qualified Person",
   description:
-    "Double Helix Pharma UK Ltd is led by a Qualified Person (QP), Responsible Person (RP/RPi) and GMP/GDP Lead Auditor with 20+ years in pharmaceutical quality across UK, EU, US and MENA.",
-  alternates: { canonical: "/about" },
-};
+    "Double Helix Pharma UK is led by a Qualified Person (QP), Responsible Person (RP/RPi) and GMP/GDP Lead Auditor with 20+ years in pharmaceutical quality.",
+  path: "/about",
+});
 
 const functional = [
   "GMP/GDP compliance audits",

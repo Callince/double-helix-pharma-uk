@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { Hero } from "@/components/sections/Hero";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { StandardsTicker } from "@/components/sections/StandardsTicker";
@@ -14,12 +15,13 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { faqSchema } from "@/lib/schema";
 import { faqsHome, ctaHref, ctaLabel } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: { absolute: "Double Helix Pharma UK | GMP/GDP Audits & Contract QP Services" },
+export const metadata: Metadata = pageMeta({
+  absoluteTitle: true,
+  title: "GMP/GDP Audits & Contract QP | Double Helix Pharma UK",
   description:
-    "UK pharmaceutical quality & compliance consultancy: independent GMP/GDP audits, contract QP/RP/RPi services and inspection-ready quality systems. 20+ years across UK, EU, US & MENA.",
-  alternates: { canonical: "/" },
-};
+    "Independent GMP/GDP audits, contract QP/RP/RPi cover and inspection-ready quality systems from a UK Qualified Person with 20+ years across regulated markets.",
+  path: "/",
+});
 
 export default function HomePage() {
   return (

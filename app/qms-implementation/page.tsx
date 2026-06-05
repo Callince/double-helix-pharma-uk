@@ -10,20 +10,16 @@ import { RelatedServices } from "@/components/sections/RelatedServices";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/schema";
+import { pageMeta } from "@/lib/seo";
 import { faqsQms, getService } from "@/lib/site";
 
 const service = getService("qms-implementation")!;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: service.metaTitle,
   description: service.metaDescription,
-  alternates: { canonical: service.href },
-  openGraph: {
-    title: `${service.metaTitle} | Double Helix Pharma UK`,
-    description: service.metaDescription,
-    url: service.href,
-  },
-};
+  path: service.href,
+});
 
 const buildItems = [
   { title: "Pharmaceutical Quality System (ICH Q10)", body: "Design and implement a right-sized PQS that satisfies EU GMP and ICH Q10." },

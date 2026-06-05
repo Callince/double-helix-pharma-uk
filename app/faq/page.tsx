@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { Hero } from "@/components/sections/Hero";
 import { Container } from "@/components/ui/Container";
 import { Disclosure } from "@/components/ui/Disclosure";
@@ -15,18 +16,12 @@ import {
   faqsGdp,
 } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Frequently Asked Questions",
   description:
-    "Answers to common questions about GMP/GDP audits, contract QP/RP/RPi cover, QMS & PQS implementation, site readiness, supplier management and GDP distribution compliance.",
-  alternates: { canonical: "/faq" },
-  openGraph: {
-    title: "FAQ | Double Helix Pharma UK",
-    description:
-      "Straight answers on pharmaceutical audits, Qualified Person cover, quality systems and distribution compliance.",
-    url: "/faq",
-  },
-};
+    "Answers on GMP/GDP audits, contract QP/RP/RPi cover, QMS implementation, site readiness, supplier management and GDP distribution compliance.",
+  path: "/faq",
+});
 
 const groups = [
   { id: "general", title: "General", faqs: faqsHome },
