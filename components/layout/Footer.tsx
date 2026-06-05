@@ -31,7 +31,11 @@ export function Footer() {
           </div>
 
           <nav aria-label="Services">
-            <h2 className="label-mono text-white/45">Services</h2>
+            <h2 className="label-mono text-white/45">
+              <Link href="/services" className="transition-colors hover:text-cyan">
+                Services
+              </Link>
+            </h2>
             <ul className="mt-5 space-y-3 text-sm">
               {services.map((s) => (
                 <li key={s.slug}>

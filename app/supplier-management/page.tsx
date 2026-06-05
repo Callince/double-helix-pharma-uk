@@ -57,7 +57,7 @@ export default function SupplierManagementPage() {
         }}
         breadcrumb={[
           { name: "Home", href: "/" },
-          { name: "Services", href: "/#services" },
+          { name: "Services", href: "/services" },
           { name: "Supplier & Vendor Management" },
         ]}
         eyebrow="Supplier & Vendor Management"
@@ -69,7 +69,7 @@ export default function SupplierManagementPage() {
         }
         subtitle="Risk-based GxP supplier qualification, technical/quality agreements and ongoing oversight — so every link in your supply chain stays compliant and audit-ready."
         primary={{ label: "Strengthen your supply chain", href: "/contact" }}
-        secondary={{ label: "All services", href: "/#services" }}
+        secondary={{ label: "All services", href: "/services" }}
         chips={["Risk-based qualification", "QTAs (GMP Ch. 7)", "Audit programmes"]}
       />
 

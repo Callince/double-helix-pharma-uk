@@ -57,7 +57,7 @@ export default function GdpSupplyChainPage() {
         }}
         breadcrumb={[
           { name: "Home", href: "/" },
-          { name: "Services", href: "/#services" },
+          { name: "Services", href: "/services" },
           { name: "GDP Transport & Supply Chain" },
         ]}
         eyebrow="GDP Transport & Supply Chain"
@@ -69,7 +69,7 @@ export default function GdpSupplyChainPage() {
         }
         subtitle="Transport validation, cold-chain assurance and distribution compliance to EU GDP — so your products reach patients within specification, every time."
         primary={{ label: "Secure your distribution", href: "/contact" }}
-        secondary={{ label: "All services", href: "/#services" }}
+        secondary={{ label: "All services", href: "/services" }}
         chips={["Transport validation", "Cold-chain mapping", "EU GDP 2013/C 343/01"]}
       />
 

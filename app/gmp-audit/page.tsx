@@ -77,7 +77,7 @@ export default function GmpAuditPage() {
         }}
         breadcrumb={[
           { name: "Home", href: "/" },
-          { name: "Services", href: "/#services" },
+          { name: "Services", href: "/services" },
           { name: "GMP & GDP Audits" },
         ]}
         eyebrow="GMP & GDP Audit Consulting"
@@ -89,7 +89,7 @@ export default function GmpAuditPage() {
         }
         subtitle="Supplier, internal and mock-regulatory audits delivered by an experienced GMP/GDP Lead Auditor — with clear, graded, regulation-mapped reports your team can act on immediately."
         primary={{ label: "Speak to a GMP expert", href: "/contact" }}
-        secondary={{ label: "All services", href: "/#services" }}
+        secondary={{ label: "All services", href: "/services" }}
         chips={["Supplier & for-cause audits", "Remote, on-site or hybrid", "Graded, actionable reports"]}
       />
 

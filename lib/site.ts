@@ -50,7 +50,7 @@ export const site = {
 export type NavLink = { label: string; href: string };
 
 export const primaryNav: NavLink[] = [
-  { label: "Services", href: "/#services" },
+  { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

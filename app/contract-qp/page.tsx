@@ -72,7 +72,7 @@ export default function ContractQpPage() {
         }}
         breadcrumb={[
           { name: "Home", href: "/" },
-          { name: "Services", href: "/#services" },
+          { name: "Services", href: "/services" },
           { name: "Contract QP, RP & RPi" },
         ]}
         eyebrow="Contract QP, RP & RPi"
@@ -84,7 +84,7 @@ export default function ContractQpPage() {
         }
         subtitle="Named QP, RP and RPi support for UK and EU operations — from interim cover to an ongoing arrangement, backed by 20+ years of batch release and inspection experience."
         primary={{ label: "Discuss your requirements", href: "/contact" }}
-        secondary={{ label: "All services", href: "/#services" }}
+        secondary={{ label: "All services", href: "/services" }}
         chips={["Batch certification & release", "WDA & import (RPi)", "Interim or ongoing"]}
       />
 

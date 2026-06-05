@@ -59,7 +59,7 @@ export default function QmsImplementationPage() {
         }}
         breadcrumb={[
           { name: "Home", href: "/" },
-          { name: "Services", href: "/#services" },
+          { name: "Services", href: "/services" },
           { name: "QMS & PQS Implementation" },
         ]}
         eyebrow="QMS & PQS Implementation"
@@ -71,7 +71,7 @@ export default function QmsImplementationPage() {
         }
         subtitle="From a first MIA/WDA to post-inspection remediation — practical Pharmaceutical Quality Systems aligned to ICH Q10, built to be lived by your team, not just filed."
         primary={{ label: "Plan your QMS", href: "/contact" }}
-        secondary={{ label: "All services", href: "/#services" }}
+        secondary={{ label: "All services", href: "/services" }}
         chips={["ICH Q10 aligned", "Inspection remediation", "SOPs to qualification"]}
       />
 

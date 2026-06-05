@@ -112,6 +112,13 @@ export function Header() {
                     </span>
                   </Link>
                 ))}
+                <Link
+                  href="/services"
+                  className="mt-1 flex items-center justify-between gap-2 rounded-lg bg-surface px-3 py-3 text-sm font-semibold text-navy transition-colors hover:bg-line/60"
+                >
+                  View all services
+                  <Icon name="arrow-right" className="size-4 text-teal-ink" />
+                </Link>
               </div>
             )}
           </div>
@@ -141,7 +148,13 @@ export function Header() {
       {mobileOpen && (
         <div className="border-t border-line bg-white lg:hidden">
           <div className="space-y-1 px-5 py-5 sm:px-6">
-            <p className="label-mono px-2 pb-2 text-muted">Services</p>
+            <Link
+              href="/services"
+              className="label-mono flex items-center gap-2 px-2 pb-2 text-muted transition-colors hover:text-teal-ink"
+            >
+              Services
+              <Icon name="arrow-right" className="size-3.5" />
+            </Link>
             {services.map((s) => (
               <Link
                 key={s.slug}

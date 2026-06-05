@@ -16,7 +16,7 @@ export default function NotFound() {
         <Button href="/" variant="gradient" withArrow>
           Back to home
         </Button>
-        <Button href="/#services" variant="outline">
+        <Button href="/services" variant="outline">
           View services
         </Button>
       </div>

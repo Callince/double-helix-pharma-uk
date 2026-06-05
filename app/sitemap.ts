@@ -3,7 +3,7 @@ import { site, servicePages } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticRoutes = ["/", "/about", "/contact"];
+  const staticRoutes = ["/", "/services", "/about", "/contact"];
   const serviceRoutes = servicePages.map((s) => s.href);
 
   return [...staticRoutes, ...serviceRoutes].map((route) => ({

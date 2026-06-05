@@ -57,7 +57,7 @@ export default function SiteReadinessPage() {
         }}
         breadcrumb={[
           { name: "Home", href: "/" },
-          { name: "Services", href: "/#services" },
+          { name: "Services", href: "/services" },
           { name: "Site Readiness" },
         ]}
         eyebrow="Site Readiness (MIA / WDA)"
@@ -69,7 +69,7 @@ export default function SiteReadinessPage() {
         }
         subtitle="From a first MIA/WDA application to operational go-live — gap assessment, remediation, mock inspection and team preparation so you pass and start licensed operations on time."
         primary={{ label: "Plan your licensing", href: "/contact" }}
-        secondary={{ label: "All services", href: "/#services" }}
+        secondary={{ label: "All services", href: "/services" }}
         chips={["MIA · MIA(IMP) · WDA(H)", "Mock pre-licensing inspection", "QP / RP / RPi support"]}
       />
 
