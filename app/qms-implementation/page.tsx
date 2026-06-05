@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { FeatureGrid } from "@/components/sections/FeatureGrid";
+import { Pillars } from "@/components/sections/Pillars";
+import { ComplianceTable } from "@/components/sections/ComplianceTable";
 import { Methodology } from "@/components/sections/Methodology";
 import { Benefits } from "@/components/sections/Benefits";
 import { FAQ } from "@/components/sections/FAQ";
@@ -75,6 +77,8 @@ export default function QmsImplementationPage() {
         chips={["ICH Q10 aligned", "Inspection remediation", "SOPs to qualification"]}
       />
 
+      <Pillars />
+
       <FeatureGrid
         eyebrow="What we build"
         title="A complete, inspection-ready quality system"
@@ -82,6 +86,8 @@ export default function QmsImplementationPage() {
         items={buildItems}
         bg="surface"
       />
+
+      <ComplianceTable />
 
       <Methodology tone="dark" />
       <Benefits eyebrow="Why it works" title="Systems that survive contact with the real world" />

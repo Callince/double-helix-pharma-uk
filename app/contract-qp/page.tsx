@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { FeatureGrid } from "@/components/sections/FeatureGrid";
+import { Pillars } from "@/components/sections/Pillars";
+import { ComplianceTable } from "@/components/sections/ComplianceTable";
 import { Methodology } from "@/components/sections/Methodology";
 import { Benefits } from "@/components/sections/Benefits";
 import { FAQ } from "@/components/sections/FAQ";
@@ -88,6 +90,8 @@ export default function ContractQpPage() {
         chips={["Batch certification & release", "WDA & import (RPi)", "Interim or ongoing"]}
       />
 
+      <Pillars />
+
       <FeatureGrid
         eyebrow="The roles explained"
         title="QP, RP and RPi — what's the difference?"
@@ -102,7 +106,9 @@ export default function ContractQpPage() {
         items={coverage}
       />
 
-      <Methodology />
+      <ComplianceTable />
+
+      <Methodology tone="dark" />
       <Benefits
         eyebrow="Why work with us"
         title="Senior cover you can rely on"

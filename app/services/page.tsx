@@ -83,7 +83,7 @@ export default function ServicesPage() {
       </section>
 
       <Pillars />
-      <Methodology />
+      <Methodology tone="dark" />
       <Benefits />
       <FAQ faqs={faqsHome} bg="surface" />
       <CTABand />

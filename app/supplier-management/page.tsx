@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { FeatureGrid } from "@/components/sections/FeatureGrid";
+import { Pillars } from "@/components/sections/Pillars";
+import { ComplianceTable } from "@/components/sections/ComplianceTable";
 import { Methodology } from "@/components/sections/Methodology";
 import { Benefits } from "@/components/sections/Benefits";
 import { FAQ } from "@/components/sections/FAQ";
@@ -73,6 +75,8 @@ export default function SupplierManagementPage() {
         chips={["Risk-based qualification", "QTAs (GMP Ch. 7)", "Audit programmes"]}
       />
 
+      <Pillars />
+
       <FeatureGrid
         eyebrow="What we cover"
         title="A complete supplier-management programme"
@@ -81,7 +85,9 @@ export default function SupplierManagementPage() {
         bg="surface"
       />
 
-      <Methodology />
+      <ComplianceTable />
+
+      <Methodology tone="dark" />
       <Benefits eyebrow="Why partner with us" title="Supply-chain assurance, end to end" />
       <FAQ faqs={faqsSupplier} bg="surface" />
       <RelatedServices currentSlug="supplier-management" />

@@ -18,8 +18,10 @@ export function Benefits({
         <SectionHeading split eyebrow={eyebrow} title={title} intro={intro} />
         <div data-reveal-group className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((b) => (
-            <div key={b.title} className="border-t border-line pt-6">
-              <Icon name={b.icon as IconName} className="size-6 text-green" />
+            <div key={b.title} className="group flex flex-col">
+              <span className="grid size-12 place-items-center rounded-2xl bg-brand-gradient text-white shadow-[0_14px_28px_-14px_rgba(43,154,205,0.75)] transition-transform duration-300 group-hover:-translate-y-1">
+                <Icon name={b.icon as IconName} className="size-5" />
+              </span>
               <h3 className="mt-5 font-display text-lg font-medium text-navy">{b.title}</h3>
               <p className="mt-2.5 text-sm leading-relaxed text-muted">{b.body}</p>
             </div>

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { FeatureGrid } from "@/components/sections/FeatureGrid";
+import { Pillars } from "@/components/sections/Pillars";
+import { ComplianceTable } from "@/components/sections/ComplianceTable";
 import { Methodology } from "@/components/sections/Methodology";
 import { Benefits } from "@/components/sections/Benefits";
 import { FAQ } from "@/components/sections/FAQ";
@@ -73,6 +75,8 @@ export default function SiteReadinessPage() {
         chips={["MIA · MIA(IMP) · WDA(H)", "Mock pre-licensing inspection", "QP / RP / RPi support"]}
       />
 
+      <Pillars />
+
       <FeatureGrid
         eyebrow="What we cover"
         title="Everything between application and go-live"
@@ -81,7 +85,9 @@ export default function SiteReadinessPage() {
         bg="surface"
       />
 
-      <Methodology />
+      <ComplianceTable />
+
+      <Methodology tone="dark" />
       <Benefits eyebrow="Why partner with us" title="An inspector's eye on your readiness" />
       <FAQ faqs={faqsSiteReadiness} bg="surface" />
       <RelatedServices currentSlug="site-readiness" />

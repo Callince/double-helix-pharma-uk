@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { FeatureGrid } from "@/components/sections/FeatureGrid";
+import { Pillars } from "@/components/sections/Pillars";
+import { ComplianceTable } from "@/components/sections/ComplianceTable";
 import { Methodology } from "@/components/sections/Methodology";
 import { Benefits } from "@/components/sections/Benefits";
 import { FAQ } from "@/components/sections/FAQ";
@@ -73,6 +75,8 @@ export default function GdpSupplyChainPage() {
         chips={["Transport validation", "Cold-chain mapping", "EU GDP 2013/C 343/01"]}
       />
 
+      <Pillars />
+
       <FeatureGrid
         eyebrow="What we cover"
         title="End-to-end distribution compliance"
@@ -81,7 +85,9 @@ export default function GdpSupplyChainPage() {
         bg="surface"
       />
 
-      <Methodology />
+      <ComplianceTable />
+
+      <Methodology tone="dark" />
       <Benefits eyebrow="Why partner with us" title="Distribution you can defend in an inspection" />
       <FAQ faqs={faqsGdp} bg="surface" />
       <RelatedServices currentSlug="gdp-supply-chain" />
