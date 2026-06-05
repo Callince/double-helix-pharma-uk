@@ -3,13 +3,19 @@ import { site, servicePages } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticRoutes = ["/", "/services", "/about", "/contact"];
-  const serviceRoutes = servicePages.map((s) => s.href);
+  const entry = (
+    route: string,
+    priority: number,
+    changeFrequency: "monthly" | "yearly" = "monthly",
+  ) => ({ url: `${site.url}${route}`, lastModified: now, changeFrequency, priority });
 
-  return [...staticRoutes, ...serviceRoutes].map((route) => ({
-    url: `${site.url}${route}`,
-    lastModified: now,
-    changeFrequency: "monthly",
-    priority: route === "/" ? 1 : 0.8,
-  }));
+  return [
+    entry("/", 1),
+    entry("/services", 0.9),
+    ...servicePages.map((s) => entry(s.href, 0.8)),
+    entry("/about", 0.7),
+    entry("/contact", 0.7),
+    entry("/privacy", 0.2, "yearly"),
+    entry("/terms", 0.2, "yearly"),
+  ];
 }

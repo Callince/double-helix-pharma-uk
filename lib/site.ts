@@ -13,8 +13,9 @@ export const site = {
   tagline: "Pharmaceutical Quality & Compliance Consultancy",
   description:
     "UK-based pharmaceutical quality & compliance consultancy delivering EU GMP/GDP audits, contract QP/RP/RPi services and inspection-ready quality systems for pharma, biotech and CMOs.",
-  // PLACEHOLDER domain — drives canonical URLs, sitemap and structured data.
-  url: "https://www.doublehelixpharma.co.uk",
+  // Canonical site origin — drives canonical URLs, sitemap, OG & structured data.
+  // Override per environment with NEXT_PUBLIC_SITE_URL (set the live domain on Vercel).
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://www.doublehelixpharma.co.uk").replace(/\/+$/, ""),
   locale: "en_GB",
 
   founder: {

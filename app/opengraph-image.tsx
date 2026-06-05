@@ -16,7 +16,7 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           background:
-            "linear-gradient(135deg, #16365b 0%, #0f2942 55%, #0b2138 100%)",
+            "linear-gradient(135deg, #0c3f7a 0%, #042a63 55%, #001a45 100%)",
           padding: "72px",
           color: "#ffffff",
           fontFamily: "sans-serif",
@@ -24,9 +24,9 @@ export default function OpengraphImage() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: "22px" }}>
           <svg width="60" height="72" viewBox="0 0 36 44" fill="none">
-            <g stroke="#45b5ce" strokeWidth="3" strokeLinecap="round">
-              <path d="M9 3c0 9 18 11 18 19S9 32 9 41" />
-              <path d="M27 3c0 9-18 11-18 19s18 11 18 19" />
+            <g strokeWidth="3" strokeLinecap="round">
+              <path d="M9 3c0 9 18 11 18 19S9 32 9 41" stroke="#0aa6e2" />
+              <path d="M27 3c0 9-18 11-18 19s18 11 18 19" stroke="#7cc63f" />
             </g>
           </svg>
           <div style={{ display: "flex", flexDirection: "column" }}>
@@ -47,7 +47,7 @@ export default function OpengraphImage() {
               borderRadius: 4,
               marginBottom: 26,
               display: "flex",
-              background: "linear-gradient(90deg,#45b5ce,#2f9fbe)",
+              background: "linear-gradient(90deg,#7cc63f,#0aa6e2)",
             }}
           />
           <span
