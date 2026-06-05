@@ -52,7 +52,7 @@ export default function GdpSupplyChainPage() {
 
       <Hero
         image={{
-          src: "/hero-gdp-supply-chain.jpg",
+          src: "/hero-gdp-supply-chain.webp",
           alt: "Temperature-controlled pharmaceutical distribution and cold-chain logistics",
         }}
         breadcrumb={[

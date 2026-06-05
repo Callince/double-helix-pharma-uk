@@ -52,7 +52,7 @@ export default function SupplierManagementPage() {
 
       <Hero
         image={{
-          src: "/hero-supplier-management.jpg",
+          src: "/hero-supplier-management.webp",
           alt: "Pharmaceutical supplier qualification and quality oversight",
         }}
         breadcrumb={[

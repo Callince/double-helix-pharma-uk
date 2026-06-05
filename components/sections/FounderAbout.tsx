@@ -13,7 +13,7 @@ export function FounderAbout() {
           <div className="mx-auto w-full max-w-sm">
             <div className="relative aspect-[4/5] overflow-hidden rounded-lg border border-navy/10 bg-surface">
               <Image
-                src="/founder-web.jpg"
+                src="/founder-web.webp"
                 alt={`${site.founder.name} — ${site.founder.role} at ${site.shortName}`}
                 fill
                 unoptimized

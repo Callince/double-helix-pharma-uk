@@ -48,7 +48,7 @@ export function HomeHero() {
         >
           <div className="relative aspect-[16/11] overflow-hidden rounded-[1.75rem] ring-1 ring-line shadow-[0_44px_90px_-34px_rgba(13,39,64,0.5)] sm:aspect-[16/8]">
             <Image
-              src="/hero-pharma.jpg"
+              src="/hero-pharma.webp"
               alt="Pharmaceutical quality professional reviewing compliance in a laboratory"
               fill
               priority

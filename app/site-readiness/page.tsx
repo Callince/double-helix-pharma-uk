@@ -52,7 +52,7 @@ export default function SiteReadinessPage() {
 
       <Hero
         image={{
-          src: "/hero-site-readiness.jpg",
+          src: "/hero-site-readiness.webp",
           alt: "Pharmaceutical site prepared for an MHRA MIA/WDA licensing inspection",
         }}
         breadcrumb={[

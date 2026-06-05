@@ -36,7 +36,7 @@ export default function ContactPage() {
 
       <Hero
         image={{
-          src: "/hero-contact.jpg",
+          src: "/hero-contact.webp",
           alt: "Welcoming modern pharmaceutical consultancy office",
         }}
         breadcrumb={[{ name: "Home", href: "/" }, { name: "Contact" }]}

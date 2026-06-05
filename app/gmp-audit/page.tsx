@@ -72,7 +72,7 @@ export default function GmpAuditPage() {
 
       <Hero
         image={{
-          src: "/hero-gmp-audit.jpg",
+          src: "/hero-gmp-audit.webp",
           alt: "Pharmaceutical quality auditor inspecting a GMP manufacturing site",
         }}
         breadcrumb={[

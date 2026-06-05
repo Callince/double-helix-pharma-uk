@@ -61,7 +61,7 @@ export default function AboutPage() {
 
       <Hero
         image={{
-          src: "/hero-about.jpg",
+          src: "/hero-about.webp",
           alt: "Senior pharmaceutical quality and compliance consultant in a modern office",
         }}
         breadcrumb={[
@@ -86,7 +86,7 @@ export default function AboutPage() {
             <div className="mx-auto w-full max-w-sm">
               <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-surface shadow-[0_30px_60px_-25px_rgba(22,54,91,0.5)]">
                 <Image
-                  src="/founder-web.jpg"
+                  src="/founder-web.webp"
                   alt={`${site.founder.name} — ${site.founder.role} at ${site.shortName}`}
                   fill
                   unoptimized
