@@ -18,7 +18,7 @@ export function FeatureGrid({
   intro?: string;
   items: Feature[];
   bg?: "white" | "surface";
-  cols?: 2 | 3;
+  cols?: 2 | 3 | 4;
   icon?: IconName;
 }) {
   return (
@@ -35,7 +35,9 @@ export function FeatureGrid({
         <SectionHeading split eyebrow={eyebrow} title={title} intro={intro} />
         <div
           data-reveal-group
-          className={`relative mt-14 grid gap-5 sm:grid-cols-2 ${cols === 3 ? "lg:grid-cols-3" : ""}`}
+          className={`relative mt-14 grid gap-5 sm:grid-cols-2 ${
+            cols === 4 ? "lg:grid-cols-4" : cols === 3 ? "lg:grid-cols-3" : ""
+          }`}
         >
           {items.map((item, i) => (
             <div

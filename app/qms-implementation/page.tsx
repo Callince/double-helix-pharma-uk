@@ -84,6 +84,7 @@ export default function QmsImplementationPage() {
         title="A complete, inspection-ready quality system"
         intro="Implemented from scratch or remediated where you already have gaps."
         items={buildItems}
+        cols={4}
         bg="surface"
       />
 
