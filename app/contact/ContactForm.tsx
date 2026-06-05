@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
 import { servicePages } from "@/lib/site";
 
-type Status = "idle" | "sending" | "sent" | "error";
+type Status = "idle" | "sending" | "error";
 
 const fieldCls =
   "w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-ink shadow-sm transition-colors placeholder:text-muted/70 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30";
 const labelCls = "mb-1.5 block text-sm font-medium text-navy";
 
 export function ContactForm() {
+  const router = useRouter();
   const [status, setStatus] = useState<Status>("idle");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -19,9 +20,9 @@ export function ContactForm() {
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
 
-    // Honeypot — bots fill hidden fields.
+    // Honeypot — bots fill hidden fields. Send them to the confirmation page silently.
     if (data.website) {
-      setStatus("sent");
+      router.push("/thank-you");
       return;
     }
 
@@ -34,31 +35,10 @@ export function ContactForm() {
       });
       if (!res.ok) throw new Error("Request failed");
       form.reset();
-      setStatus("sent");
+      router.push("/thank-you");
     } catch {
       setStatus("error");
     }
-  }
-
-  if (status === "sent") {
-    return (
-      <div className="rounded-2xl border border-line bg-white p-8 text-center shadow-sm">
-        <span className="mx-auto grid size-14 place-items-center rounded-full bg-teal/10 text-teal">
-          <Icon name="check" className="size-7" />
-        </span>
-        <h3 className="mt-4 font-display text-xl font-semibold text-navy">Thank you</h3>
-        <p className="mt-2 text-sm text-muted">
-          Your enquiry has been received. We aim to respond within one business day.
-        </p>
-        <button
-          type="button"
-          onClick={() => setStatus("idle")}
-          className="mt-5 text-sm font-semibold text-[#1d6d85] hover:underline"
-        >
-          Send another message
-        </button>
-      </div>
-    );
   }
 
   return (

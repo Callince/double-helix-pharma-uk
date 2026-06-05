@@ -84,6 +84,9 @@ export function Footer() {
             © {year} {site.legalName}. Company No. {site.companyNumber} · Registered in England &amp; Wales.
           </p>
           <div className="flex items-center gap-6">
+            <Link href="/faq" className="hover:text-white">
+              FAQ
+            </Link>
             <Link href="/privacy" className="hover:text-white">
               Privacy
             </Link>

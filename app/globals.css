@@ -131,6 +131,48 @@ html.gsap-ready [data-reveal-group] > * {
   mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
 }
 
+/* ---- Legal / long-form prose (privacy, terms) ---- */
+.legal-prose h2 {
+  font-family: var(--font-display);
+  color: var(--color-navy);
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-top: 2.5rem;
+  margin-bottom: 0.7rem;
+}
+.legal-prose h2:first-child {
+  margin-top: 0;
+}
+.legal-prose h3 {
+  font-family: var(--font-display);
+  color: var(--color-navy);
+  font-size: 1.075rem;
+  font-weight: 500;
+  margin-top: 1.6rem;
+  margin-bottom: 0.4rem;
+}
+.legal-prose p {
+  margin-bottom: 0.95rem;
+}
+.legal-prose ul {
+  list-style: disc;
+  padding-left: 1.3rem;
+  margin-bottom: 0.95rem;
+}
+.legal-prose li {
+  margin-bottom: 0.4rem;
+}
+.legal-prose a {
+  color: var(--color-teal-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.legal-prose strong {
+  color: var(--color-navy);
+  font-weight: 600;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

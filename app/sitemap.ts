@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...servicePages.map((s) => entry(s.href, 0.8)),
     entry("/about", 0.7),
     entry("/contact", 0.7),
+    entry("/faq", 0.6),
     entry("/privacy", 0.2, "yearly"),
     entry("/terms", 0.2, "yearly"),
   ];
