@@ -5,18 +5,19 @@
    Palette: teal -> navy (from logo). Type: Fraunces / Hanken / Plex Mono
    =================================================================== */
 @theme {
-  /* Dark blue — logo "Double" (#002964), softened a hair for large fields */
-  --color-navy: #06295c;
-  --color-navy-deep: #021c44;
-  --color-blue: #395e8f; /* logo mid blue */
-  /* Light blue — logo "Helix" / figure (#2b9acd) */
-  --color-teal: #2b9acd;
-  --color-teal-ink: #1b6e95; /* AA-contrast sky blue for text on white */
-  --color-cyan: #5fb6e0;
-  --color-azure: #395e8f;
-  /* Green — logo mark (#69af47), deepened for usable contrast */
-  --color-green: #4ca236;
-  --color-green-ink: #2c7a1a; /* AA-contrast green for text on white */
+  /* Dark blue — logo "Double" #002762 */
+  --color-navy: #042a63;
+  --color-navy-deep: #001a45;
+  --color-blue: #2f6fb0; /* logo mid blue #005497 */
+  /* Cyan — logo figure / "Helix" #00a5e1 (vivid, true to the mark) */
+  --color-teal: #0aa6e2;
+  --color-teal-ink: #136c9c; /* AA-contrast cyan-blue for text on white */
+  --color-cyan: #45c7f2; /* logo bright highlight #00caf5 */
+  --color-azure: #2f6fb0;
+  /* Green — logo mark / "PHARMA" #4eb248 + lime highlight #a1e04b */
+  --color-green: #47ae3a;
+  --color-green-ink: #237a1f; /* AA-contrast green for text on white */
+  --color-lime: #8ace3a; /* logo lime accent (gradient highlight) */
   /* Neutrals */
   --color-surface: #f3f7fa;
   --color-paper: #e9f1f6;
@@ -62,10 +63,10 @@
 
 /* ---- Brand fills ---- */
 @utility bg-brand-gradient {
-  background-image: linear-gradient(135deg, #5ab63c 0%, #2b9acd 55%, #06295c 100%);
+  background-image: linear-gradient(135deg, #7cc63f 0%, #0aa6e2 54%, #042a63 100%);
 }
 @utility bg-ink-gradient {
-  background-image: radial-gradient(120% 120% at 85% 0%, #0d3a72 0%, #06295c 38%, #021c44 100%);
+  background-image: radial-gradient(120% 120% at 85% 0%, #0c3f7a 0%, #042a63 40%, #001a45 100%);
 }
 @utility bg-hero-light {
   background-image: radial-gradient(125% 130% at 80% -10%, #e4eff8 0%, #eef5fa 40%, #ffffff 100%);
@@ -79,7 +80,7 @@ html.gsap-ready [data-reveal-group] > * {
   will-change: transform, opacity;
 }
 @utility text-gradient-brand {
-  background-image: linear-gradient(120deg, #2b9acd, #06295c 72%);
+  background-image: linear-gradient(120deg, #0aa6e2, #042a63 72%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
