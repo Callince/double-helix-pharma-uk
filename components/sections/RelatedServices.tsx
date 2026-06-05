@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/Icon";
 import { servicePages } from "@/lib/site";
 
 export function RelatedServices({ currentSlug }: { currentSlug: string }) {
-  const others = servicePages.filter((s) => s.slug !== currentSlug);
+  const others = servicePages.filter((s) => s.slug !== currentSlug).slice(0, 4);
   if (others.length === 0) return null;
 
   return (
