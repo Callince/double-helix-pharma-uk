@@ -118,36 +118,39 @@ export const services: Service[] = [
   },
   {
     slug: "site-readiness",
-    href: "/contact",
+    href: "/site-readiness",
     title: "Site Readiness (MIA / WDA)",
     short:
       "Prepare sites, dossiers and teams for MIA/WDA licensing, regulatory inspection and operational go-live.",
     icon: "building",
-    hasPage: false,
-    metaTitle: "Site Readiness",
-    metaDescription: "",
+    hasPage: true,
+    metaTitle: "Site Readiness for MIA & WDA Licensing",
+    metaDescription:
+      "MIA/WDA site readiness — licence-application support, facility and quality-system gap assessment, mock pre-licensing inspection and operational go-live for UK pharmaceutical sites.",
   },
   {
     slug: "supplier-management",
-    href: "/contact",
+    href: "/supplier-management",
     title: "Supplier & Vendor Management",
     short:
       "GxP supplier qualification, technical/quality agreements (QTA) and ongoing performance oversight.",
     icon: "link",
-    hasPage: false,
-    metaTitle: "Supplier & Vendor Management",
-    metaDescription: "",
+    hasPage: true,
+    metaTitle: "Supplier & Vendor Quality Management",
+    metaDescription:
+      "GxP supplier and vendor management — risk-based qualification, technical/quality agreements (QTA), audit programmes and ongoing performance oversight for pharmaceutical supply chains.",
   },
   {
     slug: "gdp-supply-chain",
-    href: "/contact",
+    href: "/gdp-supply-chain",
     title: "GDP Transport & Supply Chain",
     short:
       "Transport validation, cold-chain assurance and distribution compliance across the GDP supply chain.",
     icon: "truck",
-    hasPage: false,
-    metaTitle: "GDP Transport & Supply Chain",
-    metaDescription: "",
+    hasPage: true,
+    metaTitle: "GDP Transport & Supply Chain Compliance",
+    metaDescription:
+      "GDP transport and supply-chain compliance — transport validation, cold-chain and temperature mapping, distribution gap assessments and WDA/RP support to EU GDP standards.",
   },
 ];
 
@@ -382,5 +385,62 @@ export const faqsQms: Faq[] = [
   {
     q: "Do you write SOPs, the SMF, VMP and quality agreements?",
     a: "Yes. Quality-system documentation including SMF, VMP/VPP, SOPs, QTA, change control, deviation, OOS/OOT/OOC handling, CAPA and Product Quality Reviews.",
+  },
+];
+
+export const faqsSiteReadiness: Faq[] = [
+  {
+    q: "What does ‘site readiness’ actually involve?",
+    a: "Getting a site, its quality system, documentation and team to the point where they can pass a regulatory pre-licensing inspection and begin licensed operations — covering gap assessment, remediation, mock inspection and go-live support.",
+  },
+  {
+    q: "Can you help with the MIA or WDA application itself?",
+    a: "Yes — we support the licence application and supporting documentation (e.g. the Site Master File), help nominate the QP/RP/RPi, and prepare you for the MHRA inspection that precedes the licence.",
+  },
+  {
+    q: "How early should we engage you?",
+    a: "As early as possible — ideally before the application — so gaps are found and fixed on your timeline rather than during an inspection. We can also help recover a stalled application.",
+  },
+  {
+    q: "Do you cover both manufacturing and wholesale dealer sites?",
+    a: "Yes. Manufacturing/Import Authorisation (MIA / MIA(IMP)) and Wholesale Dealer’s Authorisation (WDA(H)), including the importation (RPi) route.",
+  },
+];
+
+export const faqsSupplier: Faq[] = [
+  {
+    q: "How do you qualify and risk-rate suppliers?",
+    a: "A risk-based programme: criticality assessment, questionnaires, document review and on-site or remote audits where warranted, with a defined re-qualification cycle proportionate to risk.",
+  },
+  {
+    q: "Can you write our technical/quality agreements (QTAs)?",
+    a: "Yes — clear QTAs that define quality responsibilities between you and your CMOs, suppliers and service providers, aligned to EU GMP Chapter 7.",
+  },
+  {
+    q: "Do you run ongoing supplier audits?",
+    a: "Yes. Scheduled and for-cause supplier/third-party audits, performance monitoring (KPIs, complaints, deviations) and escalation when a supplier drifts out of specification.",
+  },
+  {
+    q: "Which suppliers does this cover?",
+    a: "API and excipient manufacturers, CMOs, packaging, laboratories, calibration, logistics and other GxP service providers across your supply chain.",
+  },
+];
+
+export const faqsGdp: Faq[] = [
+  {
+    q: "What does transport validation involve?",
+    a: "Demonstrating that your distribution routes, packaging and processes keep products within their required conditions — temperature mapping and qualification of lanes, packaging and vehicles, plus a control strategy for excursions.",
+  },
+  {
+    q: "Can you help with cold-chain and temperature-sensitive products?",
+    a: "Yes — cold-chain qualification, temperature mapping of stores and shipping, monitoring strategy and excursion management for refrigerated and frozen products.",
+  },
+  {
+    q: "Do you provide GDP gap assessments and RP support?",
+    a: "Yes. GDP gap assessments against EU GDP (2013/C 343/01) and MHRA expectations, plus Responsible Person (RP) and RPi support under your WDA.",
+  },
+  {
+    q: "Can you investigate a temperature excursion or distribution deviation?",
+    a: "Yes — root-cause investigation, risk assessment of product impact, and CAPA to prevent recurrence across the supply chain.",
   },
 ];
