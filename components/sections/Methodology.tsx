@@ -36,9 +36,9 @@ export function Methodology({ tone = "light" }: { tone?: "light" | "dark" }) {
           {methodology.map((m) => (
             <li key={m.step} className="relative grid gap-4 sm:grid-cols-[3.25rem_1fr] sm:gap-7">
               <span
-                className={`relative z-10 grid size-[3.25rem] place-items-center rounded-2xl font-display text-lg font-medium ${
+                className={`relative z-10 grid size-[3.25rem] shrink-0 place-items-center rounded-2xl font-display text-lg font-medium ${
                   isDark
-                    ? "bg-white/[0.07] text-cyan ring-1 ring-white/15 backdrop-blur"
+                    ? "bg-navy text-cyan ring-1 ring-white/20 shadow-[0_10px_24px_-12px_rgba(2,12,28,0.8)]"
                     : "bg-white text-teal-ink ring-1 ring-line shadow-[0_12px_26px_-16px_rgba(6,41,92,0.6)]"
                 }`}
               >
