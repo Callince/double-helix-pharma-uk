@@ -1,19 +1,33 @@
 import type { ReactNode } from "react";
 import { Container } from "@/components/ui/Container";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export function LegalShell({
   title,
   updated,
   intro,
+  path,
   children,
 }: {
   title: string;
   updated?: string;
   intro?: ReactNode;
+  /** When provided, emits BreadcrumbList JSON-LD (Home › title). */
+  path?: string;
   children: ReactNode;
 }) {
   return (
     <>
+      {path && (
+        <JsonLd
+          data={breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: title, path },
+          ])}
+        />
+      )}
+
       <section className="border-b border-line bg-hero-light">
         <Container size="narrow">
           <div className="py-14 sm:py-20">

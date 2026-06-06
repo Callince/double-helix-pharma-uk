@@ -18,6 +18,7 @@ export default function TermsPage() {
     <LegalShell
       title="Website Terms of Use"
       updated={UPDATED}
+      path="/terms"
       intro={`These terms govern your use of this website. By using it, you agree to them.`}
     >
       <h2>1. About us</h2>

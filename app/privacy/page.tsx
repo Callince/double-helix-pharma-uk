@@ -18,6 +18,7 @@ export default function PrivacyPage() {
     <LegalShell
       title="Privacy Policy"
       updated={UPDATED}
+      path="/privacy"
       intro={`This policy explains how ${site.legalName} collects, uses and protects your personal data when you use this website or contact us.`}
     >
       <h2>1. Who we are</h2>
