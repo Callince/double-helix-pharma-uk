@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { site } from "@/lib/site";
 import { createEnquiry } from "@/lib/db/enquiries";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 /**
  * Contact form handler.
@@ -31,6 +32,16 @@ export async function POST(request: Request) {
 
   if (!name || !email || !message || !email.includes("@")) {
     return NextResponse.json({ ok: false, error: "Missing or invalid fields" }, { status: 400 });
+  }
+
+  // Anti-bot — verify the Cloudflare Turnstile token.
+  const turnstileToken = String(body["cf-turnstile-response"] ?? "");
+  const ip =
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    undefined;
+  if (!(await verifyTurnstile(turnstileToken, ip))) {
+    return NextResponse.json({ ok: false, error: "Verification failed. Please try again." }, { status: 400 });
   }
 
   // 1) Persist to SQLite (primary capture).
