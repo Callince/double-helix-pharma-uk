@@ -3,6 +3,7 @@ import { Fraunces, Hanken_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { ConditionalChrome } from "@/components/layout/ConditionalChrome";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ScrollAnimations } from "@/components/anim/ScrollAnimations";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
@@ -82,19 +83,11 @@ export default function RootLayout({
       className={`${fraunces.variable} ${hanken.variable} ${plexMono.variable}`}
     >
       <body className="flex min-h-screen flex-col font-sans">
-        <a
-          href="#content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-navy focus:px-4 focus:py-2 focus:text-white"
-        >
-          Skip to content
-        </a>
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
         <ScrollAnimations />
-        <Header />
-        <main id="content" className="flex-1">
+        <ConditionalChrome header={<Header />} footer={<Footer />}>
           {children}
-        </main>
-        <Footer />
+        </ConditionalChrome>
       </body>
     </html>
   );
