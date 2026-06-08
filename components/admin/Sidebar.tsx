@@ -1,15 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { Icon } from "@/components/ui/Icon";
-import { adminNav, adminUser } from "@/lib/admin/data";
+import { adminNav } from "@/lib/admin/data";
+import type { AdminUser } from "@/components/admin/AdminShell";
 
-export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
+const ROLE_LABEL: Record<string, string> = { admin: "Administrator", editor: "Editor", viewer: "Viewer" };
+
+export function Sidebar({ user, onNavigate }: { user: AdminUser; onNavigate?: () => void }) {
   const pathname = usePathname() || "";
+  const router = useRouter();
   const active = (href: string) => (href === "/admin" ? pathname === "/admin" : pathname.startsWith(href));
-  const initials = adminUser.name.split(" ").map((s) => s[0]).join("").slice(0, 2);
+  const initials = user.full_name.split(" ").map((s) => s[0]).join("").slice(0, 2);
+
+  async function logout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/admin/login");
+    router.refresh();
+  }
 
   return (
     <div className="flex h-full flex-col bg-navy-deep">
@@ -48,17 +58,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             {initials}
           </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-white">{adminUser.name}</p>
-            <p className="truncate text-xs text-white/45">{adminUser.role}</p>
+            <p className="truncate text-sm font-medium text-white">{user.full_name}</p>
+            <p className="truncate text-xs text-white/45">{ROLE_LABEL[user.role] ?? user.role}</p>
           </div>
         </div>
-        <Link
-          href="/admin/login"
-          onClick={onNavigate}
-          className="mt-1 flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-white/55 transition-colors hover:bg-white/5 hover:text-white"
+        <button
+          onClick={logout}
+          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-white/55 transition-colors hover:bg-white/5 hover:text-white"
         >
           <Icon name="log-out" className="size-[18px]" /> Sign out
-        </Link>
+        </button>
       </div>
     </div>
   );

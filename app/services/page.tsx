@@ -12,6 +12,8 @@ import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { site, services, faqsHome, ctaHref, ctaLabel } from "@/lib/site";
+import { listServices } from "@/lib/db/content";
+import type { IconName } from "@/components/ui/Icon";
 
 export const metadata: Metadata = pageMeta({
   title: "GMP Audits, QP & QMS Services",
@@ -20,7 +22,13 @@ export const metadata: Metadata = pageMeta({
   path: "/services",
 });
 
-export default function ServicesPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ServicesPage() {
+  const dbServices = await listServices().catch(() => []);
+  const gridItems = dbServices
+    .filter((s) => s.published)
+    .map((s) => ({ href: `/${s.slug}`, title: s.title, short: s.short, icon: s.icon as IconName, hasPage: true }));
   return (
     <>
       <JsonLd
@@ -72,7 +80,7 @@ export default function ServicesPage() {
             intro="Engage a single service or combine several into an ongoing compliance partnership — each one scaled to your stage, market and budget."
           />
           <div className="mt-14">
-            <ServiceGrid />
+            <ServiceGrid items={gridItems} />
           </div>
         </Container>
       </section>

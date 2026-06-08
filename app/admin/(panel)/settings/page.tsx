@@ -1,19 +1,10 @@
 import type { ReactNode } from "react";
 import { PageHeader, Card, AdminButton } from "@/components/admin/primitives";
-import { site } from "@/lib/site";
+import { Input, Textarea } from "@/components/admin/Form";
+import { getSettings } from "@/lib/db/content";
+import { saveSettings } from "../content-actions";
 
-function Field({ label, defaultValue, type = "text" }: { label: string; defaultValue?: string; type?: string }) {
-  return (
-    <label className="block">
-      <span className="mb-1.5 block text-sm font-medium text-navy">{label}</span>
-      <input
-        type={type}
-        defaultValue={defaultValue}
-        className="w-full rounded-lg border border-line bg-white px-3.5 py-2 text-sm text-ink shadow-sm outline-none transition-colors focus:border-teal focus:ring-2 focus:ring-teal/25"
-      />
-    </label>
-  );
-}
+export const dynamic = "force-dynamic";
 
 function Section({ title, desc, children }: { title: string; desc: string; children: ReactNode }) {
   return (
@@ -29,42 +20,38 @@ function Section({ title, desc, children }: { title: string; desc: string; child
   );
 }
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const s = await getSettings().catch(() => ({} as Record<string, Record<string, string>>));
+  const contact = s.contact ?? {};
+  const social = s.social ?? {};
+  const seo = s.seo ?? {};
+
   return (
     <>
-      <PageHeader
-        title="Settings"
-        subtitle="Site-wide configuration used across the website and structured data."
-        action={<AdminButton variant="green" icon="check">Save changes</AdminButton>}
-      />
-
-      <div className="space-y-5">
+      <PageHeader title="Settings" subtitle="Site-wide configuration — saved to the database." />
+      <form action={saveSettings} className="space-y-5">
         <Section title="Contact details" desc="Shown in the footer, contact page and JSON-LD.">
-          <Field label="Email" type="email" defaultValue={site.contact.email} />
-          <Field label="Phone" defaultValue={site.contact.phoneDisplay} />
-          <Field label="Location" defaultValue={`${site.contact.locality}, ${site.contact.region}, ${site.contact.country}`} />
+          <Input label="Email" name="contact_email" type="email" defaultValue={contact.email} />
+          <Input label="Phone" name="contact_phone" defaultValue={contact.phone} />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Input label="Locality" name="contact_locality" defaultValue={contact.locality} />
+            <Input label="Region" name="contact_region" defaultValue={contact.region} />
+          </div>
         </Section>
 
         <Section title="Social" desc="Linked from the footer and organisation schema.">
-          <Field label="LinkedIn URL" defaultValue={site.social.linkedin} />
+          <Input label="LinkedIn URL" name="social_linkedin" defaultValue={social.linkedin} />
         </Section>
 
-        <Section title="SEO defaults" desc="Fallback metadata when a page doesn't set its own.">
-          <Field label="Default meta title" defaultValue={`${site.name} — ${site.tagline}`} />
-          <label className="block">
-            <span className="mb-1.5 block text-sm font-medium text-navy">Default meta description</span>
-            <textarea
-              rows={3}
-              defaultValue={site.description}
-              className="w-full rounded-lg border border-line bg-white px-3.5 py-2 text-sm text-ink shadow-sm outline-none focus:border-teal focus:ring-2 focus:ring-teal/25"
-            />
-          </label>
+        <Section title="SEO defaults" desc="Fallback metadata for pages without their own.">
+          <Input label="Default meta title" name="seo_title" defaultValue={seo.metaTitle} />
+          <Textarea label="Default meta description" name="seo_description" rows={3} defaultValue={seo.metaDescription} />
         </Section>
 
-        <p className="rounded-lg bg-paper px-4 py-3 text-xs text-muted">
-          Demo UI — saving persists via the backend settings API once implemented (spec §4.5, settings table §5.3.16).
-        </p>
-      </div>
+        <div className="flex items-center gap-3">
+          <AdminButton type="submit" variant="green" icon="check">Save changes</AdminButton>
+        </div>
+      </form>
     </>
   );
 }

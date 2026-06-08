@@ -26,15 +26,18 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const password = (e.currentTarget.elements.namedItem("password") as HTMLInputElement)?.value ?? "";
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem("email") as HTMLInputElement)?.value ?? "";
+    const password = (form.elements.namedItem("password") as HTMLInputElement)?.value ?? "";
     try {
-      const res = await fetch("/api/admin-gate", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       });
       if (!res.ok) {
-        setError("Incorrect password. Please try again.");
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Invalid email or password.");
         setLoading(false);
         return;
       }
@@ -58,13 +61,9 @@ export default function AdminLoginPage() {
           <p className="mt-1 text-sm text-muted">Double Helix Pharma console</p>
 
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
-            <Field label="Email" type="email" name="email" autoComplete="username"
-              defaultValue="admin@doublehelixpharma.co.uk" />
-            <Field label="Password" type="password" name="password" autoComplete="current-password"
-              placeholder="Access password" />
-            {error && (
-              <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>
-            )}
+            <Field label="Email" type="email" name="email" autoComplete="username" placeholder="you@doublehelixpharma.co.uk" />
+            <Field label="Password" type="password" name="password" autoComplete="current-password" placeholder="••••••••" />
+            {error && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>}
             <button
               type="submit"
               disabled={loading}
@@ -73,10 +72,6 @@ export default function AdminLoginPage() {
               {loading ? "Signing in…" : "Sign in"}
             </button>
           </form>
-
-          <p className="mt-5 rounded-lg bg-surface px-3 py-2 text-center text-xs text-muted">
-            Protected preview area. Real authentication is implemented by the backend (spec §7).
-          </p>
         </div>
         <p className="mt-5 text-center text-xs text-white/45">
           <Link href="/" className="hover:text-white">&larr; Back to website</Link>

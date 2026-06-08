@@ -1,15 +1,22 @@
 import { cookies } from "next/headers";
-import crypto from "node:crypto";
+import { verifySession, SESSION_COOKIE } from "@/lib/auth/crypto";
+import { getUserById, type User } from "@/lib/db/users";
 
-/** True when the admin gate is satisfied (or disabled in dev). Mirrors middleware.ts. */
-export async function isAdmin(): Promise<boolean> {
-  const password = process.env.ADMIN_GATE_PASSWORD;
-  if (!password) return true; // gate disabled (local dev)
-  const expected = crypto.createHash("sha256").update(password).digest("hex");
-  const token = (await cookies()).get("dh_gate")?.value;
-  return token === expected;
+/** Resolve the currently signed-in admin user (or null). */
+export async function getSessionUser(): Promise<User | null> {
+  const token = (await cookies()).get(SESSION_COOKIE)?.value;
+  const session = verifySession(token);
+  if (!session) return null;
+  try {
+    return await getUserById(session.userId);
+  } catch {
+    return null;
+  }
 }
 
-export async function assertAdmin(): Promise<void> {
-  if (!(await isAdmin())) throw new Error("Unauthorized");
+/** For server actions / protected reads — throws if not authenticated. */
+export async function assertAdmin(): Promise<User> {
+  const user = await getSessionUser();
+  if (!user) throw new Error("Unauthorized");
+  return user;
 }

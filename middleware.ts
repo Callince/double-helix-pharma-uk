@@ -2,33 +2,50 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Lightweight access gate for /admin/*.
- * Protection is ON only when ADMIN_GATE_PASSWORD is set (so local dev stays open).
- * The login page sets an httpOnly cookie = SHA-256(password) via /api/admin-gate;
- * this middleware re-derives the expected hash and lets the request through if it matches.
- * This is a perimeter gate, NOT real auth — the backend implements proper auth (spec §7).
+ * Auth gate for /admin/*. Verifies the HMAC-signed session cookie at the edge
+ * (Web Crypto) — no DB call needed. The cookie is issued by /api/auth/login
+ * after a real email + password check against the users table.
  */
 export const config = { matcher: ["/admin", "/admin/:path*"] };
 
-async function sha256hex(input: string): Promise<string> {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input));
-  return Array.from(new Uint8Array(buf))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+const SECRET = process.env.AUTH_SECRET || "dev-insecure-secret-change-in-production";
+
+function hexToBytes(hex: string): Uint8Array {
+  const out = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  return out;
+}
+
+async function valid(token?: string): Promise<boolean> {
+  if (!token) return false;
+  const parts = token.split(".");
+  if (parts.length !== 3) return false;
+  const [userId, exp, sig] = parts;
+  if (!exp || Date.now() > Number(exp)) return false;
+  try {
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      "raw",
+      enc.encode(SECRET) as BufferSource,
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["verify"],
+    );
+    return await crypto.subtle.verify(
+      "HMAC",
+      key,
+      hexToBytes(sig) as BufferSource,
+      enc.encode(`${userId}.${exp}`) as BufferSource,
+    );
+  } catch {
+    return false;
+  }
 }
 
 export async function middleware(req: NextRequest) {
-  const password = process.env.ADMIN_GATE_PASSWORD;
-
-  // Gate disabled when no password is configured.
-  if (!password) return NextResponse.next();
-
-  // The sign-in page must always be reachable.
   if (req.nextUrl.pathname === "/admin/login") return NextResponse.next();
 
-  const expected = await sha256hex(password);
-  const token = req.cookies.get("dh_gate")?.value;
-  if (token === expected) return NextResponse.next();
+  if (await valid(req.cookies.get("dh_session")?.value)) return NextResponse.next();
 
   const url = req.nextUrl.clone();
   url.pathname = "/admin/login";
