@@ -28,3 +28,10 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# local sqlite database
+/.data
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
