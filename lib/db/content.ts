@@ -1,6 +1,5 @@
 import { getDb } from "./client";
 import { services as siteServices, faqsHome, faqsGmp, faqsContractQp, faqsQms, faqsSiteReadiness, faqsSupplier, faqsGdp, site } from "@/lib/site";
-import { posts as mockPosts, caseStudies as mockCases, subscribers as mockSubs } from "@/lib/admin/data";
 
 /* ===================================================================== types */
 export type Post = {
@@ -48,18 +47,6 @@ async function init() {
 async function seed(db: ReturnType<typeof getDb>) {
   const empty = async (t: string) => Number((await db.execute(`SELECT COUNT(*) c FROM ${t}`)).rows[0].c) === 0;
 
-  if (await empty("posts")) {
-    for (const p of mockPosts) {
-      await db.execute({
-        sql: `INSERT INTO posts (id,slug,title,excerpt,body,category,status,author,reading_minutes,views,updated_at)
-              VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
-        args: [uid(), slugify(p.title), p.title,
-          `${p.title} — a practical guide from a Qualified Person.`,
-          `## ${p.title}\n\nThis article is ready for your content. Replace this body with the full write-up.\n\nWritten by ${p.author}.`,
-          p.category, p.status, p.author, 4, p.views, p.updatedAt],
-      });
-    }
-  }
   if (await empty("faqs")) {
     const groups: [string, { q: string; a: string }[]][] = [
       ["General", faqsHome], ["GMP & GDP Audits", faqsGmp], ["Contract QP, RP & RPi", faqsContractQp],
@@ -78,17 +65,6 @@ async function seed(db: ReturnType<typeof getDb>) {
       await db.execute({ sql: `INSERT INTO services (id,slug,title,short,body,icon,order_index,published) VALUES (?,?,?,?,?,?,?,1)`,
         args: [uid(), s.slug, s.title, s.short, s.metaDescription, s.icon, i++] });
   }
-  if (await empty("case_studies")) {
-    for (const c of mockCases)
-      await db.execute({ sql: `INSERT INTO case_studies (id,slug,title,sector,summary,challenge,approach,outcome,status,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)`,
-        args: [uid(), slugify(c.title), c.title, c.sector, c.title,
-          "The client faced a specific compliance challenge.", "We applied a structured, risk-based approach.",
-          "A successful, inspection-ready outcome.", c.status, c.updatedAt] });
-  }
-  if (await empty("subscribers"))
-    for (const s of mockSubs)
-      await db.execute({ sql: `INSERT INTO subscribers (id,email,status,created_at) VALUES (?,?,?,?)`,
-        args: [uid(), s.email, s.status, s.createdAt] });
   if (await empty("settings")) {
     const set = (k: string, v: unknown) => db.execute({ sql: `INSERT INTO settings (key,value) VALUES (?,?)`, args: [k, JSON.stringify(v)] });
     await set("contact", { email: site.contact.email, phone: site.contact.phoneDisplay, locality: site.contact.locality, region: site.contact.region });

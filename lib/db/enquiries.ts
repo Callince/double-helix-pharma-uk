@@ -1,5 +1,4 @@
 import { getDb } from "./client";
-import { enquiries as seedData } from "@/lib/admin/data";
 
 export type EnquiryRow = {
   id: string;
@@ -40,20 +39,6 @@ async function init() {
   `);
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_enquiries_created ON enquiries(created_at)`);
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_enquiries_status ON enquiries(status)`);
-
-  const { rows } = await db.execute("SELECT COUNT(*) AS c FROM enquiries");
-  if (Number(rows[0].c) === 0) await seed();
-}
-
-async function seed() {
-  const db = getDb();
-  for (const e of seedData) {
-    await db.execute({
-      sql: `INSERT INTO enquiries (id,name,email,company,service,message,status,page_path,created_at)
-            VALUES (?,?,?,?,?,?,?,?,?)`,
-      args: [e.id, e.name, e.email, e.company || null, e.service, e.message, e.status, "/contact", e.createdAt],
-    });
-  }
 }
 
 function newId() {
