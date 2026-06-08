@@ -20,12 +20,31 @@ function Field({ label, ...props }: { label: string } & React.InputHTMLAttribute
 export default function AdminLoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError(null);
     setLoading(true);
-    // Mock auth — the backend wires real authentication (see spec §7).
-    setTimeout(() => router.push("/admin"), 600);
+    const password = (e.currentTarget.elements.namedItem("password") as HTMLInputElement)?.value ?? "";
+    try {
+      const res = await fetch("/api/admin-gate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (!res.ok) {
+        setError("Incorrect password. Please try again.");
+        setLoading(false);
+        return;
+      }
+      const from = new URLSearchParams(window.location.search).get("from");
+      router.push(from && from.startsWith("/admin") ? from : "/admin");
+      router.refresh();
+    } catch {
+      setError("Something went wrong. Please try again.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -42,7 +61,10 @@ export default function AdminLoginPage() {
             <Field label="Email" type="email" name="email" autoComplete="username"
               defaultValue="admin@doublehelixpharma.co.uk" />
             <Field label="Password" type="password" name="password" autoComplete="current-password"
-              defaultValue="demo-password" />
+              placeholder="Access password" />
+            {error && (
+              <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>
+            )}
             <button
               type="submit"
               disabled={loading}
@@ -53,7 +75,7 @@ export default function AdminLoginPage() {
           </form>
 
           <p className="mt-5 rounded-lg bg-surface px-3 py-2 text-center text-xs text-muted">
-            Demo UI — authentication is implemented by the backend (spec §7). Any details sign you in.
+            Protected preview area. Real authentication is implemented by the backend (spec §7).
           </p>
         </div>
         <p className="mt-5 text-center text-xs text-white/45">
