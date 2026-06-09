@@ -67,6 +67,31 @@ export async function saveService(fd: FormData) {
   redirect("/admin/services");
 }
 
+/* ------------------------------------------------------------- case studies */
+export async function saveCaseStudy(fd: FormData) {
+  await assertAdmin();
+  await db.upsertCaseStudy({
+    id: str(fd, "id") || undefined,
+    title: str(fd, "title"),
+    slug: str(fd, "slug"),
+    sector: str(fd, "sector"),
+    summary: str(fd, "summary"),
+    challenge: str(fd, "challenge"),
+    approach: str(fd, "approach"),
+    outcome: str(fd, "outcome"),
+    status: str(fd, "status") || "draft",
+  });
+  revalidatePath("/admin/case-studies");
+  revalidatePath("/case-studies");
+  redirect("/admin/case-studies");
+}
+export async function deleteCaseStudyAction(id: string) {
+  await assertAdmin();
+  await db.deleteCaseStudy(id);
+  revalidatePath("/admin/case-studies");
+  revalidatePath("/case-studies");
+}
+
 /* ---------------------------------------------------------------- settings */
 export async function saveSettings(fd: FormData) {
   await assertAdmin();

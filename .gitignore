@@ -35,3 +35,6 @@ next-env.d.ts
 *.db-journal
 *.db-wal
 *.db-shm
+
+# admin media uploads (stored on the server's disk at runtime)
+/public/uploads

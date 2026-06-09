@@ -10,6 +10,7 @@ import { services, ctaHref, ctaLabel } from "@/lib/site";
 
 const topLinks = [
   { label: "Insights", href: "/insights" },
+  { label: "Case Studies", href: "/case-studies" },
   { label: "About", href: "/about" },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },

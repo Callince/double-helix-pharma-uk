@@ -3,6 +3,7 @@ import { StatCard, Card, PageHeader, StatusBadge, AdminButton } from "@/componen
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { timeAgo } from "@/lib/admin/data";
 import { enquiryStats, listEnquiries, type EnquiryRow } from "@/lib/db/enquiries";
+import { listPosts, listSubscribers } from "@/lib/db/content";
 
 export const dynamic = "force-dynamic";
 
@@ -22,9 +23,18 @@ const PIPE: { status: string; label: string }[] = [
 export default async function DashboardPage() {
   let all: EnquiryRow[] = [];
   let totals = { total: 0, newCount: 0 };
+  let insights = { published: 0, drafts: 0 };
+  let subs = { total: 0, confirmed: 0 };
   try {
     all = await listEnquiries();
     totals = await enquiryStats();
+    const posts = await listPosts();
+    insights = {
+      published: posts.filter((p) => p.status === "published").length,
+      drafts: posts.filter((p) => p.status !== "published").length,
+    };
+    const list = await listSubscribers();
+    subs = { total: list.length, confirmed: list.filter((s) => s.status === "confirmed").length };
   } catch (err) {
     console.error("[admin] dashboard read failed", err);
   }
@@ -36,8 +46,8 @@ export default async function DashboardPage() {
   const stats = [
     { label: "Total enquiries", value: String(totals.total), delta: "live from SQLite", icon: "inbox" as IconName, tone: "teal" as const },
     { label: "New (untriaged)", value: String(totals.newCount), delta: "needs attention", icon: "bell" as IconName, tone: "green" as const },
-    { label: "Published insights", value: "14", delta: "+2 this month", icon: "file-text" as IconName, tone: "navy" as const },
-    { label: "Subscribers", value: "342", delta: "+18 this month", icon: "users" as IconName, tone: "plum" as const },
+    { label: "Published insights", value: String(insights.published), delta: `${insights.drafts} in draft`, icon: "file-text" as IconName, tone: "navy" as const },
+    { label: "Subscribers", value: String(subs.total), delta: `${subs.confirmed} confirmed`, icon: "users" as IconName, tone: "plum" as const },
   ];
 
   return (

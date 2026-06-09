@@ -162,6 +162,39 @@ export async function listCaseStudies(): Promise<CaseStudy[]> {
   await ensure();
   return (await getDb().execute("SELECT * FROM case_studies ORDER BY updated_at DESC")).rows as unknown as CaseStudy[];
 }
+export async function listPublishedCaseStudies(): Promise<CaseStudy[]> {
+  await ensure();
+  return (await getDb().execute("SELECT * FROM case_studies WHERE status='published' ORDER BY updated_at DESC")).rows as unknown as CaseStudy[];
+}
+export async function getCaseStudy(id: string): Promise<CaseStudy | null> {
+  await ensure();
+  return ((await getDb().execute({ sql: "SELECT * FROM case_studies WHERE id=?", args: [id] })).rows[0] as unknown as CaseStudy) ?? null;
+}
+export async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null> {
+  await ensure();
+  return ((await getDb().execute({ sql: "SELECT * FROM case_studies WHERE slug=?", args: [slug] })).rows[0] as unknown as CaseStudy) ?? null;
+}
+export async function upsertCaseStudy(c: { id?: string; title: string; slug?: string; sector?: string; summary?: string; challenge?: string; approach?: string; outcome?: string; status: string }) {
+  await ensure();
+  const slug = c.slug?.trim() || slugify(c.title);
+  if (c.id) {
+    await getDb().execute({
+      sql: `UPDATE case_studies SET title=?, slug=?, sector=?, summary=?, challenge=?, approach=?, outcome=?, status=?, updated_at=datetime('now') WHERE id=?`,
+      args: [c.title, slug, c.sector || null, c.summary || null, c.challenge || null, c.approach || null, c.outcome || null, c.status, c.id],
+    });
+    return c.id;
+  }
+  const id = uid();
+  await getDb().execute({
+    sql: `INSERT INTO case_studies (id,slug,title,sector,summary,challenge,approach,outcome,status) VALUES (?,?,?,?,?,?,?,?,?)`,
+    args: [id, slug, c.title, c.sector || null, c.summary || null, c.challenge || null, c.approach || null, c.outcome || null, c.status],
+  });
+  return id;
+}
+export async function deleteCaseStudy(id: string) {
+  await ensure();
+  await getDb().execute({ sql: "DELETE FROM case_studies WHERE id=?", args: [id] });
+}
 
 /* ============================================================ subscribers */
 export async function listSubscribers(): Promise<Subscriber[]> {
