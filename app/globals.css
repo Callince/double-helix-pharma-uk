@@ -172,6 +172,23 @@ html.gsap-ready [data-reveal-group] > * {
   color: var(--color-navy);
   font-weight: 600;
 }
+.legal-prose img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 2rem 0;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-line);
+}
+.legal-prose figure {
+  margin: 2rem 0;
+}
+.legal-prose figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  text-align: center;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {

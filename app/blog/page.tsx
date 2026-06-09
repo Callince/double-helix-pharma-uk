@@ -43,6 +43,10 @@ export default async function BlogPage() {
                   href={`/blog/${p.slug}`}
                   className="group flex flex-col rounded-2xl border border-line bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-teal/40 hover:shadow-[0_26px_55px_-30px_rgba(6,41,92,0.5)]"
                 >
+                  {p.cover_image && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.cover_image} alt="" className="mb-4 aspect-[16/9] w-full rounded-lg border border-line object-cover" />
+                  )}
                   <div className="flex items-center gap-2">
                     <span className="label-mono text-teal-ink">{p.category || "Article"}</span>
                     <span className="text-xs text-muted">· {p.reading_minutes} min</span>

@@ -67,6 +67,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </Container>
         </header>
 
+        {post.cover_image && (
+          <Container size="narrow">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={post.cover_image}
+              alt={post.title}
+              className="-mt-8 aspect-[16/7] w-full rounded-2xl border border-line object-cover shadow-sm sm:-mt-12"
+            />
+          </Container>
+        )}
+
         <section className="bg-white py-12 sm:py-16">
           <Container size="narrow">
             <div

@@ -32,6 +32,7 @@ export async function savePost(fd: FormData) {
     category: str(fd, "category"),
     status,
     excerpt: str(fd, "excerpt"),
+    cover_image: str(fd, "cover_image"),
     body,
   });
   revalidatePath("/admin/blog");

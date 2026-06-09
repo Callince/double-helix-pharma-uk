@@ -68,6 +68,7 @@ export function BlogForm({ post }: { post?: Post }) {
             options={[{ value: "draft", label: "Draft" }, { value: "published", label: "Published" }]}
           />
           <Textarea label="Excerpt" name="excerpt" rows={2} defaultValue={post?.excerpt ?? ""} hint="Short summary shown in listings & the meta description." />
+          <Input label="Cover image" name="cover_image" defaultValue={post?.cover_image ?? ""} hint="Banner image path, e.g. /hero-gmp-audit.webp or an uploaded /uploads/… file." />
 
           <div>
             <div className="mb-1.5 flex items-center justify-between gap-3">
