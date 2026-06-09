@@ -38,6 +38,7 @@ export default async function FaqPage() {
       />
 
       <Hero
+        image={{ src: "/hero-faq.webp", alt: "Answers to common pharmaceutical compliance questions" }}
         breadcrumb={[{ name: "Home", href: "/" }, { name: "FAQ" }]}
         eyebrow="FAQ"
         title={<>Frequently asked <em className="font-display italic text-teal-ink">questions</em></>}

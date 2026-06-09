@@ -21,6 +21,7 @@ export default async function CaseStudiesPage() {
     <>
       <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Case Studies", path: "/case-studies" }])} />
       <Hero
+        image={{ src: "/hero-case-studies.webp", alt: "Proven pharmaceutical compliance outcomes" }}
         breadcrumb={[{ name: "Home", href: "/" }, { name: "Case Studies" }]}
         eyebrow="Case Studies"
         title={<>Proven <em className="font-display italic text-teal-ink">compliance outcomes</em></>}

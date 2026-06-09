@@ -21,6 +21,7 @@ export default async function BlogPage() {
     <>
       <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }])} />
       <Hero
+        image={{ src: "/hero-blog.webp", alt: "Pharmaceutical quality and compliance insights" }}
         breadcrumb={[{ name: "Home", href: "/" }, { name: "Blog" }]}
         eyebrow="Blog"
         title={<>Practical pharma <em className="font-display italic text-teal-ink">quality &amp; compliance</em></>}
