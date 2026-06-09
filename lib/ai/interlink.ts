@@ -5,7 +5,10 @@ import { listPublishedPosts } from "@/lib/db/content";
 import { servicePages } from "@/lib/site";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = process.env.OPENROUTER_MODEL || "qwen/qwen-2.5-72b-instruct:free";
+// Free Qwen models tried in order — if one is rate-limited upstream, fall through to the next.
+const MODELS = process.env.OPENROUTER_MODEL
+  ? [process.env.OPENROUTER_MODEL]
+  : ["qwen/qwen3-next-80b-a3b-instruct:free", "qwen/qwen3-coder:free"];
 const KEY = process.env.OPENROUTER_API_KEY;
 
 export type LinkTarget = { title: string; url: string };
@@ -48,8 +51,36 @@ export async function getLinkTargets(excludeSlug?: string): Promise<LinkTarget[]
   return targets;
 }
 
+/** Call the free Qwen models in order; return the first non-empty completion. */
+async function callQwen(prompt: string): Promise<string | null> {
+  for (const model of MODELS) {
+    try {
+      const res = await fetch(OPENROUTER_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${KEY}`,
+          "HTTP-Referer": "https://www.doublehelixpharma.co.uk",
+          "X-Title": "Double Helix Pharma",
+        },
+        body: JSON.stringify({ model, temperature: 0.2, messages: [{ role: "user", content: prompt }] }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const content: string = data?.choices?.[0]?.message?.content ?? "";
+        if (content.trim()) return content;
+      } else {
+        console.error("[interlink]", model, res.status, (await res.text().catch(() => "")).slice(0, 180));
+      }
+    } catch (err) {
+      console.error("[interlink] request failed", model, err);
+    }
+  }
+  return null;
+}
+
 /** Ask Qwen which phrases in the text should link to which target pages. */
-export async function suggestInterlinks(text: string, targets: LinkTarget[], max = 6): Promise<LinkSuggestion[]> {
+export async function suggestInterlinks(text: string, targets: LinkTarget[], max = 6): Promise<LinkSuggestion[] | null> {
   if (!KEY || !text.trim() || targets.length === 0) return [];
   const list = targets.map((t, i) => `${i + 1}. ${t.title} -> ${t.url}`).join("\n");
   const prompt = [
@@ -69,35 +100,16 @@ export async function suggestInterlinks(text: string, targets: LinkTarget[], max
     text.slice(0, 6000),
   ].join("\n");
 
+  const content = await callQwen(prompt);
+  if (!content) return null; // AI attempted but unavailable (e.g. free-tier rate limit)
+  const start = content.indexOf("[");
+  const end = content.lastIndexOf("]");
+  if (start === -1 || end === -1) return [];
   try {
-    const res = await fetch(OPENROUTER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${KEY}`,
-        "HTTP-Referer": "https://www.doublehelixpharma.co.uk",
-        "X-Title": "Double Helix Pharma",
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        temperature: 0.2,
-        messages: [{ role: "user", content: prompt }],
-      }),
-    });
-    if (!res.ok) {
-      console.error("[interlink] OpenRouter error", res.status, await res.text().catch(() => ""));
-      return [];
-    }
-    const data = await res.json();
-    const content: string = data?.choices?.[0]?.message?.content ?? "";
-    const start = content.indexOf("[");
-    const end = content.lastIndexOf("]");
-    if (start === -1 || end === -1) return [];
     const parsed = JSON.parse(content.slice(start, end + 1)) as LinkSuggestion[];
     const allowed = new Set(targets.map((t) => t.url));
     return parsed.filter((s) => s && typeof s.phrase === "string" && allowed.has(s.url)).slice(0, max);
-  } catch (err) {
-    console.error("[interlink] request failed", err);
+  } catch {
     return [];
   }
 }

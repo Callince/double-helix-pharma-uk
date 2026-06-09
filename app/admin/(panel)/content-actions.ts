@@ -20,7 +20,7 @@ export async function savePost(fd: FormData) {
       const clean = stripAutoLinks(body);
       const targets = await getLinkTargets(slug || undefined);
       const suggestions = await suggestInterlinks(htmlToText(clean), targets, 6);
-      body = applyInterlinks(clean, suggestions);
+      if (suggestions) body = applyInterlinks(clean, suggestions);
     } catch (err) {
       console.error("[blog] auto-interlink failed", err);
     }

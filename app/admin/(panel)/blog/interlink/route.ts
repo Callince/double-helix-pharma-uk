@@ -35,6 +35,12 @@ export async function POST(req: Request) {
   const clean = stripAutoLinks(html);
   const targets = await getLinkTargets(slug || undefined);
   const suggestions = await suggestInterlinks(htmlToText(clean), targets, 6);
+  if (suggestions === null) {
+    return NextResponse.json(
+      { error: "The free Qwen tier is busy right now — please try again in a moment." },
+      { status: 503 },
+    );
+  }
   const linked = applyInterlinks(clean, suggestions);
   const added = (linked.match(/data-ai-link="1"/g) || []).length;
 
