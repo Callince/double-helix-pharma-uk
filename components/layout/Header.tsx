@@ -9,7 +9,7 @@ import { Icon } from "@/components/ui/Icon";
 import { services, ctaHref, ctaLabel } from "@/lib/site";
 
 const topLinks = [
-  { label: "Insights", href: "/insights" },
+  { label: "Blog", href: "/blog" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "About", href: "/about" },
   { label: "FAQ", href: "/faq" },

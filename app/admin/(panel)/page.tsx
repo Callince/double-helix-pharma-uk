@@ -8,7 +8,7 @@ import { listPosts, listSubscribers } from "@/lib/db/content";
 export const dynamic = "force-dynamic";
 
 const quickActions: { label: string; href: string; icon: IconName }[] = [
-  { label: "Write a new insight", href: "/admin/posts", icon: "file-text" },
+  { label: "Write a new post", href: "/admin/blog", icon: "file-text" },
   { label: "Add a case study", href: "/admin/case-studies", icon: "briefcase" },
   { label: "Review enquiries", href: "/admin/enquiries", icon: "inbox" },
   { label: "Edit site settings", href: "/admin/settings", icon: "settings" },
@@ -46,7 +46,7 @@ export default async function DashboardPage() {
   const stats = [
     { label: "Total enquiries", value: String(totals.total), delta: "live from SQLite", icon: "inbox" as IconName, tone: "teal" as const },
     { label: "New (untriaged)", value: String(totals.newCount), delta: "needs attention", icon: "bell" as IconName, tone: "green" as const },
-    { label: "Published insights", value: String(insights.published), delta: `${insights.drafts} in draft`, icon: "file-text" as IconName, tone: "navy" as const },
+    { label: "Published posts", value: String(insights.published), delta: `${insights.drafts} in draft`, icon: "file-text" as IconName, tone: "navy" as const },
     { label: "Subscribers", value: String(subs.total), delta: `${subs.confirmed} confirmed`, icon: "users" as IconName, tone: "plum" as const },
   ];
 
@@ -55,7 +55,7 @@ export default async function DashboardPage() {
       <PageHeader
         title="Dashboard"
         subtitle="Overview of enquiries, content and subscribers."
-        action={<AdminButton href="/admin/posts" icon="plus" variant="green">New insight</AdminButton>}
+        action={<AdminButton href="/admin/blog" icon="plus" variant="green">New post</AdminButton>}
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

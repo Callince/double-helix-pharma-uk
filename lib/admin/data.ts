@@ -6,7 +6,7 @@ export type AdminNavItem = { label: string; href: string; icon: IconName };
 export const adminNav: AdminNavItem[] = [
   { label: "Dashboard", href: "/admin", icon: "grid" },
   { label: "Enquiries", href: "/admin/enquiries", icon: "inbox" },
-  { label: "Insights", href: "/admin/posts", icon: "file-text" },
+  { label: "Blog", href: "/admin/blog", icon: "file-text" },
   { label: "Case Studies", href: "/admin/case-studies", icon: "briefcase" },
   { label: "Services", href: "/admin/services", icon: "layers" },
   { label: "FAQs", href: "/admin/faqs", icon: "help-circle" },

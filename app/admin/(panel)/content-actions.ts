@@ -4,30 +4,45 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { assertAdmin } from "@/lib/admin/guard";
 import * as db from "@/lib/db/content";
+import { stripAutoLinks, getLinkTargets, suggestInterlinks, applyInterlinks, htmlToText } from "@/lib/ai/interlink";
 
 const str = (fd: FormData, k: string) => String(fd.get(k) ?? "").trim();
 
 /* ------------------------------------------------------------------- posts */
 export async function savePost(fd: FormData) {
   await assertAdmin();
+  const status = str(fd, "status") || "draft";
+  const slug = str(fd, "slug");
+  let body = str(fd, "body");
+  // Auto-add internal links when publishing (Qwen via OpenRouter; fails open).
+  if (status === "published") {
+    try {
+      const clean = stripAutoLinks(body);
+      const targets = await getLinkTargets(slug || undefined);
+      const suggestions = await suggestInterlinks(htmlToText(clean), targets, 6);
+      body = applyInterlinks(clean, suggestions);
+    } catch (err) {
+      console.error("[blog] auto-interlink failed", err);
+    }
+  }
   await db.upsertPost({
     id: str(fd, "id") || undefined,
     title: str(fd, "title"),
-    slug: str(fd, "slug"),
+    slug,
     category: str(fd, "category"),
-    status: str(fd, "status") || "draft",
+    status,
     excerpt: str(fd, "excerpt"),
-    body: str(fd, "body"),
+    body,
   });
-  revalidatePath("/admin/posts");
-  revalidatePath("/insights");
-  redirect("/admin/posts");
+  revalidatePath("/admin/blog");
+  revalidatePath("/blog");
+  redirect("/admin/blog");
 }
 export async function deletePostAction(id: string) {
   await assertAdmin();
   await db.deletePost(id);
-  revalidatePath("/admin/posts");
-  revalidatePath("/insights");
+  revalidatePath("/admin/blog");
+  revalidatePath("/blog");
 }
 
 /* -------------------------------------------------------------------- faqs */

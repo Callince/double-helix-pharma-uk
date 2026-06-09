@@ -9,20 +9,20 @@ import { breadcrumbSchema } from "@/lib/schema";
 import { listPublishedPosts } from "@/lib/db/content";
 
 export const metadata = pageMeta({
-  title: "Insights — Pharma Quality & Compliance",
+  title: "Blog — Pharma Quality & Compliance",
   description: "Practical guidance on GMP/GDP audits, Qualified Person duties, quality systems, inspections and pharmaceutical compliance.",
-  path: "/insights",
+  path: "/blog",
 });
 export const dynamic = "force-dynamic";
 
-export default async function InsightsPage() {
+export default async function BlogPage() {
   const posts = await listPublishedPosts().catch(() => []);
   return (
     <>
-      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Insights", path: "/insights" }])} />
+      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }])} />
       <Hero
-        breadcrumb={[{ name: "Home", href: "/" }, { name: "Insights" }]}
-        eyebrow="Insights"
+        breadcrumb={[{ name: "Home", href: "/" }, { name: "Blog" }]}
+        eyebrow="Blog"
         title={<>Practical pharma <em className="font-display italic text-teal-ink">quality &amp; compliance</em></>}
         subtitle="Field-tested guidance on audits, Qualified Person duties, quality systems and inspection readiness — written by a senior QP."
         primary={{ label: "Book a discovery call", href: "/contact" }}
@@ -40,7 +40,7 @@ export default async function InsightsPage() {
               {posts.map((p) => (
                 <Link
                   key={p.id}
-                  href={`/insights/${p.slug}`}
+                  href={`/blog/${p.slug}`}
                   className="group flex flex-col rounded-2xl border border-line bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-teal/40 hover:shadow-[0_26px_55px_-30px_rgba(6,41,92,0.5)]"
                 >
                   <div className="flex items-center gap-2">
