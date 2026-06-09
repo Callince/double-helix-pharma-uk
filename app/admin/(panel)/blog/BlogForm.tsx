@@ -15,6 +15,16 @@ const RichEditor = dynamic(() => import("@/components/admin/RichEditor"), {
   ),
 });
 
+function faqsToText(json?: string | null): string {
+  if (!json) return "";
+  try {
+    const arr = JSON.parse(json) as { q: string; a: string }[];
+    return arr.map((f) => `${f.q} :: ${f.a}`).join("\n");
+  } catch {
+    return "";
+  }
+}
+
 export function BlogForm({ post }: { post?: Post }) {
   const [body, setBody] = useState(post?.body ?? "");
   const [aiBusy, setAiBusy] = useState(false);
@@ -67,8 +77,8 @@ export function BlogForm({ post }: { post?: Post }) {
             defaultValue={post?.status ?? "draft"}
             options={[{ value: "draft", label: "Draft" }, { value: "published", label: "Published" }]}
           />
-          <Textarea label="Excerpt" name="excerpt" rows={2} defaultValue={post?.excerpt ?? ""} hint="Short summary shown in listings & the meta description." />
-          <Input label="Cover image" name="cover_image" defaultValue={post?.cover_image ?? ""} hint="Banner image path, e.g. /hero-gmp-audit.webp or an uploaded /uploads/… file." />
+          <Textarea label="Excerpt" name="excerpt" rows={2} defaultValue={post?.excerpt ?? ""} hint="Short summary shown in listings & the meta/social description." />
+          <Input label="Cover image" name="cover_image" defaultValue={post?.cover_image ?? ""} hint="Banner + social image, e.g. /hero-gmp-audit.webp or an uploaded /uploads/… file." />
 
           <div>
             <div className="mb-1.5 flex items-center justify-between gap-3">
@@ -85,7 +95,16 @@ export function BlogForm({ post }: { post?: Post }) {
             <RichEditor value={body} onChange={setBody} />
             {aiMsg && <p className="mt-1.5 text-xs text-muted">{aiMsg}</p>}
             <input type="hidden" name="body" value={body} />
+            <p className="mt-1.5 text-xs text-muted">Use the image button in the toolbar to upload or embed images. Headings (H2/H3) build the table of contents automatically.</p>
           </div>
+
+          <Textarea
+            label="FAQs"
+            name="faqs"
+            rows={5}
+            defaultValue={faqsToText(post?.faqs)}
+            hint={'One per line as "Question :: Answer". Renders an FAQ section and emits FAQ schema for SEO.'}
+          />
 
           <FormActions>
             <AdminButton type="submit" variant="green" icon="check">Save post</AdminButton>

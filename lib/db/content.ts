@@ -4,7 +4,7 @@ import { services as siteServices, faqsHome, faqsGmp, faqsContractQp, faqsQms, f
 /* ===================================================================== types */
 export type Post = {
   id: string; slug: string; title: string; excerpt: string | null; body: string;
-  cover_image: string | null; category: string | null; status: string; author: string | null;
+  cover_image: string | null; faqs: string | null; category: string | null; status: string; author: string | null;
   reading_minutes: number; views: number; created_at: string; updated_at: string;
 };
 export type Faq = { id: string; question: string; answer: string; category: string | null; order_index: number; published: number; };
@@ -41,8 +41,9 @@ async function init() {
       status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL DEFAULT (datetime('now')))`,
     `CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at TEXT NOT NULL DEFAULT (datetime('now')))`,
   ], "write");
-  // Migration: add the blog cover-image column when upgrading an existing database.
+  // Migrations: add columns when upgrading an existing database.
   try { await db.execute("ALTER TABLE posts ADD COLUMN cover_image TEXT"); } catch { /* column already exists */ }
+  try { await db.execute("ALTER TABLE posts ADD COLUMN faqs TEXT"); } catch { /* column already exists */ }
   await seed(db);
 }
 
@@ -92,20 +93,20 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   await ensure();
   return ((await getDb().execute({ sql: "SELECT * FROM posts WHERE slug=?", args: [slug] })).rows[0] as unknown as Post) ?? null;
 }
-export async function upsertPost(p: { id?: string; title: string; slug?: string; excerpt?: string; body: string; cover_image?: string; category?: string; status: string; author?: string }) {
+export async function upsertPost(p: { id?: string; title: string; slug?: string; excerpt?: string; body: string; cover_image?: string; faqs?: string; category?: string; status: string; author?: string }) {
   await ensure();
   const slug = p.slug?.trim() || slugify(p.title);
   if (p.id) {
     await getDb().execute({
-      sql: `UPDATE posts SET title=?, slug=?, excerpt=?, body=?, cover_image=?, category=?, status=?, updated_at=datetime('now') WHERE id=?`,
-      args: [p.title, slug, p.excerpt || null, p.body, p.cover_image || null, p.category || null, p.status, p.id],
+      sql: `UPDATE posts SET title=?, slug=?, excerpt=?, body=?, cover_image=?, faqs=?, category=?, status=?, updated_at=datetime('now') WHERE id=?`,
+      args: [p.title, slug, p.excerpt || null, p.body, p.cover_image || null, p.faqs || null, p.category || null, p.status, p.id],
     });
     return p.id;
   }
   const id = uid();
   await getDb().execute({
-    sql: `INSERT INTO posts (id,slug,title,excerpt,body,cover_image,category,status,author) VALUES (?,?,?,?,?,?,?,?,?)`,
-    args: [id, slug, p.title, p.excerpt || null, p.body, p.cover_image || null, p.category || null, p.status, p.author || "B. Subramanian"],
+    sql: `INSERT INTO posts (id,slug,title,excerpt,body,cover_image,faqs,category,status,author) VALUES (?,?,?,?,?,?,?,?,?,?)`,
+    args: [id, slug, p.title, p.excerpt || null, p.body, p.cover_image || null, p.faqs || null, p.category || null, p.status, p.author || "B. Subramanian"],
   });
   return id;
 }

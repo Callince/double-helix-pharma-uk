@@ -189,6 +189,15 @@ html.gsap-ready [data-reveal-group] > * {
   color: var(--color-muted);
   text-align: center;
 }
+/* Anchor offset so TOC / sticky-header jumps land below the header */
+.legal-prose h2,
+.legal-prose h3 {
+  scroll-margin-top: 6rem;
+}
+/* Image inside a figure: the figure owns the spacing */
+.legal-prose figure img {
+  margin: 0;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {

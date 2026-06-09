@@ -25,6 +25,14 @@ export async function savePost(fd: FormData) {
       console.error("[blog] auto-interlink failed", err);
     }
   }
+  // FAQs entered as "Question :: Answer" per line -> JSON for storage + schema.
+  const faqs = str(fd, "faqs")
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => { const i = l.indexOf("::"); return i === -1 ? null : { q: l.slice(0, i).trim(), a: l.slice(i + 1).trim() }; })
+    .filter((f): f is { q: string; a: string } => Boolean(f && f.q && f.a));
+
   await db.upsertPost({
     id: str(fd, "id") || undefined,
     title: str(fd, "title"),
@@ -33,6 +41,7 @@ export async function savePost(fd: FormData) {
     status,
     excerpt: str(fd, "excerpt"),
     cover_image: str(fd, "cover_image"),
+    faqs: faqs.length ? JSON.stringify(faqs) : "",
     body,
   });
   revalidatePath("/admin/blog");
