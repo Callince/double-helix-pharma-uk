@@ -6,7 +6,7 @@ import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMeta } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/schema";
-import { listPublishedPosts } from "@/lib/db/content";
+import { listPublishedPosts, type Post } from "@/lib/db/content";
 
 export const metadata = pageMeta({
   title: "Blog — Pharma Quality & Compliance",
@@ -16,15 +16,39 @@ export const metadata = pageMeta({
 export const dynamic = "force-dynamic";
 
 const PER_PAGE = 9;
+const catSlug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-export default async function BlogPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+export default async function BlogPage({ searchParams }: { searchParams: Promise<{ page?: string; category?: string }> }) {
   const sp = await searchParams;
-  const posts = await listPublishedPosts().catch(() => []);
+  const all = await listPublishedPosts().catch(() => [] as Post[]);
+
+  // Category chips (distinct categories with counts)
+  const catMap = new Map<string, { name: string; slug: string; count: number }>();
+  for (const p of all) {
+    const name = p.category || "General";
+    const slug = catSlug(name);
+    const e = catMap.get(slug) || { name, slug, count: 0 };
+    e.count++;
+    catMap.set(slug, e);
+  }
+  const categories = [...catMap.values()].sort((a, b) => b.count - a.count);
+
+  const activeCat = sp?.category ? catSlug(sp.category) : "";
+  const posts = activeCat ? all.filter((p) => catSlug(p.category || "General") === activeCat) : all;
 
   const totalPages = Math.max(1, Math.ceil(posts.length / PER_PAGE));
   const current = Math.min(Math.max(1, Number.parseInt(String(sp?.page ?? "1"), 10) || 1), totalPages);
   const pagePosts = posts.slice((current - 1) * PER_PAGE, current * PER_PAGE);
-  const pageHref = (n: number) => (n === 1 ? "/blog" : `/blog?page=${n}`);
+
+  const hrefFor = (cat: string, n: number) => {
+    const q = new URLSearchParams();
+    if (cat) q.set("category", cat);
+    if (n > 1) q.set("page", String(n));
+    const s = q.toString();
+    return s ? `/blog?${s}` : "/blog";
+  };
+  const chip = (active: boolean) =>
+    `rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${active ? "border-teal bg-teal/10 text-teal-ink" : "border-line text-navy hover:border-teal/50 hover:bg-surface"}`;
 
   return (
     <>
@@ -41,9 +65,21 @@ export default async function BlogPage({ searchParams }: { searchParams: Promise
 
       <section className="bg-white py-16 sm:py-20 lg:py-24">
         <Container>
-          {posts.length === 0 ? (
+          {/* Category filter */}
+          {categories.length > 1 && (
+            <div className="mb-10 flex flex-wrap justify-center gap-2.5">
+              <Link href={hrefFor("", 1)} className={chip(!activeCat)}>All <span className="text-muted">({all.length})</span></Link>
+              {categories.map((c) => (
+                <Link key={c.slug} href={hrefFor(c.slug, 1)} className={chip(activeCat === c.slug)}>
+                  {c.name} <span className="text-muted">({c.count})</span>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {pagePosts.length === 0 ? (
             <p className="rounded-2xl border border-line bg-surface p-10 text-center text-muted">
-              No articles published yet — check back soon.
+              No articles in this category yet — check back soon.
             </p>
           ) : (
             <>
@@ -77,26 +113,20 @@ export default async function BlogPage({ searchParams }: { searchParams: Promise
               {totalPages > 1 && (
                 <nav className="mt-14 flex flex-wrap items-center justify-center gap-2" aria-label="Blog pagination">
                   {current > 1 && (
-                    <Link href={pageHref(current - 1)} rel="prev" className="rounded-lg border border-line px-3.5 py-2 text-sm font-medium text-navy transition-colors hover:bg-surface">
-                      Previous
-                    </Link>
+                    <Link href={hrefFor(activeCat, current - 1)} rel="prev" className="rounded-lg border border-line px-3.5 py-2 text-sm font-medium text-navy transition-colors hover:bg-surface">Previous</Link>
                   )}
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
                     <Link
                       key={n}
-                      href={pageHref(n)}
+                      href={hrefFor(activeCat, n)}
                       aria-current={n === current ? "page" : undefined}
-                      className={`grid size-10 place-items-center rounded-lg border text-sm font-medium transition-colors ${
-                        n === current ? "border-teal bg-teal/10 text-teal-ink" : "border-line text-navy hover:bg-surface"
-                      }`}
+                      className={`grid size-10 place-items-center rounded-lg border text-sm font-medium transition-colors ${n === current ? "border-teal bg-teal/10 text-teal-ink" : "border-line text-navy hover:bg-surface"}`}
                     >
                       {n}
                     </Link>
                   ))}
                   {current < totalPages && (
-                    <Link href={pageHref(current + 1)} rel="next" className="rounded-lg border border-line px-3.5 py-2 text-sm font-medium text-navy transition-colors hover:bg-surface">
-                      Next
-                    </Link>
+                    <Link href={hrefFor(activeCat, current + 1)} rel="next" className="rounded-lg border border-line px-3.5 py-2 text-sm font-medium text-navy transition-colors hover:bg-surface">Next</Link>
                   )}
                 </nav>
               )}
