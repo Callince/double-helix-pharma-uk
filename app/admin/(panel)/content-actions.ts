@@ -69,6 +69,25 @@ export async function deletePostAction(id: string) {
   revalidatePath("/blog");
 }
 
+/** Drip-publish automation: schedule the next N drafts, one per day (Day 1 = today). */
+export async function scheduleDripAction(fd: FormData) {
+  await assertAdmin();
+  const days = Number(fd.get("days") || 1);
+  await db.scheduleNextDrafts(days);
+  revalidatePath("/admin/blog");
+  revalidatePath("/blog");
+  redirect("/admin/blog");
+}
+
+/** Revert every post to draft (also clears any pending schedule). */
+export async function setAllPostsDraftAction() {
+  await assertAdmin();
+  await db.setAllPostsDraft();
+  revalidatePath("/admin/blog");
+  revalidatePath("/blog");
+  redirect("/admin/blog");
+}
+
 /* -------------------------------------------------------------------- faqs */
 export async function saveFaq(fd: FormData) {
   await assertAdmin();

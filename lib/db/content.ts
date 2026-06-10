@@ -5,7 +5,7 @@ import { services as siteServices, faqsHome, faqsGmp, faqsContractQp, faqsQms, f
 export type Post = {
   id: string; slug: string; title: string; excerpt: string | null; body: string;
   cover_image: string | null; cover_alt: string | null; faqs: string | null; category: string | null; status: string; author: string | null;
-  reading_minutes: number; views: number; created_at: string; updated_at: string;
+  reading_minutes: number; views: number; publish_at: string | null; created_at: string; updated_at: string;
 };
 export type Faq = { id: string; question: string; answer: string; category: string | null; order_index: number; published: number; };
 export type Service = { id: string; slug: string; title: string; short: string; body: string | null; icon: string | null; order_index: number; published: number; };
@@ -45,6 +45,7 @@ async function init() {
   try { await db.execute("ALTER TABLE posts ADD COLUMN cover_image TEXT"); } catch { /* column already exists */ }
   try { await db.execute("ALTER TABLE posts ADD COLUMN cover_alt TEXT"); } catch { /* column already exists */ }
   try { await db.execute("ALTER TABLE posts ADD COLUMN faqs TEXT"); } catch { /* column already exists */ }
+  try { await db.execute("ALTER TABLE posts ADD COLUMN publish_at TEXT"); } catch { /* column already exists */ }
   await seed(db);
 }
 
@@ -114,6 +115,56 @@ export async function upsertPost(p: { id?: string; title: string; slug?: string;
 export async function deletePost(id: string) {
   await ensure();
   await getDb().execute({ sql: "DELETE FROM posts WHERE id=?", args: [id] });
+}
+
+/* ----------------------------------------------- drip-publish automation */
+const sqlUtc = (d: Date) => d.toISOString().slice(0, 19).replace("T", " "); // -> "YYYY-MM-DD HH:MM:SS" UTC
+
+/** Oldest drafts first — used to preview the drip schedule in the admin. */
+export async function listSchedulableDrafts(limit = 4): Promise<{ id: string; title: string }[]> {
+  await ensure();
+  return (await getDb().execute({
+    sql: "SELECT id, title FROM posts WHERE status='draft' ORDER BY created_at ASC, id ASC LIMIT ?",
+    args: [limit],
+  })).rows as unknown as { id: string; title: string }[];
+}
+
+/** Schedule the next `days` draft posts to publish one per day (Day 1 = today). */
+export async function scheduleNextDrafts(days: number): Promise<{ scheduled: number; publishedNow: number }> {
+  await ensure();
+  const db = getDb();
+  const n = Math.max(1, Math.min(Math.floor(days) || 1, 365));
+  const drafts = (await db.execute({
+    sql: "SELECT id FROM posts WHERE status='draft' ORDER BY created_at ASC, id ASC LIMIT ?",
+    args: [n],
+  })).rows as unknown as { id: string }[];
+  const base = new Date();
+  base.setUTCHours(0, 0, 0, 0);
+  const stmts = drafts.map((row, i) => ({
+    sql: "UPDATE posts SET status='scheduled', publish_at=?, updated_at=datetime('now') WHERE id=?",
+    args: [sqlUtc(new Date(base.getTime() + i * 86400000)), row.id],
+  }));
+  if (stmts.length) await db.batch(stmts, "write");
+  const publishedNow = await publishDuePosts();
+  return { scheduled: drafts.length, publishedNow };
+}
+
+/** Publish any scheduled post whose publish_at has arrived (driven by the daily cron). */
+export async function publishDuePosts(): Promise<number> {
+  await ensure();
+  const r = await getDb().execute(
+    "UPDATE posts SET status='published', updated_at=datetime('now') WHERE status='scheduled' AND publish_at IS NOT NULL AND publish_at <= datetime('now')",
+  );
+  return Number(r.rowsAffected ?? 0);
+}
+
+/** Revert every non-draft post to draft and clear any schedule. */
+export async function setAllPostsDraft(): Promise<number> {
+  await ensure();
+  const r = await getDb().execute(
+    "UPDATE posts SET status='draft', publish_at=NULL, updated_at=datetime('now') WHERE status<>'draft'",
+  );
+  return Number(r.rowsAffected ?? 0);
 }
 
 /* ================================================================== faqs */
