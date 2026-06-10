@@ -5,7 +5,7 @@ import { CTABand } from "@/components/sections/CTABand";
 import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMeta } from "@/lib/seo";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { listPublishedCaseStudies } from "@/lib/db/content";
 
 export const metadata = pageMeta({
@@ -19,7 +19,17 @@ export default async function CaseStudiesPage() {
   const studies = await listPublishedCaseStudies().catch(() => []);
   return (
     <>
-      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Case Studies", path: "/case-studies" }])} />
+      <JsonLd
+        data={[
+          collectionPageSchema({
+            name: "Case Studies — Pharmaceutical Quality & Compliance",
+            description: "Anonymised GMP/GDP audit, contract QP cover, quality system and inspection-readiness engagements delivered by Double Helix Pharma.",
+            path: "/case-studies",
+            items: studies.map((c) => ({ name: c.title, path: `/case-studies/${c.slug}` })),
+          }),
+          breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Case Studies", path: "/case-studies" }]),
+        ]}
+      />
       <Hero
         image={{ src: "/hero-case-studies.webp", alt: "Proven pharmaceutical compliance outcomes" }}
         breadcrumb={[{ name: "Home", href: "/" }, { name: "Case Studies" }]}

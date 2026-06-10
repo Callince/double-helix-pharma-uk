@@ -114,7 +114,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={post.cover_image}
-              alt={post.title}
+              alt={post.cover_alt || post.title}
+              title={post.cover_alt || post.title}
               className="-mt-8 aspect-[16/7] w-full rounded-2xl border border-line object-cover shadow-sm sm:-mt-12"
             />
           </Container>

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { site, servicePages } from "@/lib/site";
-import { listPublishedPosts } from "@/lib/db/content";
+import { listPublishedPosts, listPublishedCaseStudies } from "@/lib/db/content";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -11,8 +11,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ) => ({ url: `${site.url}${route}`, lastModified: now, changeFrequency, priority });
 
   let posts: { slug: string; updated_at: string }[] = [];
+  let caseStudies: { slug: string; updated_at: string }[] = [];
   try {
     posts = await listPublishedPosts();
+  } catch {
+    /* DB unavailable — sitemap still lists static routes */
+  }
+  try {
+    caseStudies = await listPublishedCaseStudies();
   } catch {
     /* DB unavailable — sitemap still lists static routes */
   }
@@ -27,6 +33,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(p.updated_at || now),
       changeFrequency: "monthly" as const,
       priority: 0.6,
+    })),
+    entry("/case-studies", 0.7),
+    ...caseStudies.map((c) => ({
+      url: `${site.url}/case-studies/${c.slug}`,
+      lastModified: new Date(c.updated_at || now),
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
     })),
     entry("/about", 0.7),
     entry("/contact", 0.7),

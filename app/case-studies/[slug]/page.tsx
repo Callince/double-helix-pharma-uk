@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMeta } from "@/lib/seo";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, caseStudySchema } from "@/lib/schema";
 import { getCaseStudyBySlug } from "@/lib/db/content";
 
 export const dynamic = "force-dynamic";
@@ -31,11 +31,20 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   return (
     <>
       <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "Case Studies", path: "/case-studies" },
-          { name: cs.title, path: `/case-studies/${cs.slug}` },
-        ])}
+        data={[
+          caseStudySchema({
+            title: cs.title,
+            description: cs.summary,
+            sector: cs.sector,
+            path: `/case-studies/${cs.slug}`,
+            dateModified: cs.updated_at,
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Case Studies", path: "/case-studies" },
+            { name: cs.title, path: `/case-studies/${cs.slug}` },
+          ]),
+        ]}
       />
 
       <article>

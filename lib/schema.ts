@@ -127,3 +127,61 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
     })),
   };
 }
+
+/** Article schema for a case study (challenge/approach/outcome write-up). */
+export function caseStudySchema(opts: {
+  title: string;
+  description?: string | null;
+  sector?: string | null;
+  path: string;
+  dateModified?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: opts.title,
+    ...(opts.description ? { description: opts.description } : {}),
+    ...(opts.sector ? { articleSection: opts.sector } : {}),
+    ...(opts.dateModified
+      ? { datePublished: opts.dateModified, dateModified: opts.dateModified }
+      : {}),
+    url: `${site.url}${opts.path}`,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${site.url}${opts.path}` },
+    author: { "@id": ORG_ID },
+    publisher: { "@id": ORG_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    about: { "@type": "Thing", name: "Pharmaceutical quality and compliance" },
+    inLanguage: "en-GB",
+  };
+}
+
+/** CollectionPage (+ optional ItemList) for listing pages like /blog, /case-studies. */
+export function collectionPageSchema(opts: {
+  name: string;
+  description: string;
+  path: string;
+  items?: { name: string; path: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: opts.name,
+    description: opts.description,
+    url: `${site.url}${opts.path}`,
+    isPartOf: { "@id": WEBSITE_ID },
+    ...(opts.items && opts.items.length
+      ? {
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: opts.items.length,
+            itemListElement: opts.items.map((it, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: it.name,
+              url: `${site.url}${it.path}`,
+            })),
+          },
+        }
+      : {}),
+  };
+}

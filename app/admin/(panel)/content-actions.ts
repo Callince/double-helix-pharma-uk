@@ -25,13 +25,26 @@ export async function savePost(fd: FormData) {
       console.error("[blog] auto-interlink failed", err);
     }
   }
-  // FAQs entered as "Question :: Answer" per line -> JSON for storage + schema.
-  const faqs = str(fd, "faqs")
-    .split(/\r?\n/)
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .map((l) => { const i = l.indexOf("::"); return i === -1 ? null : { q: l.slice(0, i).trim(), a: l.slice(i + 1).trim() }; })
-    .filter((f): f is { q: string; a: string } => Boolean(f && f.q && f.a));
+  // FAQs come from the structured editor as a JSON array of {q,a}; fall back to
+  // the legacy "Question :: Answer" per-line format for older forms.
+  const rawFaqs = str(fd, "faqs");
+  let faqs: { q: string; a: string }[] = [];
+  if (rawFaqs.startsWith("[")) {
+    try {
+      const arr = JSON.parse(rawFaqs);
+      if (Array.isArray(arr))
+        faqs = arr
+          .map((f) => ({ q: String(f?.q ?? "").trim(), a: String(f?.a ?? "").trim() }))
+          .filter((f) => f.q && f.a);
+    } catch { /* ignore malformed JSON */ }
+  } else {
+    faqs = rawFaqs
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .map((l) => { const i = l.indexOf("::"); return i === -1 ? null : { q: l.slice(0, i).trim(), a: l.slice(i + 1).trim() }; })
+      .filter((f): f is { q: string; a: string } => Boolean(f && f.q && f.a));
+  }
 
   await db.upsertPost({
     id: str(fd, "id") || undefined,
@@ -41,6 +54,7 @@ export async function savePost(fd: FormData) {
     status,
     excerpt: str(fd, "excerpt"),
     cover_image: str(fd, "cover_image"),
+    cover_alt: str(fd, "cover_alt"),
     faqs: faqs.length ? JSON.stringify(faqs) : "",
     body,
   });

@@ -38,3 +38,6 @@ next-env.d.ts
 
 # admin media uploads (stored on the server's disk at runtime)
 /public/uploads
+
+# scratch / temp doc artifacts
+docs/_*

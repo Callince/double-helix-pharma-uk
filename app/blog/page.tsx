@@ -5,7 +5,7 @@ import { CTABand } from "@/components/sections/CTABand";
 import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMeta } from "@/lib/seo";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { listPublishedPosts, type Post } from "@/lib/db/content";
 
 export const metadata = pageMeta({
@@ -52,7 +52,17 @@ export default async function BlogPage({ searchParams }: { searchParams: Promise
 
   return (
     <>
-      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }])} />
+      <JsonLd
+        data={[
+          collectionPageSchema({
+            name: "Blog — Pharmaceutical Quality & Compliance",
+            description: "Practical guidance on GMP/GDP audits, Qualified Person duties, quality systems, inspections and pharmaceutical compliance.",
+            path: "/blog",
+            items: pagePosts.map((p) => ({ name: p.title, path: `/blog/${p.slug}` })),
+          }),
+          breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }]),
+        ]}
+      />
       <Hero
         image={{ src: "/hero-blog.webp", alt: "Pharmaceutical quality and compliance insights" }}
         breadcrumb={[{ name: "Home", href: "/" }, { name: "Blog" }]}
@@ -92,7 +102,7 @@ export default async function BlogPage({ searchParams }: { searchParams: Promise
                   >
                     {p.cover_image && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={p.cover_image} alt="" className="mb-4 aspect-[16/9] w-full rounded-lg border border-line object-cover" />
+                      <img src={p.cover_image} alt={p.cover_alt || ""} className="mb-4 aspect-[16/9] w-full rounded-lg border border-line object-cover" />
                     )}
                     <div className="flex items-center gap-2">
                       <span className="label-mono text-teal-ink">{p.category || "Article"}</span>
