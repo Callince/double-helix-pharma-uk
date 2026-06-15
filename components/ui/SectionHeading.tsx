@@ -10,6 +10,7 @@ export function SectionHeading({
   as: Tag = "h2",
   split = false,
   className = "",
+  maxW,
 }: {
   index?: string;
   eyebrow?: string;
@@ -20,6 +21,8 @@ export function SectionHeading({
   as?: "h1" | "h2" | "h3";
   split?: boolean;
   className?: string;
+  /** Override the block max-width (left-aligned headings). Default: max-w-3xl. */
+  maxW?: string;
 }) {
   const isLight = tone === "light";
 
@@ -69,7 +72,7 @@ export function SectionHeading({
   return (
     <div
       data-reveal
-      className={`${align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-3xl"} ${className}`}
+      className={`${align === "center" ? "mx-auto max-w-2xl text-center" : maxW || "max-w-3xl"} ${className}`}
     >
       {eyebrowEl}
       <div className="mt-4">{titleEl}</div>

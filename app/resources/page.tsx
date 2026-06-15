@@ -90,7 +90,7 @@ export default function ResourcesPage() {
           <div className="space-y-14">
             {groups.map((g) => (
               <div key={g.heading}>
-                <SectionHeading eyebrow="Source" title={g.heading} intro={g.blurb} />
+                <SectionHeading eyebrow="Source" title={g.heading} intro={g.blurb} maxW="max-w-4xl" />
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
                   {g.links.map((l) => (
                     <a

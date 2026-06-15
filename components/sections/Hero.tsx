@@ -152,7 +152,7 @@ export function Hero({
       )}
 
       <div
-        className={`relative z-10 mx-auto flex w-full max-w-[120rem] items-center px-6 sm:px-10 lg:px-16 ${
+        className={`relative z-10 mx-auto flex w-full max-w-6xl items-center px-5 sm:px-6 lg:px-8 ${
           panel
             ? "min-h-[calc(100svh-4.5rem)] py-20 lg:py-0"
             : "min-h-[42vh] py-16 lg:min-h-[46vh] lg:py-20"
