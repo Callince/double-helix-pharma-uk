@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { Icon } from "@/components/ui/Icon";
+import { NewsletterForm } from "@/components/sections/NewsletterForm";
 import { site, services } from "@/lib/site";
 
 const year = new Date().getFullYear();
@@ -28,6 +29,12 @@ export function Footer() {
             >
               <Icon name="linkedin" className="size-5" />
             </a>
+
+            <div className="mt-8 max-w-sm">
+              <p className="text-sm font-semibold text-white/85">Get compliance updates</p>
+              <p className="mt-1 text-xs text-white/50">Occasional GMP/GDP insight — no spam, unsubscribe anytime.</p>
+              <NewsletterForm />
+            </div>
           </div>
 
           <nav aria-label="Services">
