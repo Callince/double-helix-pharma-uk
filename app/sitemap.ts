@@ -2,6 +2,10 @@ import type { MetadataRoute } from "next";
 import { site, servicePages } from "@/lib/site";
 import { listPublishedPosts, listPublishedCaseStudies } from "@/lib/db/content";
 
+// Generate per-request so the sitemap always reflects currently-published content
+// (drafting/publishing posts updates it without a rebuild).
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const entry = (
@@ -44,6 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry("/about", 0.7),
     entry("/contact", 0.7),
     entry("/faq", 0.6),
+    entry("/resources", 0.6),
     entry("/privacy", 0.2, "yearly"),
     entry("/terms", 0.2, "yearly"),
   ];
