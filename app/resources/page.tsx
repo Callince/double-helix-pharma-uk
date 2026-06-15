@@ -12,7 +12,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = pageMeta({
   title: "Regulatory Resources — MHRA, EMA & EU GMP/GDP Guidance",
   description:
-    "The official UK & EU pharmaceutical compliance sources we work to — MHRA, the MHRA Inspectorate blog, EMA GMP/GDP Q&A and EudraLex Volume 4 (EU GMP), including key chapters and annexes.",
+    "The official UK & EU pharmaceutical compliance sources we work to — MHRA, the MHRA Inspectorate blog, EMA GMP/GDP Q&A and EudraLex Volume 4 (EU GMP), including key chapters and annexes.",
   path: "/resources",
 });
 
@@ -29,10 +29,10 @@ const groups: Group[] = [
     ],
   },
   {
-    heading: "EU GMP guidelines — EudraLex Volume 4",
+    heading: "EU GMP guidelines — EudraLex Volume 4",
     blurb: "The EU Guidelines to Good Manufacturing Practice — the basis of EU/UK GMP expectations. Key chapters and annexes:",
     links: [
-      { name: "EudraLex Volume 4 — EU GMP Guidelines", desc: "The full set of EU GMP guidelines (basic requirements, Part II and annexes).", url: "https://health.ec.europa.eu/medicinal-products/eudralex/eudralex-volume-4_en" },
+      { name: "EudraLex Volume 4 — EU GMP Guidelines", desc: "The full set of EU GMP guidelines (basic requirements, Part II and annexes).", url: "https://health.ec.europa.eu/medicinal-products/eudralex/eudralex-volume-4_en" },
       { name: "Chapter 1 — Pharmaceutical Quality System", desc: "The PQS / ICH Q10 foundation for a compliant quality system.", url: "https://health.ec.europa.eu/document/download/e458c423-f564-4171-b344-030a461c567f_en" },
       { name: "Chapter 7 — Outsourced Activities", desc: "Contract giver/acceptor duties and technical/quality agreements.", url: "https://health.ec.europa.eu/document/download/58b5106a-cf6f-4352-9dca-1caf5d27d97e_en" },
       { name: "Chapter 9 — Self Inspection", desc: "The basis for internal audit and self-inspection programmes.", url: "https://health.ec.europa.eu/document/download/07195808-d02e-4d7a-b8f4-f84a83278b62_en" },
@@ -64,7 +64,7 @@ export default function ResourcesPage() {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             name: "Regulatory Resources",
-            description: "Official MHRA, EMA and EudraLex Volume 4 GMP/GDP sources.",
+            description: "Official MHRA, EMA and EudraLex Volume 4 GMP/GDP sources.",
             url: `${site.url}/resources`,
             mainEntity: {
               "@type": "ItemList",
@@ -80,7 +80,7 @@ export default function ResourcesPage() {
         breadcrumb={[{ name: "Home", href: "/" }, { name: "Resources" }]}
         eyebrow="Regulatory Resources"
         title={<>The official guidance we <em className="font-display italic text-teal-ink">work to</em></>}
-        subtitle="The primary UK and EU GMP/GDP sources behind our audits, QP services and quality systems — MHRA, EMA and EudraLex Volume 4. Bookmark them; always check the latest published version."
+        subtitle="The primary UK and EU GMP/GDP sources behind our audits, QP services and quality systems — MHRA, EMA and EudraLex Volume 4. Bookmark them; always check the latest published version."
         primary={{ label: "Talk to a QP", href: "/contact" }}
         secondary={{ label: "Read the blog", href: "/blog" }}
       />
