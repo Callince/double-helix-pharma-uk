@@ -2,16 +2,22 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
-import { useMemo, useRef, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import * as THREE from "three";
+import gsap from "gsap";
 
 const COUNT = 24; // base pairs
 const RADIUS = 1.15;
 const STEP = 0.24; // vertical spacing
 const ANGLE = 0.52; // radians of twist per step
+const TILT_X = 0.16;
+const TILT_Z = 0.2;
 
 function Helix({ reduced }: { reduced: boolean }) {
-  const ref = useRef<THREE.Group>(null);
+  const ref = useRef<THREE.Group>(null); // whole helix — entrance spin, continuous rotation, parallax
+  const pairs = useRef<(THREE.Group | null)[]>([]); // each base pair — staggered assemble
+  const ready = useRef(false); // continuous rotation starts only after the entrance settles
+  const pointer = useRef({ x: 0, y: 0 });
 
   const nodes = useMemo(() => {
     const up = new THREE.Vector3(0, 1, 0);
@@ -28,14 +34,67 @@ function Helix({ reduced }: { reduced: boolean }) {
     });
   }, []);
 
+  // GSAP entrance: strands assemble bottom-to-top, the model unwinds into place,
+  // then settles into a slow "breathing" pulse.
+  useEffect(() => {
+    const group = ref.current;
+    if (!group) return;
+    if (reduced) {
+      ready.current = true;
+      return;
+    }
+    const items = pairs.current.filter(Boolean) as THREE.Group[];
+    const tl = gsap.timeline({ onComplete: () => (ready.current = true) });
+    tl.to(group.scale, { x: 1, y: 1, z: 1, duration: 1.3, ease: "power3.out" }, 0)
+      .to(group.rotation, { y: 0, duration: 1.7, ease: "power2.out" }, 0)
+      .to(
+        items.map((p) => p.scale),
+        { x: 1, y: 1, z: 1, duration: 0.55, ease: "back.out(2.2)", stagger: { each: 0.045, from: "start" } },
+        0.2,
+      )
+      .add(() => {
+        gsap.to(group.scale, {
+          x: 1.04, y: 1.04, z: 1.04,
+          duration: 3.4, ease: "sine.inOut", yoyo: true, repeat: -1,
+        });
+      });
+    return () => {
+      tl.kill();
+      gsap.killTweensOf(group.scale);
+    };
+  }, [reduced]);
+
+  // Cursor parallax target (whole window, so it reacts across the hero).
+  useEffect(() => {
+    if (reduced) return;
+    const onMove = (e: PointerEvent) => {
+      pointer.current.x = e.clientX / window.innerWidth - 0.5;
+      pointer.current.y = e.clientY / window.innerHeight - 0.5;
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [reduced]);
+
   useFrame((_, delta) => {
-    if (ref.current && !reduced) ref.current.rotation.y += delta * 0.35;
+    const g = ref.current;
+    if (!g || reduced) return;
+    const d = Math.min(delta, 0.05); // clamp on tab refocus
+    if (ready.current) g.rotation.y += d * 0.3; // gentle continuous spin
+    // smooth tilt toward the cursor
+    const tx = TILT_X + pointer.current.y * 0.22;
+    const tz = TILT_Z + pointer.current.x * 0.18;
+    g.rotation.x += (tx - g.rotation.x) * d * 3.5;
+    g.rotation.z += (tz - g.rotation.z) * d * 3.5;
   });
 
   return (
-    <group ref={ref} rotation={[0.16, 0, 0.2]}>
+    <group
+      ref={ref}
+      rotation={[TILT_X, reduced ? 0 : -Math.PI * 0.85, TILT_Z]}
+      scale={reduced ? 1 : 0.5}
+    >
       {nodes.map((n, i) => (
-        <group key={i}>
+        <group key={i} ref={(el) => { pairs.current[i] = el; }} scale={reduced ? 1 : 0}>
           {/* strand A node — logo green */}
           <mesh position={[n.x, n.y, n.z]}>
             <sphereGeometry args={[0.16, 24, 24]} />
@@ -85,9 +144,9 @@ export default function DnaScene({ reduced = false }: { reduced?: boolean }) {
 
       <Rig>
         <Float
-          speed={reduced ? 0 : 1.2}
-          rotationIntensity={reduced ? 0 : 0.45}
-          floatIntensity={reduced ? 0 : 0.7}
+          speed={reduced ? 0 : 1.1}
+          rotationIntensity={reduced ? 0 : 0.15}
+          floatIntensity={reduced ? 0 : 0.5}
         >
           <Helix reduced={reduced} />
         </Float>
