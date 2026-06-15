@@ -132,7 +132,7 @@ export function Hero({
     <section className="relative isolate overflow-hidden bg-hero-light text-ink">
       {/* Atmosphere */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-        <div className="absolute right-[-10%] top-[-22%] h-[36rem] w-[36rem] rounded-full bg-teal/10 blur-[120px]" />
+        <div data-parallax="0.35" className="absolute right-[-10%] top-[-22%] h-[36rem] w-[36rem] rounded-full bg-teal/10 blur-[120px]" />
         <div className="absolute inset-0 opacity-[0.05]" style={dotPattern} />
         {/* Subtle helix accent only when there's no side image and no 3D */}
         {!panel && !image && (
