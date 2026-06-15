@@ -9,8 +9,8 @@ export function Footer() {
   return (
     <footer className="bg-navy-deep text-white/75">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1.2fr]">
-          <div>
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
+          <div className="sm:col-span-2 lg:col-span-1">
             <Logo tone="light" />
             <p className="mt-6 max-w-sm font-display text-lg leading-snug text-white/85">
               {site.tagline}.
@@ -41,6 +41,26 @@ export function Footer() {
                 <li key={s.slug}>
                   <Link href={s.href} className="text-white/65 transition-colors hover:text-cyan">
                     {s.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Explore">
+            <h2 className="label-mono text-white/45">Explore</h2>
+            <ul className="mt-5 space-y-3 text-sm">
+              {[
+                { label: "About", href: "/about" },
+                { label: "Case Studies", href: "/case-studies" },
+                { label: "Blog", href: "/blog" },
+                { label: "Resources", href: "/resources" },
+                { label: "FAQ", href: "/faq" },
+                { label: "Contact", href: "/contact" },
+              ].map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-white/65 transition-colors hover:text-cyan">
+                    {l.label}
                   </Link>
                 </li>
               ))}
@@ -84,12 +104,6 @@ export function Footer() {
             © {year} {site.legalName}. Company No. {site.companyNumber} · Registered in England &amp; Wales.
           </p>
           <div className="flex items-center gap-6">
-            <Link href="/resources" className="hover:text-white">
-              Resources
-            </Link>
-            <Link href="/faq" className="hover:text-white">
-              FAQ
-            </Link>
             <Link href="/privacy" className="hover:text-white">
               Privacy
             </Link>

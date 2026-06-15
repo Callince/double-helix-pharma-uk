@@ -42,7 +42,7 @@ export function SectionHeading({
 
   const titleEl = (
     <Tag
-      className={`font-display text-[2rem] font-medium leading-[1.1] sm:text-[2.55rem] ${
+      className={`font-display text-[2rem] font-medium leading-[1.1] text-balance sm:text-[2.55rem] ${
         isLight ? "text-white" : "text-navy"
       }`}
     >

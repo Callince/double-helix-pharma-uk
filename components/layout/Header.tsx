@@ -11,6 +11,7 @@ import { services, ctaHref, ctaLabel } from "@/lib/site";
 const topLinks = [
   { label: "Blog", href: "/blog" },
   { label: "Case Studies", href: "/case-studies" },
+  { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
@@ -76,7 +77,7 @@ export function Header() {
           <Logo />
         </Link>
 
-        <div className="hidden items-center gap-8 lg:flex">
+        <div className="hidden items-center gap-6 lg:flex">
           <div className="relative" ref={servicesRef}>
             <button
               type="button"
