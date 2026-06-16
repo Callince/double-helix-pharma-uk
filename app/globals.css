@@ -28,6 +28,17 @@
   --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
   --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Display type scale (editorial) — single source of truth for large headings.
+     Generates text-display-sm … text-display-xl utilities. */
+  --text-display-sm: 2rem;     /* section headings (mobile) */
+  --text-display: 2.55rem;     /* section headings (desktop) */
+  --text-display-md: 2.6rem;   /* hero (mobile) */
+  --text-display-lg: 3.3rem;   /* hero (sm) */
+  --text-display-xl: 3.85rem;  /* hero (lg) */
+
+  /* Motion — shared easing for a consistent feel */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -58,6 +69,21 @@
     outline: 2px solid var(--color-teal);
     outline-offset: 3px;
     border-radius: 2px;
+  }
+  /* Remove the 300ms tap delay on interactive elements (pinch-zoom preserved) */
+  a,
+  button,
+  [role="button"],
+  label,
+  summary,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+  /* Anchored headings clear the sticky header when smooth-scrolled to (blog TOC) */
+  :where(h2, h3, h4)[id] {
+    scroll-margin-top: 6rem;
   }
 }
 

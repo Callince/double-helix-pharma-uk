@@ -82,7 +82,7 @@ export function Hero({
       )}
 
       <h1
-        className="rise mt-6 max-w-[16ch] font-display text-[2.6rem] font-medium leading-[1.04] tracking-[-0.02em] text-navy sm:text-[3.3rem] lg:text-[3.85rem]"
+        className="rise mt-6 max-w-[16ch] font-display text-display-md font-medium leading-[1.04] tracking-[-0.02em] text-navy sm:text-display-lg lg:text-display-xl"
         style={{ animationDelay: "150ms" }}
       >
         {title}

@@ -73,7 +73,7 @@ export default function AdminLoginPage() {
             </button>
           </form>
         </div>
-        <p className="mt-5 text-center text-xs text-white/45">
+        <p className="mt-5 text-center text-xs text-white/65">
           <Link href="/" className="hover:text-white">&larr; Back to website</Link>
         </p>
       </div>

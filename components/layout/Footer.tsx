@@ -25,7 +25,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="mt-7 inline-grid size-10 place-items-center rounded-lg ring-1 ring-white/20 transition-colors hover:bg-white/10"
+              className="mt-7 inline-grid size-11 place-items-center rounded-lg ring-1 ring-white/20 transition-colors hover:bg-white/10"
             >
               <Icon name="linkedin" className="size-5" />
             </a>

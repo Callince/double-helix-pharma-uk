@@ -44,7 +44,7 @@ export function Sidebar({ user, onNavigate }: { user: AdminUser; onNavigate?: ()
                 on ? "bg-white/10 text-white" : "text-white/60 hover:bg-white/5 hover:text-white"
               }`}
             >
-              <Icon name={item.icon} className={`size-[18px] ${on ? "text-cyan" : "text-white/55"}`} />
+              <Icon name={item.icon} className={`size-[18px] ${on ? "text-cyan" : "text-white/65"}`} />
               {item.label}
               {on && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan" />}
             </Link>
@@ -59,12 +59,12 @@ export function Sidebar({ user, onNavigate }: { user: AdminUser; onNavigate?: ()
           </span>
           <div className="min-w-0">
             <p className="truncate text-sm font-medium text-white">{user.full_name}</p>
-            <p className="truncate text-xs text-white/45">{ROLE_LABEL[user.role] ?? user.role}</p>
+            <p className="truncate text-xs text-white/65">{ROLE_LABEL[user.role] ?? user.role}</p>
           </div>
         </div>
         <button
           onClick={logout}
-          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-white/55 transition-colors hover:bg-white/5 hover:text-white"
+          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-white/65 transition-colors hover:bg-white/5 hover:text-white"
         >
           <Icon name="log-out" className="size-[18px]" /> Sign out
         </button>

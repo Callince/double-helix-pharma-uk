@@ -140,7 +140,7 @@ export function Header() {
 
         <button
           type="button"
-          className="grid size-10 place-items-center rounded-lg text-navy hover:bg-navy/[0.05] lg:hidden"
+          className="grid size-11 place-items-center rounded-lg text-navy hover:bg-navy/[0.05] lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((v) => !v)}
