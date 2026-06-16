@@ -1,8 +1,18 @@
 import { NextResponse } from "next/server";
 import { getUserByEmail } from "@/lib/db/users";
 import { verifyPassword, signSession, SESSION_COOKIE } from "@/lib/auth/crypto";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
+  // Brute-force throttle: 10 attempts / 10 min per IP.
+  const rl = rateLimit(`login:ip:${clientIp(req)}`, 10, 10 * 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Too many attempts. Please wait a few minutes and try again." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
+    );
+  }
+
   let body: { email?: string; password?: string } = {};
   try {
     body = await req.json();
@@ -14,6 +24,15 @@ export async function POST(req: Request) {
 
   if (!email || !password) {
     return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
+  }
+
+  // Per-account throttle to slow targeted guessing even across IPs.
+  const rlAcct = rateLimit(`login:acct:${email.toLowerCase()}`, 10, 10 * 60_000);
+  if (!rlAcct.ok) {
+    return NextResponse.json(
+      { error: "Too many attempts for this account. Please wait a few minutes." },
+      { status: 429, headers: { "Retry-After": String(rlAcct.retryAfter) } },
+    );
   }
 
   let user;

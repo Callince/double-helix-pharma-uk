@@ -41,3 +41,6 @@ next-env.d.ts
 
 # scratch / temp doc artifacts
 docs/_*
+
+# third-party Claude skills (installed locally, not committed)
+.claude/skills/

@@ -20,15 +20,32 @@ declare global {
 }
 
 type Status = "idle" | "sending" | "error";
+type FieldName = "name" | "email" | "message";
+type Errors = Partial<Record<FieldName, string>>;
 
-const fieldCls =
-  "w-full rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-ink shadow-sm transition-colors placeholder:text-muted/70 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30";
+const fieldBase =
+  "w-full rounded-xl border bg-white px-4 py-3 text-sm text-ink shadow-sm transition-colors placeholder:text-muted/70 focus:outline-none focus:ring-2";
+const fieldOk = "border-line focus:border-teal focus:ring-teal/30";
+const fieldError = "border-red-400 focus:border-red-500 focus:ring-red-200";
 const labelCls = "mb-1.5 block text-sm font-medium text-navy";
+
+function validate(d: Record<string, string>): Errors {
+  const e: Errors = {};
+  if (!d.name?.trim()) e.name = "Please enter your name.";
+  if (!d.email?.trim()) e.email = "Please enter your email address.";
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim()))
+    e.email = "Please enter a valid email address.";
+  if (!d.message?.trim()) e.message = "Please tell us a little about your enquiry.";
+  return e;
+}
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Errors>({});
+  const [attempted, setAttempted] = useState(false);
   const [token, setToken] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
   const widgetEl = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
 
@@ -59,9 +76,21 @@ export function ContactForm() {
     if (widgetId.current && window.turnstile) window.turnstile.reset(widgetId.current);
   }
 
+  // After the first submit attempt, validate live so errors clear as the user fixes them.
+  function onFormChange() {
+    if (!attempted || !formRef.current) return;
+    const data = Object.fromEntries(new FormData(formRef.current).entries()) as Record<string, string>;
+    setErrors(validate(data));
+  }
+
+  function fieldClass(name: FieldName) {
+    return `${fieldBase} ${errors[name] ? fieldError : fieldOk}`;
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
+    if (status === "sending") return; // guard against double-submit
+    setFormError(null);
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
 
@@ -71,8 +100,18 @@ export function ContactForm() {
       return;
     }
 
+    // Inline field validation — show errors by the field, focus the first problem.
+    const fieldErrors = validate(data);
+    setAttempted(true);
+    setErrors(fieldErrors);
+    if (Object.keys(fieldErrors).length > 0) {
+      const first = (["name", "email", "message"] as const).find((k) => fieldErrors[k]);
+      if (first) document.getElementById(first)?.focus();
+      return;
+    }
+
     if (!token) {
-      setError("Please complete the verification check below.");
+      setFormError("Please complete the verification check below.");
       return;
     }
     data["cf-turnstile-response"] = token;
@@ -89,7 +128,7 @@ export function ContactForm() {
       window.location.assign("/thank-you");
     } catch {
       setStatus("error");
-      setError("Something went wrong. Please email us directly instead.");
+      setFormError("Something went wrong. Please email us directly instead.");
       resetWidget();
     }
   }
@@ -102,29 +141,59 @@ export function ContactForm() {
         onLoad={renderWidget}
       />
       <form
+        ref={formRef}
         onSubmit={onSubmit}
+        onChange={onFormChange}
         className="rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8"
         noValidate
       >
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="name" className={labelCls}>Name <span className="text-teal">*</span></label>
-            <input id="name" name="name" required autoComplete="name" className={fieldCls} />
+            <input
+              id="name"
+              name="name"
+              required
+              autoComplete="name"
+              aria-invalid={errors.name ? true : undefined}
+              aria-describedby={errors.name ? "name-error" : undefined}
+              className={fieldClass("name")}
+            />
+            {errors.name && (
+              <p id="name-error" role="alert" className="mt-1.5 text-xs font-medium text-red-600">
+                {errors.name}
+              </p>
+            )}
           </div>
           <div>
             <label htmlFor="company" className={labelCls}>Company</label>
-            <input id="company" name="company" autoComplete="organization" className={fieldCls} />
+            <input id="company" name="company" autoComplete="organization" className={`${fieldBase} ${fieldOk}`} />
           </div>
         </div>
 
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="email" className={labelCls}>Email <span className="text-teal">*</span></label>
-            <input id="email" name="email" type="email" required autoComplete="email" className={fieldCls} />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              inputMode="email"
+              aria-invalid={errors.email ? true : undefined}
+              aria-describedby={errors.email ? "email-error" : undefined}
+              className={fieldClass("email")}
+            />
+            {errors.email && (
+              <p id="email-error" role="alert" className="mt-1.5 text-xs font-medium text-red-600">
+                {errors.email}
+              </p>
+            )}
           </div>
           <div>
             <label htmlFor="service" className={labelCls}>How can we help?</label>
-            <select id="service" name="service" defaultValue="" className={fieldCls}>
+            <select id="service" name="service" defaultValue="" className={`${fieldBase} ${fieldOk}`}>
               <option value="" disabled>Select a service…</option>
               {servicePages.map((s) => <option key={s.slug} value={s.title}>{s.title}</option>)}
               <option value="General enquiry">General enquiry</option>
@@ -134,7 +203,20 @@ export function ContactForm() {
 
         <div className="mt-5">
           <label htmlFor="message" className={labelCls}>Message <span className="text-teal">*</span></label>
-          <textarea id="message" name="message" required rows={5} className={fieldCls} />
+          <textarea
+            id="message"
+            name="message"
+            required
+            rows={5}
+            aria-invalid={errors.message ? true : undefined}
+            aria-describedby={errors.message ? "message-error" : undefined}
+            className={fieldClass("message")}
+          />
+          {errors.message && (
+            <p id="message-error" role="alert" className="mt-1.5 text-xs font-medium text-red-600">
+              {errors.message}
+            </p>
+          )}
         </div>
 
         {/* Honeypot (hidden from users) */}
@@ -147,10 +229,12 @@ export function ContactForm() {
         <div className="mt-5" ref={widgetEl} />
 
         <div className="mt-6 flex flex-wrap items-center gap-4">
-          <Button type="submit" variant="green" size="lg" withArrow>
+          <Button type="submit" variant="green" size="lg" withArrow disabled={status === "sending"}>
             {status === "sending" ? "Sending…" : "Send enquiry"}
           </Button>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {formError && (
+            <p role="alert" className="text-sm font-medium text-red-600">{formError}</p>
+          )}
         </div>
         <p className="mt-4 text-xs text-muted">
           By submitting this form you agree to be contacted about your enquiry. We never share your details.

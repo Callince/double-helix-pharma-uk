@@ -40,7 +40,7 @@ export function NewsletterForm() {
 
   if (state === "ok") {
     return (
-      <p className="mt-3 flex items-center gap-2 text-sm font-medium text-cyan">
+      <p role="status" className="mt-3 flex items-center gap-2 text-sm font-medium text-cyan">
         <Icon name="check" className="size-4 shrink-0" /> Thanks — you&apos;re on the list.
       </p>
     );
@@ -58,7 +58,8 @@ export function NewsletterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@company.com"
-          className="min-w-0 flex-1 rounded-lg border border-white/15 bg-white/[0.06] px-3.5 py-2 text-sm text-white outline-none transition-colors placeholder:text-white/40 focus:border-cyan focus:ring-2 focus:ring-cyan/30"
+          aria-describedby={state === "error" ? "newsletter-error" : undefined}
+          className="min-w-0 flex-1 rounded-lg border border-white/15 bg-white/[0.06] px-3.5 py-2 text-sm text-white outline-none transition-colors placeholder:text-white/60 focus:border-cyan focus:ring-2 focus:ring-cyan/30"
         />
         {/* honeypot — hidden from users, bots fill it */}
         <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
@@ -70,7 +71,7 @@ export function NewsletterForm() {
           {state === "loading" ? "…" : "Subscribe"}
         </button>
       </div>
-      {state === "error" && <p className="mt-2 text-xs text-rose-300">{msg}</p>}
+      {state === "error" && <p id="newsletter-error" role="alert" className="mt-2 text-xs text-rose-300">{msg}</p>}
     </form>
   );
 }

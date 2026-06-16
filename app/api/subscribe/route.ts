@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addSubscriber } from "@/lib/db/content";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 /**
  * Public newsletter signup. Stores the email in the `subscribers` table
@@ -12,6 +13,15 @@ export const dynamic = "force-dynamic";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
+  // Abuse throttle: 5 signups / 10 min per IP (no Turnstile on this form).
+  const rl = rateLimit(`subscribe:${clientIp(request)}`, 5, 10 * 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests. Please try again shortly." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
+    );
+  }
+
   let body: Record<string, unknown>;
   try {
     body = await request.json();

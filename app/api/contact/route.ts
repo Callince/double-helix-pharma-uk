@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import { site } from "@/lib/site";
 import { createEnquiry } from "@/lib/db/enquiries";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 /**
  * Contact form handler.
@@ -12,6 +13,15 @@ import { verifyTurnstile } from "@/lib/turnstile";
  * failure never loses (or appears to reject) a lead.
  */
 export async function POST(request: Request) {
+  // Abuse throttle: 5 submissions / 10 min per IP.
+  const rl = rateLimit(`contact:${clientIp(request)}`, 5, 10 * 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false, error: "Too many submissions. Please try again shortly." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
+    );
+  }
+
   let body: Record<string, unknown>;
   try {
     body = await request.json();
@@ -19,11 +29,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
   }
 
-  const name = String(body.name ?? "").trim();
-  const email = String(body.email ?? "").trim();
-  const message = String(body.message ?? "").trim();
-  const company = String(body.company ?? "").trim();
-  const service = String(body.service ?? "").trim();
+  // Trim and cap lengths to bound stored/emailed payload size.
+  const name = String(body.name ?? "").trim().slice(0, 200);
+  const email = String(body.email ?? "").trim().slice(0, 254);
+  const message = String(body.message ?? "").trim().slice(0, 5000);
+  const company = String(body.company ?? "").trim().slice(0, 200);
+  const service = String(body.service ?? "").trim().slice(0, 120);
 
   // Honeypot — silently accept bot submissions.
   if (typeof body.website === "string" && body.website.length > 0) {

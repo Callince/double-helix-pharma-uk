@@ -8,7 +8,18 @@ import type { NextRequest } from "next/server";
  */
 export const config = { matcher: ["/admin", "/admin/:path*"] };
 
-const SECRET = process.env.AUTH_SECRET || "dev-insecure-secret-change-in-production";
+const DEV_FALLBACK = "dev-insecure-secret-change-in-production";
+
+/** Resolve the signing secret. Fails closed: throws on the insecure dev default in production
+ *  (the throw is caught in valid() → request is treated as unauthenticated → redirected to login). */
+function getSecret(): string {
+  const s = process.env.AUTH_SECRET;
+  if (s && s !== DEV_FALLBACK) return s;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("AUTH_SECRET must be set in production.");
+  }
+  return DEV_FALLBACK;
+}
 
 function hexToBytes(hex: string): Uint8Array {
   const out = new Uint8Array(hex.length / 2);
@@ -26,7 +37,7 @@ async function valid(token?: string): Promise<boolean> {
     const enc = new TextEncoder();
     const key = await crypto.subtle.importKey(
       "raw",
-      enc.encode(SECRET) as BufferSource,
+      enc.encode(getSecret()) as BufferSource,
       { name: "HMAC", hash: "SHA-256" },
       false,
       ["verify"],

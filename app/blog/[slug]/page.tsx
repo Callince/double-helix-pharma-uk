@@ -9,6 +9,7 @@ import { breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
 import { getPostBySlug, listPublishedPosts, type Post } from "@/lib/db/content";
 import { processArticle } from "@/lib/blog/toc";
+import { sanitizeArticleHtml } from "@/lib/sanitize";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +48,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const post = await getPostBySlug(slug).catch(() => null);
   if (!post || post.status !== "published") notFound();
 
-  const { html, toc } = processArticle(post.body);
+  const { html, toc } = processArticle(sanitizeArticleHtml(post.body));
   const faqs = parseFaqs(post.faqs);
   const published = fmtDate(post.created_at);
   const updated = fmtDate(post.updated_at);

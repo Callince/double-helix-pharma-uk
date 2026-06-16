@@ -5,14 +5,17 @@ import { listSubscribers } from "@/lib/db/content";
 export const dynamic = "force-dynamic";
 
 function cell(v: unknown): string {
-  const s = String(v ?? "");
+  let s = String(v ?? "");
+  // Neutralise spreadsheet formula injection (=, +, -, @, tab, CR triggers).
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
   return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
 export async function GET() {
-  // Defence in depth — middleware also gates /admin/*.
+  // Subscriber emails are PII — admin only (middleware also gates /admin/*).
   const user = await getSessionUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (user.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const rows = await listSubscribers().catch(() => []);
   const lines = ["email,status,subscribed_at", ...rows.map((r) => [r.email, r.status, r.created_at].map(cell).join(","))];

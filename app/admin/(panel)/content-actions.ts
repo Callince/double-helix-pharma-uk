@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { assertAdmin } from "@/lib/admin/guard";
+import { assertAdmin, assertEditor } from "@/lib/admin/guard";
 import * as db from "@/lib/db/content";
 import { stripAutoLinks, getLinkTargets, suggestInterlinks, applyInterlinks, htmlToText } from "@/lib/ai/interlink";
 
@@ -10,7 +10,7 @@ const str = (fd: FormData, k: string) => String(fd.get(k) ?? "").trim();
 
 /* ------------------------------------------------------------------- posts */
 export async function savePost(fd: FormData) {
-  await assertAdmin();
+  await assertEditor();
   const status = str(fd, "status") || "draft";
   const slug = str(fd, "slug");
   let body = str(fd, "body");
@@ -63,7 +63,7 @@ export async function savePost(fd: FormData) {
   redirect("/admin/blog");
 }
 export async function deletePostAction(id: string) {
-  await assertAdmin();
+  await assertEditor();
   await db.deletePost(id);
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
@@ -71,7 +71,7 @@ export async function deletePostAction(id: string) {
 
 /** Drip-publish automation: schedule the next N drafts, one per day (Day 1 = today). */
 export async function scheduleDripAction(fd: FormData) {
-  await assertAdmin();
+  await assertEditor();
   const days = Number(fd.get("days") || 1);
   await db.scheduleNextDrafts(days);
   revalidatePath("/admin/blog");
@@ -81,7 +81,7 @@ export async function scheduleDripAction(fd: FormData) {
 
 /** Revert every post to draft (also clears any pending schedule). */
 export async function setAllPostsDraftAction() {
-  await assertAdmin();
+  await assertEditor();
   await db.setAllPostsDraft();
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
@@ -90,7 +90,7 @@ export async function setAllPostsDraftAction() {
 
 /* -------------------------------------------------------------------- faqs */
 export async function saveFaq(fd: FormData) {
-  await assertAdmin();
+  await assertEditor();
   await db.upsertFaq({
     id: str(fd, "id") || undefined,
     question: str(fd, "question"),
@@ -103,7 +103,7 @@ export async function saveFaq(fd: FormData) {
   redirect("/admin/faqs");
 }
 export async function deleteFaqAction(id: string) {
-  await assertAdmin();
+  await assertEditor();
   await db.deleteFaq(id);
   revalidatePath("/admin/faqs");
   revalidatePath("/faq");
@@ -111,7 +111,7 @@ export async function deleteFaqAction(id: string) {
 
 /* ---------------------------------------------------------------- services */
 export async function saveService(fd: FormData) {
-  await assertAdmin();
+  await assertEditor();
   await db.updateService({
     id: str(fd, "id"),
     title: str(fd, "title"),
@@ -127,7 +127,7 @@ export async function saveService(fd: FormData) {
 
 /* ------------------------------------------------------------- case studies */
 export async function saveCaseStudy(fd: FormData) {
-  await assertAdmin();
+  await assertEditor();
   await db.upsertCaseStudy({
     id: str(fd, "id") || undefined,
     title: str(fd, "title"),
@@ -144,7 +144,7 @@ export async function saveCaseStudy(fd: FormData) {
   redirect("/admin/case-studies");
 }
 export async function deleteCaseStudyAction(id: string) {
-  await assertAdmin();
+  await assertEditor();
   await db.deleteCaseStudy(id);
   revalidatePath("/admin/case-studies");
   revalidatePath("/case-studies");

@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { getSessionUser } from "@/lib/admin/guard";
+import { ALLOWED_IMAGE, sniffImage, safeBaseName } from "@/lib/upload";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
-const ALLOWED = new Set(["image/webp", "image/png", "image/jpeg", "image/gif", "image/svg+xml"]);
 const MAX = 5 * 1024 * 1024; // 5 MB
 
 function back(req: Request, q: string) {
@@ -17,6 +17,8 @@ function back(req: Request, q: string) {
 export async function POST(req: Request) {
   const user = await getSessionUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (user.role !== "admin" && user.role !== "editor")
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   let file: FormDataEntryValue | null = null;
   try {
@@ -25,17 +27,18 @@ export async function POST(req: Request) {
     return back(req, "error=upload");
   }
   if (!(file instanceof File) || file.size === 0) return back(req, "error=nofile");
-  if (!ALLOWED.has(file.type)) return back(req, "error=type");
   if (file.size > MAX) return back(req, "error=size");
 
-  const ext = (file.name.split(".").pop() || "bin").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 5);
-  const base =
-    file.name.replace(/\.[^.]+$/, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 40) || "image";
-  const name = `${base}-${Date.now().toString(36)}.${ext}`;
+  // Detect the real type from magic bytes — never trust file.type or the filename.
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const type = sniffImage(bytes);
+  if (!type) return back(req, "error=type");
+
+  const name = `${safeBaseName(file.name)}-${Date.now().toString(36)}.${ALLOWED_IMAGE[type]}`;
 
   try {
     await fs.mkdir(UPLOAD_DIR, { recursive: true });
-    await fs.writeFile(path.join(UPLOAD_DIR, name), Buffer.from(await file.arrayBuffer()));
+    await fs.writeFile(path.join(UPLOAD_DIR, name), Buffer.from(bytes));
   } catch (err) {
     console.error("[media] upload failed", err);
     return back(req, "error=write");

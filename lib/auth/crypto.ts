@@ -1,6 +1,16 @@
 import crypto from "node:crypto";
 
-const SECRET = process.env.AUTH_SECRET || "dev-insecure-secret-change-in-production";
+const DEV_FALLBACK = "dev-insecure-secret-change-in-production";
+
+/** Resolve the signing secret. Fails closed: refuses the insecure dev default in production. */
+function getSecret(): string {
+  const s = process.env.AUTH_SECRET;
+  if (s && s !== DEV_FALLBACK) return s;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("AUTH_SECRET must be set to a strong, unique value in production.");
+  }
+  return DEV_FALLBACK;
+}
 
 /* ----------------------------------------------------------------- passwords */
 export function hashPassword(password: string): string {
@@ -23,7 +33,7 @@ export function verifyPassword(password: string, stored: string): boolean {
 export function signSession(userId: string, ttlDays = 30): string {
   const exp = Date.now() + ttlDays * 86_400_000;
   const payload = `${userId}.${exp}`;
-  const sig = crypto.createHmac("sha256", SECRET).update(payload).digest("hex");
+  const sig = crypto.createHmac("sha256", getSecret()).update(payload).digest("hex");
   return `${payload}.${sig}`;
 }
 
@@ -32,7 +42,7 @@ export function verifySession(token?: string | null): { userId: string } | null 
   const parts = token.split(".");
   if (parts.length !== 3) return null;
   const [userId, exp, sig] = parts;
-  const expected = crypto.createHmac("sha256", SECRET).update(`${userId}.${exp}`).digest("hex");
+  const expected = crypto.createHmac("sha256", getSecret()).update(`${userId}.${exp}`).digest("hex");
   const a = Buffer.from(sig, "hex");
   const b = Buffer.from(expected, "hex");
   if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;

@@ -13,7 +13,13 @@ import path from "node:path";
 function resolve(): { url: string; authToken?: string } {
   const explicit = process.env.DATABASE_URL || process.env.TURSO_DATABASE_URL;
   if (explicit) return { url: explicit, authToken: process.env.TURSO_AUTH_TOKEN };
-  if (process.env.VERCEL) return { url: "file:/tmp/dh.db" };
+  // Fail closed in production: an ephemeral /tmp DB silently loses data AND
+  // re-seeds the default admin on every cold start. Require a durable DB (Turso).
+  if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
+    throw new Error(
+      "No database configured. Set DATABASE_URL or TURSO_DATABASE_URL (+ TURSO_AUTH_TOKEN) in production.",
+    );
+  }
   const dir = path.join(process.cwd(), ".data");
   try {
     fs.mkdirSync(dir, { recursive: true });

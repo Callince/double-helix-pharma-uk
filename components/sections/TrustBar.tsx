@@ -22,7 +22,7 @@ export function TrustBar() {
               <dt className="font-display text-xl font-medium tracking-tight text-navy sm:text-2xl">
                 {s.v}
               </dt>
-              <dd className="label-mono mt-2 text-[0.6rem] text-muted">{s.l}</dd>
+              <dd className="label-mono mt-2 text-[0.68rem] text-muted">{s.l}</dd>
             </div>
           ))}
         </dl>

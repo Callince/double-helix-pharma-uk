@@ -12,7 +12,13 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   const secret = process.env.CRON_SECRET;
-  if (secret && req.headers.get("authorization") !== `Bearer ${secret}`) {
+  if (!secret) {
+    // Fail closed in production: an unauthenticated trigger must not be possible.
+    if (process.env.NODE_ENV === "production") {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+    // dev only: allow unauthenticated runs for local testing.
+  } else if (req.headers.get("authorization") !== `Bearer ${secret}`) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   try {

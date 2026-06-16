@@ -2,10 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { updateEnquiryStatus } from "@/lib/db/enquiries";
-import { assertAdmin } from "@/lib/admin/guard";
+import { assertEditor } from "@/lib/admin/guard";
 
 export async function setEnquiryStatusAction(id: string, status: string) {
-  await assertAdmin();
+  await assertEditor();
   await updateEnquiryStatus(id, status);
   revalidatePath("/admin/enquiries");
   revalidatePath("/admin");

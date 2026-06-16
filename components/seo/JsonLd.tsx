@@ -7,7 +7,8 @@ export function JsonLd({ data }: { data: object | object[] }) {
         <script
           key={i}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }}
+          // Escape "<" so a "</script>" inside any string can't break out of the tag.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(block).replace(/</g, "\\u003c") }}
         />
       ))}
     </>
