@@ -38,17 +38,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.6,
     })),
-    entry("/case-studies", 0.7),
-    ...caseStudies.map((c) => ({
-      url: `${site.url}/case-studies/${c.slug}`,
-      lastModified: new Date(c.updated_at || now),
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    })),
+    ...(caseStudies.length
+      ? [
+          entry("/case-studies", 0.7),
+          ...caseStudies.map((c) => ({
+            url: `${site.url}/case-studies/${c.slug}`,
+            lastModified: new Date(c.updated_at || now),
+            changeFrequency: "monthly" as const,
+            priority: 0.5,
+          })),
+        ]
+      : []),
     entry("/about", 0.7),
     entry("/contact", 0.7),
     entry("/faq", 0.6),
     entry("/resources", 0.6),
+    entry("/resources/gmp-inspection-readiness-checklist", 0.7),
     entry("/privacy", 0.2, "yearly"),
     entry("/terms", 0.2, "yearly"),
   ];

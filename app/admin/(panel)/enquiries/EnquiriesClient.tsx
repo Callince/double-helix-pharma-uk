@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { PageHeader, Card, StatusBadge, AdminButton } from "@/components/admin/primitives";
-import { timeAgo } from "@/lib/admin/data";
+import { timeAgo, parseDbDate } from "@/lib/admin/data";
 import type { EnquiryRow } from "@/lib/db/enquiries";
 import { setEnquiryStatusAction } from "./actions";
 
@@ -121,7 +121,7 @@ function EnquiryDrawer({ enquiry, onClose }: { enquiry: EnquiryRow; onClose: () 
             <Detail label="Company" value={enquiry.company || "—"} />
             <Detail label="Service" value={enquiry.service || "—"} />
             <Detail label="Email" value={enquiry.email} link={`mailto:${enquiry.email}`} />
-            <Detail label="Received" value={new Date(enquiry.created_at).toLocaleString("en-GB")} />
+            <Detail label="Received" value={parseDbDate(enquiry.created_at).toLocaleString("en-GB")} />
           </div>
 
           <div>

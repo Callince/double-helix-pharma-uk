@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Double Helix Pharma — Blog Banner Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1b2530; display: flex; justify-content: center; padding: 24px; font-family: "Hanken Grotesk", Arial, sans-serif; }
+
+  /* ===== EXPORT AT 1800 x 900 — screenshot just the .banner element ===== */
+  .banner {
+    position: relative; width: 1800px; height: 900px; overflow: hidden;
+    background:
+      radial-gradient(120% 120% at 88% 18%, #0c4f97 0%, #06336e 38%, #042a63 60%, #021c45 100%);
+    color: #fff;
+  }
+
+  /* faint dotted "world map" texture, right side */
+  .dots {
+    position: absolute; inset: 0 0 0 48%;
+    background-image: radial-gradient(rgba(120,190,255,.30) 1.6px, transparent 1.6px);
+    background-size: 18px 18px;
+    -webkit-mask-image: radial-gradient(120% 90% at 78% 30%, #000 0%, #000 42%, transparent 72%);
+            mask-image: radial-gradient(120% 90% at 78% 30%, #000 0%, #000 42%, transparent 72%);
+    opacity: .8;
+  }
+
+  /* header strip */
+  .header { position: absolute; top: 0; left: 0; width: 560px; height: 150px;
+    background: #fff; border-radius: 0 0 90px 0; display: flex; align-items: center; padding: 0 54px; }
+  .logo { display: flex; align-items: center; gap: 16px; }
+  .logo .mark { width: 60px; height: 66px; }
+  .logo .word { line-height: 1; }
+  .logo .word .t1 { font-size: 34px; font-weight: 800; letter-spacing: -.5px; }
+  .logo .word .t1 .d { color: #2bb24c; } .logo .word .t1 .h { color: #1e74c8; }
+  .logo .word .t2 { font-size: 16px; font-weight: 700; letter-spacing: 7px; color: #1e74c8; margin-top: 4px; }
+  .logo .word .t3 { font-size: 9px; font-weight: 600; letter-spacing: .5px; color: #5f7283; margin-top: 3px; }
+
+  /* left text block */
+  .copy { position: absolute; left: 72px; top: 270px; max-width: 980px; }
+  .eyebrow { color: #5ec43f; font-size: 26px; font-weight: 800; letter-spacing: 6px; text-transform: uppercase; }
+  .eyebrow::after { content: ""; display: block; width: 64px; height: 4px; background: #5ec43f; border-radius: 2px; margin-top: 14px; }
+  .headline { margin-top: 26px; font-size: 116px; font-weight: 800; line-height: .98; letter-spacing: -1px; text-transform: uppercase; }
+  .headline .accent { color: #36a7e6; }
+
+  /* process panel */
+  .panel { position: absolute; left: 72px; bottom: 70px; width: 880px; padding: 26px 30px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); border-radius: 22px;
+    display: flex; justify-content: space-between; align-items: flex-start; }
+  .step { width: 150px; text-align: center; position: relative; }
+  .step:not(:last-child)::after { content: ""; position: absolute; top: 36px; left: 86%; width: 64px;
+    border-top: 2px dotted rgba(255,255,255,.4); }
+  .step .ic { width: 72px; height: 72px; margin: 0 auto 14px; border-radius: 50%;
+    border: 2px solid; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.04); }
+  .step .lbl { font-size: 16px; font-weight: 700; line-height: 1.2; letter-spacing: .3px; text-transform: uppercase; }
+  .ic svg { width: 34px; height: 34px; }
+
+  /* right-side product image slot */
+  .product { position: absolute; right: 150px; top: 300px; width: 520px; height: 420px;
+    display: flex; align-items: center; justify-content: center; }
+  .product img { max-width: 100%; max-height: 100%; object-fit: contain;
+    filter: drop-shadow(0 30px 50px rgba(0,0,0,.5)); }
+  .product .placeholder { width: 100%; height: 100%; border: 2px dashed rgba(120,190,255,.5);
+    border-radius: 16px; display: flex; align-items: center; justify-content: center; text-align: center;
+    color: rgba(180,210,255,.8); font-size: 18px; font-weight: 600; padding: 20px; }
+
+  /* glowing shield, far right */
+  .shield { position: absolute; right: 70px; top: 330px; width: 150px; height: 180px; opacity: .9;
+    filter: drop-shadow(0 0 26px rgba(60,160,240,.55)); }
+  .hex { position: absolute; right: 96px; bottom: 220px; width: 120px; opacity: .5;
+    filter: drop-shadow(0 0 14px rgba(60,160,240,.5)); }
+
+  /* connection pins */
+  .pin { position: absolute; width: 26px; height: 34px; }
+  .pin svg { width: 100%; height: 100%; filter: drop-shadow(0 0 8px rgba(94,196,63,.7)); }
+
+  /* bottom brand waves */
+  .waves { position: absolute; left: 0; right: 0; bottom: 0; height: 150px; }
+</style>
+</head>
+<body>
+  <!-- =======================  BANNER  (export this element at 1800x900)  ======================= -->
+  <div class="banner" id="banner">
+
+    <div class="dots"></div>
+
+    <!-- connection pins (global) -->
+    <div class="pin" style="right:520px; top:150px;"><svg viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.4 0 12c0 8 12 20 12 20s12-12 12-20C24 5.4 18.6 0 12 0z" fill="#5ec43f"/><circle cx="12" cy="12" r="5" fill="#0a3f7a"/></svg></div>
+    <div class="pin" style="right:230px; top:120px;"><svg viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.4 0 12c0 8 12 20 12 20s12-12 12-20C24 5.4 18.6 0 12 0z" fill="#5ec43f"/><circle cx="12" cy="12" r="5" fill="#0a3f7a"/></svg></div>
+    <div class="pin" style="right:360px; top:250px;"><svg viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.4 0 12c0 8 12 20 12 20s12-12 12-20C24 5.4 18.6 0 12 0z" fill="#36a7e6"/><circle cx="12" cy="12" r="5" fill="#0a3f7a"/></svg></div>
+
+    <!-- HEADER + LOGO -->
+    <div class="header">
+      <div class="logo">
+        <svg class="mark" viewBox="0 0 60 66" aria-hidden="true">
+          <path d="M14 4 C42 18, 18 34, 46 50" fill="none" stroke="#2bb24c" stroke-width="5" stroke-linecap="round"/>
+          <path d="M46 4 C18 18, 42 34, 14 50" fill="none" stroke="#1e74c8" stroke-width="5" stroke-linecap="round"/>
+          <line x1="20" y1="14" x2="40" y2="14" stroke="#7ed957" stroke-width="3" stroke-linecap="round"/>
+          <line x1="22" y1="27" x2="38" y2="27" stroke="#36a7e6" stroke-width="3" stroke-linecap="round"/>
+          <line x1="20" y1="40" x2="40" y2="40" stroke="#2bb24c" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="30" cy="60" r="5" fill="#1e74c8"/>
+        </svg>
+        <div class="word">
+          <div class="t1"><span class="d">Double</span> <span class="h">Helix</span></div>
+          <div class="t2">PHARMA</div>
+          <div class="t3">Leading with Quality, Caring for Life</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEFT COPY  ▼ EDIT PER POST ▼ -->
+    <div class="copy">
+      <div class="eyebrow">Supplier &amp; Vendor Management</div>
+      <div class="headline">Qualify APIs,<br><span class="accent">Protect Patients</span></div>
+    </div>
+
+    <!-- PROCESS PANEL  ▼ EDIT 5 STEP LABELS ▼ -->
+    <div class="panel">
+      <div class="step">
+        <div class="ic" style="border-color:#5ec43f; color:#5ec43f;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <div class="lbl">Risk-Based<br>Approach</div>
+      </div>
+      <div class="step">
+        <div class="ic" style="border-color:#36a7e6; color:#36a7e6;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3h6v3H9z"/><path d="m8.5 13 2 2 4-4"/></svg></div>
+        <div class="lbl">GMP<br>Assurance</div>
+      </div>
+      <div class="step">
+        <div class="ic" style="border-color:#36a7e6; color:#36a7e6;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <div class="lbl">Audit &amp;<br>Assessment</div>
+      </div>
+      <div class="step">
+        <div class="ic" style="border-color:#5ec43f; color:#5ec43f;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17 7 13a2 2 0 0 1 3-3l2 2 4-4a2 2 0 0 1 3 3l-5 5a3 3 0 0 1-3 1z"/><path d="m2 12 4-4"/></svg></div>
+        <div class="lbl">Agreement &amp;<br>Approval</div>
+      </div>
+      <div class="step">
+        <div class="ic" style="border-color:#36a7e6; color:#36a7e6;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></div>
+        <div class="lbl">Ongoing<br>Oversight</div>
+      </div>
+    </div>
+
+    <!-- RIGHT PRODUCT IMAGE  ▼ swap src for your product photo (transparent PNG looks best) ▼ -->
+    <div class="product">
+      <div class="placeholder">Drop your product image here<br><span style="font-size:14px;opacity:.8">(e.g. an API vial, transparent background)</span></div>
+      <!-- <img src="your-vial.png" alt="" /> -->
+    </div>
+
+    <!-- glowing shield -->
+    <svg class="shield" viewBox="0 0 120 144" fill="none">
+      <path d="M60 4 8 22v44c0 38 26 64 52 74 26-10 52-36 52-74V22z" fill="rgba(40,120,210,.25)" stroke="#4aa6ec" stroke-width="2.5"/>
+      <path d="m40 70 14 14 28-30" stroke="#36a7e6" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <svg class="hex" viewBox="0 0 100 110" fill="none">
+      <path d="M50 4 92 28v54L50 106 8 82V28z" stroke="#4aa6ec" stroke-width="2"/>
+    </svg>
+
+    <!-- bottom waves -->
+    <svg class="waves" viewBox="0 0 1800 150" preserveAspectRatio="none">
+      <path d="M0 70 C 500 10, 1100 130, 1800 50 L1800 150 0 150 Z" fill="#1e74c8" opacity=".55"/>
+      <path d="M0 110 C 600 60, 1200 150, 1800 90 L1800 150 0 150 Z" fill="#5ec43f" opacity=".55"/>
+    </svg>
+
+  </div>
+</body>
+</html>

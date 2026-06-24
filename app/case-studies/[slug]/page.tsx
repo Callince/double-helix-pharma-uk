@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { pageMeta } from "@/lib/seo";
+import { pageMeta, seoTitle } from "@/lib/seo";
 import { breadcrumbSchema, caseStudySchema } from "@/lib/schema";
 import { getCaseStudyBySlug } from "@/lib/db/content";
 
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const cs = await getCaseStudyBySlug(slug).catch(() => null);
   if (!cs || cs.status !== "published") return { title: "Case study not found", robots: { index: false } };
-  return pageMeta({ title: cs.title, description: cs.summary || cs.title, path: `/case-studies/${cs.slug}` });
+  return pageMeta({ title: seoTitle(cs.title), absoluteTitle: true, description: cs.summary || cs.title, path: `/case-studies/${cs.slug}` });
 }
 
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {

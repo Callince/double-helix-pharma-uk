@@ -145,17 +145,17 @@ export async function scheduleNextDrafts(days: number): Promise<{ scheduled: num
     args: [sqlUtc(new Date(base.getTime() + i * 86400000)), row.id],
   }));
   if (stmts.length) await db.batch(stmts, "write");
-  const publishedNow = await publishDuePosts();
+  const publishedNow = (await publishDuePosts()).length;
   return { scheduled: drafts.length, publishedNow };
 }
 
 /** Publish any scheduled post whose publish_at has arrived (driven by the daily cron). */
-export async function publishDuePosts(): Promise<number> {
+export async function publishDuePosts(): Promise<string[]> {
   await ensure();
   const r = await getDb().execute(
-    "UPDATE posts SET status='published', updated_at=datetime('now') WHERE status='scheduled' AND publish_at IS NOT NULL AND publish_at <= datetime('now')",
+    "UPDATE posts SET status='published', updated_at=datetime('now') WHERE status='scheduled' AND publish_at IS NOT NULL AND publish_at <= datetime('now') RETURNING slug",
   );
-  return Number(r.rowsAffected ?? 0);
+  return r.rows.map((row) => String(row.slug));
 }
 
 /** Revert every non-draft post to draft and clear any schedule. */
@@ -259,6 +259,14 @@ export async function listSubscribers(): Promise<Subscriber[]> {
 export async function addSubscriber(email: string) {
   await ensure();
   await getDb().execute({ sql: `INSERT OR IGNORE INTO subscribers (id,email,status) VALUES (?,?, 'pending')`, args: [uid(), email.toLowerCase()] });
+}
+export async function setSubscriberStatus(id: string, status: string) {
+  await ensure();
+  await getDb().execute({ sql: "UPDATE subscribers SET status=? WHERE id=?", args: [status, id] });
+}
+export async function deleteSubscriber(id: string) {
+  await ensure();
+  await getDb().execute({ sql: "DELETE FROM subscribers WHERE id=?", args: [id] });
 }
 
 /* =============================================================== settings */

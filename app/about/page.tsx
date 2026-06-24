@@ -11,6 +11,7 @@ import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { personSchema, breadcrumbSchema } from "@/lib/schema";
 import { site, credentials } from "@/lib/site";
+import { getSiteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = pageMeta({
   title: "About — Our Qualified Person",
@@ -47,12 +48,13 @@ const experience = [
   "Oversaw equipment and utility qualification — URS, DQ, IQ, OQ and PQ.",
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const cfg = await getSiteConfig();
   return (
     <>
       <JsonLd
         data={[
-          personSchema(),
+          personSchema(cfg),
           breadcrumbSchema([
             { name: "Home", path: "/" },
             { name: "About", path: "/about" },

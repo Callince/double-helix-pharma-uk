@@ -12,32 +12,32 @@ import { PullQuote } from "@/components/sections/PullQuote";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { faqSchema } from "@/lib/schema";
+import { faqSchema, howToSchema } from "@/lib/schema";
 import { faqsHome, ctaHref, ctaLabel } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   absoluteTitle: true,
   title: "GMP/GDP Audits & Contract QP | Double Helix Pharma UK",
   description:
-    "Independent GMP/GDP audits, contract QP/RP/RPi cover and inspection-ready quality systems from a UK Qualified Person with 20+ years across regulated markets.",
+    "UK pharmaceutical quality consultant — independent GMP/GDP audits, contract QP/RP/RPi cover and inspection-ready quality systems from a QP with 20+ years.",
   path: "/",
 });
 
 export default function HomePage() {
   return (
     <>
-      <JsonLd data={faqSchema(faqsHome)} />
+      <JsonLd data={[faqSchema(faqsHome), howToSchema()]} />
 
       <Hero
         panel
-        eyebrow="Pharmaceutical Quality & Compliance"
+        eyebrow="UK Pharmaceutical Quality Consultant"
         title={
           <>
             Where compliance meets{" "}
             <em className="font-display italic text-teal-ink">confidence</em>
           </>
         }
-        subtitle="Independent EU GMP/GDP audits, contract QP/RP/RPi cover and inspection-ready quality systems — led by a Qualified Person with 20+ years across regulated markets."
+        subtitle="Independent EU GMP/GDP audits, contract QP/RP/RPi cover and inspection-ready quality systems — from a UK pharmaceutical quality consultant and Qualified Person with 20+ years across regulated markets."
         primary={{ label: ctaLabel, href: ctaHref }}
         secondary={{ label: "Explore services", href: "/#services" }}
         chips={["Remote, on-site or hybrid", "UK · EU · US · MENA", "Audit-graded reporting"]}

@@ -1,0 +1,218 @@
+[
+  {
+    "id": "f31346cc-f101-4614-aa6c-8aadf6801986",
+    "question": "What does a pharmaceutical quality & compliance consultant do?",
+    "answer": "We help pharma, biotech and CMOs meet GMP and GDP requirements — auditing sites and suppliers, acting as a contract QP/RP/RPi, building or remediating quality systems, and preparing teams for regulatory inspection.",
+    "category": "General",
+    "order_index": 0,
+    "published": 1
+  },
+  {
+    "id": "8daa2dcf-aa4d-48e2-aa1b-bd3ff04e045a",
+    "question": "Which markets and regulators do you cover?",
+    "answer": "Engagements span the UK (MHRA), European Union (EMA), United States (FDA) and the MENA region, drawing on 20+ years working to EU GMP/GDP standards.",
+    "category": "General",
+    "order_index": 1,
+    "published": 1
+  },
+  {
+    "id": "1550d887-2625-4f58-b72c-a4dba961babb",
+    "question": "Do you work with small, virtual or first-time pharma companies?",
+    "answer": "Yes. Whether you are a virtual company outsourcing to a CMO or preparing for your first MIA/WDA, engagements scale to your stage and budget.",
+    "category": "General",
+    "order_index": 2,
+    "published": 1
+  },
+  {
+    "id": "835341eb-da25-4fbb-a449-7ebc2bbbe826",
+    "question": "Can you act as our contract QP, RP or RPi?",
+    "answer": "Yes — contract and interim QP (batch certification/release), RP (WDA) and RPi (import) cover is available. See the Contract QP, RP & RPi page for detail.",
+    "category": "General",
+    "order_index": 3,
+    "published": 1
+  },
+  {
+    "id": "0bf74dd2-fa86-4d1f-a3bb-f38bf56718bb",
+    "question": "What types of GMP audit do you carry out?",
+    "answer": "Supplier and third-party audits, internal/self-inspections, mock regulatory inspections, pre-approval inspection preparation and for-cause (triggered) audits across GMP and GDP.",
+    "category": "GMP & GDP Audits",
+    "order_index": 4,
+    "published": 1
+  },
+  {
+    "id": "4ab04cd4-3738-447c-a8f2-47e0a15b918e",
+    "question": "Do you offer remote, on-site or hybrid audits?",
+    "answer": "All three. Many supplier and documentation audits run effectively remotely; sterile and complex sites usually benefit from on-site or hybrid assessment.",
+    "category": "GMP & GDP Audits",
+    "order_index": 5,
+    "published": 1
+  },
+  {
+    "id": "7c6713d8-800b-4d22-b7f0-4dcf6d40d705",
+    "question": "What will the audit report look like?",
+    "answer": "A clear report with findings graded by risk and mapped to the relevant regulation (e.g. EudraLex Vol. 4, 21 CFR 210/211), plus practical recommendations ready to feed into CAPA.",
+    "category": "GMP & GDP Audits",
+    "order_index": 6,
+    "published": 1
+  },
+  {
+    "id": "29fc76a1-7f2a-482b-a109-6f45dbba8c41",
+    "question": "Which standards and product types can you audit against?",
+    "answer": "EU GMP, FDA 21 CFR 210/211, ICH Q-series, EU/MHRA GDP, ISO 13485/9001 and GAMP 5 — across sterile and non-sterile medicines, biologics, APIs, excipients and distribution.",
+    "category": "GMP & GDP Audits",
+    "order_index": 7,
+    "published": 1
+  },
+  {
+    "id": "74effaa2-63b2-463f-a098-f6391e101fa6",
+    "question": "What is the difference between a QP, an RP and an RPi?",
+    "answer": "A Qualified Person (QP) certifies and releases medicinal product batches under an MIA. A Responsible Person (RP) oversees GDP compliance under a WDA. An RPi (RP for import) covers importation of medicines from outside the UK/EEA.",
+    "category": "Contract QP, RP & RPi",
+    "order_index": 8,
+    "published": 1
+  },
+  {
+    "id": "d52f2973-5be0-49fd-b611-8b48d2ce2035",
+    "question": "Can you provide interim or ongoing QP/RP cover?",
+    "answer": "Yes — from short-term interim cover during recruitment or absence, through to an ongoing named-person arrangement, subject to scope and eligibility checks.",
+    "category": "Contract QP, RP & RPi",
+    "order_index": 9,
+    "published": 1
+  },
+  {
+    "id": "82f6270b-2168-4587-b49b-b223b5f6bfcb",
+    "question": "Which product types can you support for batch release?",
+    "answer": "Sterile injectables (liquid and freeze-dried), oncology injectables, biosimilars and solid oral dose, alongside APIs and raw materials oversight.",
+    "category": "Contract QP, RP & RPi",
+    "order_index": 10,
+    "published": 1
+  },
+  {
+    "id": "30ce2768-93c9-455b-b264-116e13366c3d",
+    "question": "Do you also manage our CMOs and suppliers?",
+    "answer": "Yes. CMO oversight, technical/quality agreements (QTA) and supplier qualification can be combined with QP/RP duties for end-to-end assurance.",
+    "category": "Contract QP, RP & RPi",
+    "order_index": 11,
+    "published": 1
+  },
+  {
+    "id": "5cf8184e-7d0e-4743-bea7-a8454d8fb4c9",
+    "question": "We are preparing for our first MHRA inspection — can you help?",
+    "answer": "Yes. We build the Pharmaceutical Quality System (PQS), run mock inspections and gap assessments, and prepare your team and documentation so you walk in inspection-ready.",
+    "category": "QMS & PQS",
+    "order_index": 12,
+    "published": 1
+  },
+  {
+    "id": "4a548da2-cc4d-47bf-8e61-38dc50cb9b64",
+    "question": "Can you remediate findings from a recent inspection?",
+    "answer": "Yes — we translate inspection observations into a prioritised CAPA plan, implement the fixes and verify effectiveness so deficiencies stay closed.",
+    "category": "QMS & PQS",
+    "order_index": 13,
+    "published": 1
+  },
+  {
+    "id": "29b94fd5-6308-40f2-8b1b-943cc3300fa3",
+    "question": "Do you write SOPs, the SMF, VMP and quality agreements?",
+    "answer": "Yes. Quality-system documentation including SMF, VMP/VPP, SOPs, QTA, change control, deviation, OOS/OOT/OOC handling, CAPA and Product Quality Reviews.",
+    "category": "QMS & PQS",
+    "order_index": 14,
+    "published": 1
+  },
+  {
+    "id": "71f03d7a-7abf-4429-a067-8c4a2b75e1b5",
+    "question": "What does ‘site readiness’ actually involve?",
+    "answer": "Getting a site, its quality system, documentation and team to the point where they can pass a regulatory pre-licensing inspection and begin licensed operations — covering gap assessment, remediation, mock inspection and go-live support.",
+    "category": "Site Readiness",
+    "order_index": 15,
+    "published": 1
+  },
+  {
+    "id": "6f9c4cb6-a691-435f-b54b-552c7f6f7eef",
+    "question": "Can you help with the MIA or WDA application itself?",
+    "answer": "Yes — we support the licence application and supporting documentation (e.g. the Site Master File), help nominate the QP/RP/RPi, and prepare you for the MHRA inspection that precedes the licence.",
+    "category": "Site Readiness",
+    "order_index": 16,
+    "published": 1
+  },
+  {
+    "id": "d85eedb0-5c54-44aa-8c17-1758b932761a",
+    "question": "How early should we engage you?",
+    "answer": "As early as possible — ideally before the application — so gaps are found and fixed on your timeline rather than during an inspection. We can also help recover a stalled application.",
+    "category": "Site Readiness",
+    "order_index": 17,
+    "published": 1
+  },
+  {
+    "id": "b7a5a900-b02e-4801-975f-dd56863358d5",
+    "question": "Do you cover both manufacturing and wholesale dealer sites?",
+    "answer": "Yes. Manufacturing/Import Authorisation (MIA / MIA(IMP)) and Wholesale Dealer’s Authorisation (WDA(H)), including the importation (RPi) route.",
+    "category": "Site Readiness",
+    "order_index": 18,
+    "published": 1
+  },
+  {
+    "id": "f00161d5-16bc-4804-b883-412c61d4ac71",
+    "question": "How do you qualify and risk-rate suppliers?",
+    "answer": "A risk-based programme: criticality assessment, questionnaires, document review and on-site or remote audits where warranted, with a defined re-qualification cycle proportionate to risk.",
+    "category": "Supplier & Vendor",
+    "order_index": 19,
+    "published": 1
+  },
+  {
+    "id": "1846899b-d040-4380-baa9-459c2197a835",
+    "question": "Can you write our technical/quality agreements (QTAs)?",
+    "answer": "Yes — clear QTAs that define quality responsibilities between you and your CMOs, suppliers and service providers, aligned to EU GMP Chapter 7.",
+    "category": "Supplier & Vendor",
+    "order_index": 20,
+    "published": 1
+  },
+  {
+    "id": "78b3a968-5524-4b37-bd29-f0e9480b67f6",
+    "question": "Do you run ongoing supplier audits?",
+    "answer": "Yes. Scheduled and for-cause supplier/third-party audits, performance monitoring (KPIs, complaints, deviations) and escalation when a supplier drifts out of specification.",
+    "category": "Supplier & Vendor",
+    "order_index": 21,
+    "published": 1
+  },
+  {
+    "id": "96ead64f-6a2f-4d04-855b-81fd9150b3a0",
+    "question": "Which suppliers does this cover?",
+    "answer": "API and excipient manufacturers, CMOs, packaging, laboratories, calibration, logistics and other GxP service providers across your supply chain.",
+    "category": "Supplier & Vendor",
+    "order_index": 22,
+    "published": 1
+  },
+  {
+    "id": "cc2482a4-9eb8-4bab-b3ea-1fd1ba74e3f0",
+    "question": "What does transport validation involve?",
+    "answer": "Demonstrating that your distribution routes, packaging and processes keep products within their required conditions — temperature mapping and qualification of lanes, packaging and vehicles, plus a control strategy for excursions.",
+    "category": "GDP Supply Chain",
+    "order_index": 23,
+    "published": 1
+  },
+  {
+    "id": "fe4ce99c-4c94-41af-8cfc-2da33321c45c",
+    "question": "Can you help with cold-chain and temperature-sensitive products?",
+    "answer": "Yes — cold-chain qualification, temperature mapping of stores and shipping, monitoring strategy and excursion management for refrigerated and frozen products.",
+    "category": "GDP Supply Chain",
+    "order_index": 24,
+    "published": 1
+  },
+  {
+    "id": "002b6c1a-8811-4507-9da1-dfac5dff31b9",
+    "question": "Do you provide GDP gap assessments and RP support?",
+    "answer": "Yes. GDP gap assessments against EU GDP (2013/C 343/01) and MHRA expectations, plus Responsible Person (RP) and RPi support under your WDA.",
+    "category": "GDP Supply Chain",
+    "order_index": 25,
+    "published": 1
+  },
+  {
+    "id": "338486a3-731b-462a-a48d-40eb3db4d638",
+    "question": "Can you investigate a temperature excursion or distribution deviation?",
+    "answer": "Yes — root-cause investigation, risk assessment of product impact, and CAPA to prevent recurrence across the supply chain.",
+    "category": "GDP Supply Chain",
+    "order_index": 26,
+    "published": 1
+  }
+]

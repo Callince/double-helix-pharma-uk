@@ -16,8 +16,19 @@ export const adminNav: AdminNavItem[] = [
 ];
 
 /* ------------------------------------------------------------------- helpers */
+/**
+ * Parse a stored timestamp as UTC. SQLite's datetime('now') returns
+ * "YYYY-MM-DD HH:MM:SS" with no timezone marker, which `new Date()` would
+ * otherwise read as the viewer's LOCAL time (e.g. IST), skewing every display.
+ */
+export function parseDbDate(s: string): Date {
+  if (!s) return new Date(NaN);
+  if (/[zZ]|[+-]\d\d:?\d\d$/.test(s)) return new Date(s); // already has a tz marker
+  return new Date(s.replace(" ", "T") + "Z"); // treat bare SQLite UTC as UTC
+}
+
 export function timeAgo(iso: string): string {
-  const then = new Date(iso).getTime();
+  const then = parseDbDate(iso).getTime();
   if (Number.isNaN(then)) return "";
   const m = Math.round((Date.now() - then) / 60000);
   if (m < 1) return "just now";

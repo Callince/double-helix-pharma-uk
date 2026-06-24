@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
-import { useEffect, useMemo, useRef, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 
@@ -18,6 +18,7 @@ function Helix({ reduced }: { reduced: boolean }) {
   const pairs = useRef<(THREE.Group | null)[]>([]); // each base pair — staggered assemble
   const ready = useRef(false); // continuous rotation starts only after the entrance settles
   const pointer = useRef({ x: 0, y: 0 });
+  const t = useRef(0); // own time accumulator (advances only on rendered frames → no jump after a rest)
 
   const nodes = useMemo(() => {
     const up = new THREE.Vector3(0, 1, 0);
@@ -44,6 +45,8 @@ function Helix({ reduced }: { reduced: boolean }) {
       return;
     }
     const items = pairs.current.filter(Boolean) as THREE.Group[];
+    // One-shot assemble. The slow "breathing" pulse now lives in useFrame (below) so it
+    // pauses with the render loop when the hero rests — no perpetual GSAP ticker work.
     const tl = gsap.timeline({ onComplete: () => (ready.current = true) });
     tl.to(group.scale, { x: 1, y: 1, z: 1, duration: 1.3, ease: "power3.out" }, 0)
       .to(group.rotation, { y: 0, duration: 1.7, ease: "power2.out" }, 0)
@@ -51,16 +54,9 @@ function Helix({ reduced }: { reduced: boolean }) {
         items.map((p) => p.scale),
         { x: 1, y: 1, z: 1, duration: 0.55, ease: "back.out(2.2)", stagger: { each: 0.045, from: "start" } },
         0.2,
-      )
-      .add(() => {
-        gsap.to(group.scale, {
-          x: 1.04, y: 1.04, z: 1.04,
-          duration: 3.4, ease: "sine.inOut", yoyo: true, repeat: -1,
-        });
-      });
+      );
     return () => {
       tl.kill();
-      gsap.killTweensOf(group.scale);
     };
   }, [reduced]);
 
@@ -78,8 +74,12 @@ function Helix({ reduced }: { reduced: boolean }) {
   useFrame((_, delta) => {
     const g = ref.current;
     if (!g || reduced) return;
-    const d = Math.min(delta, 0.05); // clamp on tab refocus
-    if (ready.current) g.rotation.y += d * 0.3; // gentle continuous spin
+    const d = Math.min(delta, 0.05); // clamp on tab refocus / wake from rest
+    if (ready.current) {
+      t.current += d;
+      g.rotation.y += d * 0.3; // gentle spin — runs only while the loop is awake
+      g.scale.setScalar(1 + Math.sin(t.current * 0.9) * 0.04); // breathing pulse
+    }
     // smooth tilt toward the cursor
     const tx = TILT_X + pointer.current.y * 0.22;
     const tz = TILT_Z + pointer.current.x * 0.18;
@@ -97,12 +97,12 @@ function Helix({ reduced }: { reduced: boolean }) {
         <group key={i} ref={(el) => { pairs.current[i] = el; }} scale={reduced ? 1 : 0}>
           {/* strand A node — logo green */}
           <mesh position={[n.x, n.y, n.z]}>
-            <sphereGeometry args={[0.16, 24, 24]} />
+            <sphereGeometry args={[0.16, 16, 16]} />
             <meshStandardMaterial color="#5ab63c" metalness={0.15} roughness={0.4} />
           </mesh>
           {/* strand B node — brand navy */}
           <mesh position={[-n.x, n.y, -n.z]}>
-            <sphereGeometry args={[0.16, 24, 24]} />
+            <sphereGeometry args={[0.16, 16, 16]} />
             <meshStandardMaterial color="#06295c" metalness={0.2} roughness={0.4} />
           </mesh>
           {/* base-pair rung */}
@@ -121,7 +121,7 @@ function Rig({ children }: { children: ReactNode }) {
   const { viewport } = useThree();
   const aspect = viewport.width / viewport.height;
   const wide = aspect > 1.1;
-  const x = wide ? Math.min(viewport.width * 0.14, 2.4) : 0;
+  const x = wide ? Math.min(viewport.width * 0.2, 3.2) : 0;
   const scale = wide ? 1.25 : 1.05;
   return (
     <group position={[x, 0, 0]} scale={scale}>
@@ -131,26 +131,60 @@ function Rig({ children }: { children: ReactNode }) {
 }
 
 export default function DnaScene({ reduced = false }: { reduced?: boolean }) {
-  return (
-    <Canvas
-      camera={{ position: [0, 0, 8.5], fov: 36 }}
-      gl={{ antialias: true, alpha: true }}
-      dpr={[1, 2]}
-    >
-      <ambientLight intensity={0.9} />
-      <directionalLight position={[4, 6, 6]} intensity={2.1} color="#ffffff" />
-      <directionalLight position={[-5, -2, 2]} intensity={0.8} color="#2b9acd" />
-      <directionalLight position={[0, 0, 8]} intensity={0.7} color="#ffffff" />
+  // Pause the render loop when the hero is scrolled out of view — no wasted main-thread/GPU.
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(true);
+  // "Rest when idle": after the entrance + any cursor interaction, let the loop go quiet so
+  // the main thread can idle. This is the big TBT win — a perpetual WebGL loop makes every
+  // frame a "long task" under throttling. A pointer move wakes it; parallax stays live.
+  const [active, setActive] = useState(true);
 
-      <Rig>
-        <Float
-          speed={reduced ? 0 : 1.1}
-          rotationIntensity={reduced ? 0 : 0.15}
-          floatIntensity={reduced ? 0 : 0.5}
-        >
-          <Helix reduced={reduced} />
-        </Float>
-      </Rig>
-    </Canvas>
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (reduced) return; // reduced-motion path is static — no loop to manage
+    let timer: ReturnType<typeof setTimeout>;
+    const wake = () => {
+      setActive(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => setActive(false), 2000); // sleep 2s after the last move
+    };
+    timer = setTimeout(() => setActive(false), 3200); // play entrance + a beat, then rest
+    window.addEventListener("pointermove", wake, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("pointermove", wake);
+    };
+  }, [reduced]);
+
+  return (
+    <div ref={wrapRef} className="h-full w-full">
+      <Canvas
+        camera={{ position: [0, 0, 8.5], fov: 36 }}
+        gl={{ antialias: true, alpha: true }}
+        dpr={[1, 1.5]}
+        frameloop={reduced ? "demand" : visible && active ? "always" : "never"}
+      >
+        <ambientLight intensity={0.9} />
+        <directionalLight position={[4, 6, 6]} intensity={2.1} color="#ffffff" />
+        <directionalLight position={[-5, -2, 2]} intensity={0.8} color="#2b9acd" />
+
+        <Rig>
+          <Float
+            speed={reduced ? 0 : 1.1}
+            rotationIntensity={reduced ? 0 : 0.15}
+            floatIntensity={reduced ? 0 : 0.5}
+          >
+            <Helix reduced={reduced} />
+          </Float>
+        </Rig>
+      </Canvas>
+    </div>
   );
 }

@@ -66,7 +66,7 @@ export function NewsletterForm() {
         <button
           type="submit"
           disabled={state === "loading"}
-          className="shrink-0 rounded-lg bg-green px-4 py-2 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+          className="shrink-0 rounded-lg bg-green-ink px-4 py-2 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
         >
           {state === "loading" ? "…" : "Subscribe"}
         </button>

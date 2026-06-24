@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { pageMeta } from "@/lib/seo";
+import { pageMeta, seoTitle } from "@/lib/seo";
 import { breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
 import { getPostBySlug, listPublishedPosts, type Post } from "@/lib/db/content";
@@ -31,7 +31,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = await getPostBySlug(slug).catch(() => null);
   if (!post || post.status !== "published") return { title: "Article not found", robots: { index: false } };
   return pageMeta({
-    title: post.title,
+    title: seoTitle(post.title),
+    absoluteTitle: true,
     description: post.excerpt || post.title,
     path: `/blog/${post.slug}`,
     image: post.cover_image || undefined,
@@ -117,7 +118,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               src={post.cover_image}
               alt={post.cover_alt || post.title}
               title={post.cover_alt || post.title}
-              className="-mt-8 aspect-[16/7] w-full rounded-2xl border border-line object-cover shadow-sm sm:-mt-12"
+              className="-mt-8 aspect-[16/9] w-full rounded-2xl border border-line object-cover shadow-sm sm:-mt-12"
             />
           </Container>
         )}

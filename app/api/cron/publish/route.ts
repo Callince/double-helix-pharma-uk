@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { publishDuePosts } from "@/lib/db/content";
+import { pingIndexNow } from "@/lib/indexnow";
 
 /**
  * Daily cron target (configured in vercel.json) that drip-publishes any scheduled
@@ -22,12 +23,13 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   try {
-    const published = await publishDuePosts();
-    if (published > 0) {
+    const slugs = await publishDuePosts();
+    if (slugs.length > 0) {
       revalidatePath("/blog");
       revalidatePath("/admin/blog");
+      await pingIndexNow([...slugs.map((s) => `/blog/${s}`), "/blog"]);
     }
-    return NextResponse.json({ ok: true, published });
+    return NextResponse.json({ ok: true, published: slugs.length });
   } catch (err) {
     console.error("[cron/publish] failed", err);
     return NextResponse.json({ ok: false, error: "publish failed" }, { status: 500 });

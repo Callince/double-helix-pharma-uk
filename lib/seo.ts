@@ -40,30 +40,48 @@ export function pageMeta({
   authors?: string[];
   section?: string;
 }): Metadata {
+  // Search engines truncate descriptions past ~160 chars — clamp at a word boundary
+  // as a safety net so no page (incl. DB-driven blog/case-study excerpts) overflows.
+  const desc =
+    description.length > 160
+      ? description.slice(0, 157).replace(/\s+\S*$/, "").trimEnd() + "…"
+      : description;
   const images = image ? [{ url: image, alt: title }] : [DEFAULT_OG];
   const openGraph: Metadata["openGraph"] =
     type === "article"
       ? {
-          title, description, url: path, type: "article",
+          title, description: desc, url: path, type: "article",
           siteName: site.name, locale: site.locale, images,
           publishedTime, modifiedTime, authors, section,
         }
       : {
-          title, description, url: path, type: "website",
+          title, description: desc, url: path, type: "website",
           siteName: site.name, locale: site.locale, images,
         };
 
   return {
     title: absoluteTitle ? { absolute: title } : title,
-    description,
+    description: desc,
     alternates: { canonical: path },
     ...(index ? {} : { robots: { index: false, follow: true } }),
     openGraph,
     twitter: {
       card: "summary_large_image",
       title,
-      description,
+      description: desc,
       ...(image ? { images: [image] } : {}),
     },
   };
+}
+
+/**
+ * Build an SEO <title> ≤ 60 chars for DB-driven pages (blog posts, case studies):
+ * append the brand only when it fits, otherwise use the raw title, clamping at a
+ * word boundary if it's long on its own. Use with `absoluteTitle: true`.
+ */
+export function seoTitle(raw: string): string {
+  const brand = " | Double Helix Pharma";
+  if (raw.length + brand.length <= 60) return raw + brand;
+  if (raw.length <= 60) return raw;
+  return raw.slice(0, 59).replace(/\s+\S*$/, "").trimEnd() + "…";
 }

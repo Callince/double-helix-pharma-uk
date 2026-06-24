@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Icon } from "./Icon";
 
-type Variant = "primary" | "gradient" | "green" | "outline" | "outline-light" | "white" | "ghost";
+type Variant = "primary" | "gradient" | "green" | "outline" | "outline-light" | "ghost";
 type Size = "sm" | "md" | "lg";
 
 const base =
@@ -13,10 +13,9 @@ const variants: Record<Variant, string> = {
   gradient:
     "bg-brand-gradient text-white shadow-[0_12px_34px_-14px_rgba(22,54,91,0.7)] hover:brightness-[1.06]",
   green:
-    "bg-green text-white shadow-[0_12px_30px_-14px_rgba(28,156,95,0.75)] hover:brightness-110",
+    "bg-green-ink text-white shadow-[0_12px_30px_-14px_rgba(28,156,95,0.75)] hover:brightness-110",
   outline: "border border-navy/20 text-navy hover:border-navy/50 hover:bg-navy/[0.03]",
   "outline-light": "border border-white/30 text-white hover:bg-white/10",
-  white: "bg-white text-navy hover:bg-white/90",
   ghost: "text-navy hover:bg-navy/[0.05]",
 };
 

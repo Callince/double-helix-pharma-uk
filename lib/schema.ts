@@ -1,38 +1,49 @@
-import { site, type Faq } from "./site";
+import { site, methodology, type Faq } from "./site";
+import type { SiteConfig } from "./site-config";
 
 const ORG_ID = `${site.url}/#organization`;
 const WEBSITE_ID = `${site.url}/#website`;
 
 /** ProfessionalService / Organization — emitted site-wide in the root layout. */
-export function organizationSchema() {
+export function organizationSchema(cfg: SiteConfig) {
   return {
     "@context": "https://schema.org",
     "@type": ["ProfessionalService", "Organization"],
     "@id": ORG_ID,
-    name: site.legalName,
-    alternateName: site.shortName,
-    url: site.url,
-    description: site.description,
-    slogan: site.tagline,
-    email: site.contact.email,
-    telephone: site.contact.phoneHref,
+    name: cfg.legalName,
+    alternateName: cfg.shortName,
+    url: cfg.url,
+    description: cfg.description,
+    slogan: cfg.tagline,
+    email: cfg.contact.email,
+    telephone: cfg.contact.phoneHref,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      email: cfg.contact.email,
+      telephone: cfg.contact.phoneHref,
+      areaServed: ["GB", "EU", "US", "MENA"],
+      availableLanguage: "en",
+    },
     foundingLocation: "United Kingdom",
     areaServed: ["United Kingdom", "European Union", "United States", "MENA"],
     address: {
       "@type": "PostalAddress",
-      addressLocality: site.contact.locality,
-      addressRegion: site.contact.region,
-      addressCountry: site.contact.countryCode,
+      streetAddress: cfg.contact.street,
+      addressLocality: cfg.contact.locality,
+      addressRegion: cfg.contact.region,
+      postalCode: cfg.contact.postcode,
+      addressCountry: cfg.contact.countryCode,
     },
     identifier: {
       "@type": "PropertyValue",
       name: "UK Company Number",
-      value: site.companyNumber,
+      value: cfg.companyNumber,
     },
     founder: {
       "@type": "Person",
-      name: site.founder.name,
-      jobTitle: site.founder.role,
+      name: cfg.founder.name,
+      jobTitle: cfg.founder.role,
     },
     knowsAbout: [
       "GMP audit",
@@ -46,7 +57,10 @@ export function organizationSchema() {
       "Inspection readiness",
       "CAPA management",
     ],
-    sameAs: [site.social.linkedin],
+    sameAs: [
+      `https://find-and-update.company-information.service.gov.uk/company/${cfg.companyNumber}`,
+      ...(cfg.social.linkedin ? [cfg.social.linkedin] : []),
+    ],
   };
 }
 
@@ -62,13 +76,17 @@ export function websiteSchema() {
   };
 }
 
-export function personSchema() {
+export function personSchema(cfg: SiteConfig) {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: site.founder.name,
-    jobTitle: `${site.founder.role} — ${site.founder.credentials}`,
+    name: cfg.founder.name,
+    jobTitle: `${cfg.founder.role} — ${cfg.founder.credentials}`,
     worksFor: { "@id": ORG_ID },
+    sameAs: [
+      "https://find-and-update.company-information.service.gov.uk/officers/WEZU7C6jo8wr20j8K_PSUJW_4BY/appointments",
+      ...(cfg.social.linkedin ? [cfg.social.linkedin] : []),
+    ],
     description:
       "Qualified Person (QP), Responsible Person (RP/RPi) and GMP/GDP Lead Auditor with 20+ years in pharmaceutical quality across UK, EU, US and MENA markets.",
     knowsAbout: [
@@ -111,6 +129,24 @@ export function faqSchema(faqs: Faq[]) {
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+}
+
+/** HowTo describing the engagement methodology — helps AI answer "how does a GMP/GDP engagement work". */
+export function howToSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How a Double Helix Pharma quality & compliance engagement works",
+    description:
+      "Our five-step approach to GMP/GDP audits, contract QP/RP/RPi cover and quality-system work — from scope and risk assessment through to CAPA and follow-up.",
+    step: methodology.map((m, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: m.title,
+      text: m.body,
+      url: `${site.url}/#methodology-${m.step}`,
     })),
   };
 }

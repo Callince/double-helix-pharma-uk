@@ -120,14 +120,4 @@ export function DataTable({ columns, rows, empty = "No records yet." }: { column
   );
 }
 
-export function ResourceList({ title, subtitle, newLabel, newHref = "#", columns, rows }: {
-  title: string; subtitle?: string; newLabel?: string; newHref?: string; columns: Column[]; rows: any[];
-}) {
-  return (
-    <>
-      <PageHeader title={title} subtitle={subtitle}
-        action={newLabel ? <AdminButton href={newHref} icon="plus">{newLabel}</AdminButton> : undefined} />
-      <DataTable columns={columns} rows={rows} />
-    </>
-  );
-}
+// ponytail: removed unused ResourceList wrapper (0 callers) — admin pages build tables directly.

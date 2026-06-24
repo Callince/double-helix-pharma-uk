@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { Container } from "@/components/ui/Container";
 import { CTABand } from "@/components/sections/CTABand";
@@ -8,15 +9,43 @@ import { pageMeta } from "@/lib/seo";
 import { breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { listPublishedPosts, type Post } from "@/lib/db/content";
 
-export const metadata = pageMeta({
-  title: "Blog — Pharma Quality & Compliance",
-  description: "Practical guidance on GMP/GDP audits, Qualified Person duties, quality systems, inspections and pharmaceutical compliance.",
-  path: "/blog",
-});
 export const dynamic = "force-dynamic";
 
 const PER_PAGE = 9;
 const catSlug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+const BLOG_DESC =
+  "Practical guidance on GMP/GDP audits, Qualified Person duties, quality systems, inspections and pharmaceutical compliance.";
+
+// Filtered category views get a UNIQUE title + description (no duplicate tags) and canonicalise
+// to /blog so search engines consolidate the thin query-string variants instead of indexing each.
+const CATEGORY_NAMES: Record<string, string> = {
+  "gmp-gdp-audits": "GMP & GDP Audits",
+  "contract-qp-rp-rpi": "Contract QP, RP & RPi",
+  "qms-pqs-implementation": "QMS & PQS Implementation",
+  "site-readiness-mia-wda": "Site Readiness (MIA/WDA)",
+  "supplier-vendor-management": "Supplier & Vendor Management",
+  "gdp-transport-supply-chain": "GDP & Supply Chain",
+};
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}): Promise<Metadata> {
+  const sp = await searchParams;
+  const cat = sp?.category ? catSlug(sp.category) : "";
+  const name = cat ? CATEGORY_NAMES[cat] : "";
+  if (name) {
+    return pageMeta({
+      title: `${name} Articles | Double Helix Pharma`,
+      absoluteTitle: true,
+      description: `${name} — articles and practical, field-tested guidance from Double Helix Pharma, a UK pharmaceutical quality consultancy led by a senior Qualified Person.`,
+      path: "/blog",
+    });
+  }
+  return pageMeta({ title: "Blog — Pharma Quality & Compliance", description: BLOG_DESC, path: "/blog" });
+}
 
 export default async function BlogPage({ searchParams }: { searchParams: Promise<{ page?: string; category?: string }> }) {
   const sp = await searchParams;
@@ -102,7 +131,7 @@ export default async function BlogPage({ searchParams }: { searchParams: Promise
                   >
                     {p.cover_image && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={p.cover_image} alt={p.cover_alt || ""} className="mb-4 aspect-[16/9] w-full rounded-lg border border-line object-cover" />
+                      <img src={p.cover_image} alt={p.cover_alt || p.title} className="mb-4 aspect-[16/9] w-full rounded-lg border border-line object-cover" />
                     )}
                     <div className="flex items-center gap-2">
                       <span className="label-mono text-teal-ink">{p.category || "Article"}</span>

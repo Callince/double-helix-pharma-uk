@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { put } from "@vercel/blob";
 import { getSessionUser } from "@/lib/admin/guard";
 import { ALLOWED_IMAGE, sniffImage, safeBaseName } from "@/lib/upload";
 
@@ -35,7 +36,17 @@ export async function POST(req: Request) {
   if (!type) return back(req, "error=type");
 
   const name = `${safeBaseName(file.name)}-${Date.now().toString(36)}.${ALLOWED_IMAGE[type]}`;
+  const contentType = `image/${ALLOWED_IMAGE[type]}`;
 
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      await put(`media/${name}`, Buffer.from(bytes), { access: "public", contentType, addRandomSuffix: false });
+      return back(req, "ok=1");
+    } catch (e) {
+      console.error("[media] blob put failed", e);
+      return back(req, "error=write");
+    }
+  }
   try {
     await fs.mkdir(UPLOAD_DIR, { recursive: true });
     await fs.writeFile(path.join(UPLOAD_DIR, name), Buffer.from(bytes));

@@ -163,6 +163,36 @@ html.lenis body {
   animation: rise 0.85s cubic-bezier(0.21, 0.7, 0.25, 1) both;
 }
 
+/* ---- Services wheel entrance (each wedge scales out from the centre) ---- */
+@keyframes dh-wedge-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.18);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes dh-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.dh-wedge {
+  opacity: 0;
+  transform-box: view-box;
+  transform-origin: 150px 150px;
+  animation: dh-wedge-pop 0.55s cubic-bezier(0.34, 1.4, 0.5, 1) both;
+}
+.dh-center {
+  opacity: 0;
+  animation: dh-fade 0.5s ease-out 0.66s both;
+}
+
 /* ---- Standards marquee ---- */
 @keyframes marquee {
   from {
@@ -247,6 +277,26 @@ html.lenis body {
 .legal-prose figure img {
   margin: 0;
 }
+/* Answer-first Overview callout at the top of an article (AEO/snippet bait).
+   Styled via #id because the HTML sanitiser strips class= but keeps id. */
+.legal-prose #post-overview {
+  margin: 0 0 1.8rem;
+  padding: 1rem 1.2rem;
+  background: color-mix(in srgb, var(--color-teal-ink) 6%, transparent);
+  border-left: 3px solid var(--color-teal-ink);
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+.legal-prose #post-overview strong {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-teal-ink);
+  display: block;
+  margin-bottom: 0.35rem;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -269,5 +319,29 @@ html.lenis body {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+/* Print / Save-as-PDF: isolate the [data-print-root] subtree (e.g. the checklist). */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  [data-print-root],
+  [data-print-root] * {
+    visibility: visible;
+  }
+  [data-print-root] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  [data-print-root] a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .no-print {
+    display: none !important;
   }
 }

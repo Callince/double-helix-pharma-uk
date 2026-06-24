@@ -18,11 +18,11 @@ const dotPattern = {
 // Keeps the copy legible over the full-bleed 3D model (landing page only).
 const scrimMobile = {
   background:
-    "linear-gradient(180deg, rgba(245,249,251,0.95) 0%, rgba(245,249,251,0.68) 52%, rgba(245,249,251,0.88) 100%)",
+    "linear-gradient(180deg, rgba(245,249,251,0.95) 0%, rgba(245,249,251,0.62) 50%, rgba(245,249,251,0.85) 100%)",
 };
 const scrimDesktop = {
   background:
-    "linear-gradient(90deg, #f5f9fb 0%, rgba(245,249,251,0.92) 34%, rgba(245,249,251,0.28) 64%, rgba(245,249,251,0) 86%)",
+    "linear-gradient(90deg, #f5f9fb 0%, rgba(245,249,251,0.9) 30%, rgba(245,249,251,0.18) 60%, rgba(245,249,251,0) 82%)",
 };
 
 export function Hero({
@@ -49,9 +49,10 @@ export function Hero({
   panel?: boolean;
 }) {
   const hasSideImage = Boolean(image) && !panel;
+  const centered = false; // landing hero is two-column: text left, services wheel right
 
   const content = (
-    <div className="max-w-xl lg:max-w-2xl">
+    <div className={`max-w-xl lg:max-w-2xl ${centered ? "mx-auto text-center" : ""}`}>
       {breadcrumb && (
         <nav aria-label="Breadcrumb" className="rise mb-7" style={{ animationDelay: "40ms" }}>
           <ol className="label-mono flex flex-wrap items-center gap-2.5 text-muted">
@@ -73,7 +74,7 @@ export function Hero({
 
       {eyebrow && (
         <div
-          className="rise label-mono flex items-center gap-2.5 text-teal-ink"
+          className={`rise label-mono flex items-center gap-2.5 text-teal-ink ${centered ? "justify-center" : ""}`}
           style={{ animationDelay: "80ms" }}
         >
           <span className="h-px w-7 bg-teal" />
@@ -82,7 +83,7 @@ export function Hero({
       )}
 
       <h1
-        className="rise mt-6 max-w-[16ch] font-display text-display-md font-medium leading-[1.04] tracking-[-0.02em] text-navy sm:text-display-lg lg:text-display-xl"
+        className={`rise mt-6 max-w-[16ch] font-display text-display-md font-medium leading-[1.04] tracking-[-0.02em] text-navy sm:text-display-lg lg:text-display-xl ${centered ? "mx-auto" : ""}`}
         style={{ animationDelay: "150ms" }}
       >
         {title}
@@ -90,7 +91,7 @@ export function Hero({
 
       {subtitle && (
         <p
-          className="rise mt-7 max-w-xl text-lg leading-relaxed text-ink/85"
+          className={`rise mt-7 max-w-xl text-lg leading-relaxed text-ink/85 ${centered ? "mx-auto" : ""}`}
           style={{ animationDelay: "240ms" }}
         >
           {subtitle}
@@ -98,7 +99,7 @@ export function Hero({
       )}
 
       {(primary || secondary) && (
-        <div className="rise mt-9 flex flex-wrap gap-3" style={{ animationDelay: "320ms" }}>
+        <div className={`rise mt-9 flex flex-wrap gap-3 ${centered ? "justify-center" : ""}`} style={{ animationDelay: "320ms" }}>
           {primary && (
             <Button href={primary.href} variant="green" size="lg" withArrow>
               {primary.label}
@@ -114,7 +115,7 @@ export function Hero({
 
       {chips && (
         <ul
-          className="rise mt-10 flex flex-wrap items-center gap-x-6 gap-y-3"
+          className={`rise mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 ${centered ? "justify-center" : ""}`}
           style={{ animationDelay: "400ms" }}
         >
           {chips.map((chip) => (

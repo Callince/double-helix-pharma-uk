@@ -15,32 +15,33 @@ export const site = {
     "UK-based pharmaceutical quality & compliance consultancy delivering EU GMP/GDP audits, contract QP/RP/RPi services and inspection-ready quality systems for pharma, biotech and CMOs.",
   // Canonical site origin — drives canonical URLs, sitemap, OG & structured data.
   // Override per environment with NEXT_PUBLIC_SITE_URL (set the live domain on Vercel).
-  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://www.doublehelixpharma.co.uk").replace(/\/+$/, ""),
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://doublehelixpharma.co.uk").replace(/\/+$/, ""),
   locale: "en_GB",
 
   founder: {
-    name: "Balasubramanian", // PLACEHOLDER — confirm full display name
-    initials: "B",
+    name: "Balasubramanian Ramaiah",
+    initials: "BR",
     role: "Principal Consultant",
     credentials: "QP · RP · RPi · GMP/GDP Lead Auditor",
     yearsExperience: 20,
   },
 
-  // ⚠️ PLACEHOLDER contact details — replace with real ones before launch.
-  contactIsPlaceholder: true,
+  contactIsPlaceholder: false,
   contact: {
     email: "info@doublehelixpharma.co.uk",
-    phoneDisplay: "+44 (0)1296 000 000",
-    phoneHref: "+441296000000",
+    phoneDisplay: "+44 7909 174355",
+    phoneHref: "+447909174355",
+    street: "7 Draycott Close",
     locality: "Aylesbury",
     region: "Buckinghamshire",
     postalArea: "HP18",
+    postcode: "HP18 1AZ",
     country: "United Kingdom",
     countryCode: "GB",
   },
 
   social: {
-    linkedin: "https://www.linkedin.com/", // PLACEHOLDER
+    linkedin: "", // set the real LinkedIn profile/company URL when ready (hidden while empty)
   },
 
   markets: ["United Kingdom (MHRA)", "European Union (EMA)", "United States (FDA)", "MENA"],
@@ -89,9 +90,9 @@ export const services: Service[] = [
       "Independent GMP/GDP, supplier and for-cause audits, mock regulatory inspections and inspection-readiness reviews.",
     icon: "clipboard-check",
     hasPage: true,
-    metaTitle: "GMP & GDP Audit Consulting",
+    metaTitle: "GMP & GDP Audit Services",
     metaDescription:
-      "Independent GMP & GDP audits — supplier audits, mock inspections, gap assessments and inspection readiness to EU GMP, 21 CFR 210/211 and ICH.",
+      "Independent GMP & GDP audit services in the UK — supplier, for-cause and mock MHRA inspection audits with graded, regulation-mapped reports from a Lead Auditor.",
   },
   {
     slug: "contract-qp",
@@ -101,9 +102,9 @@ export const services: Service[] = [
       "Qualified Person batch certification plus Responsible Person (WDA) and Responsible Person for import (RPi) cover.",
     icon: "badge-check",
     hasPage: true,
-    metaTitle: "Contract QP, RP & RPi Cover",
+    metaTitle: "Contract QP, RP & RPi Services",
     metaDescription:
-      "Contract Qualified Person (QP) batch certification and release, plus Responsible Person (RP) and RPi import cover for UK and EU pharmaceutical operations.",
+      "Contract Qualified Person (QP), Responsible Person (RP) and RPi services for UK and EU pharma — batch certification, release and import oversight you can name.",
   },
   {
     slug: "qms-implementation",
@@ -113,9 +114,9 @@ export const services: Service[] = [
       "Build and remediate quality systems to ICH Q10 — SOPs, CAPA, deviations, change control and self-inspection.",
     icon: "layers",
     hasPage: true,
-    metaTitle: "QMS & PQS Implementation",
+    metaTitle: "QMS & PQS Implementation (ICH Q10)",
     metaDescription:
-      "Pharmaceutical Quality System (PQS) build and remediation to ICH Q10 — SOPs, CAPA, deviation and change control, self-inspection and inspection remediation.",
+      "QMS and PQS implementation to ICH Q10 for UK pharma — SOPs, CAPA, deviations, change control and self-inspection, built or remediated to pass inspection.",
   },
   {
     slug: "site-readiness",
@@ -125,9 +126,9 @@ export const services: Service[] = [
       "Prepare sites, dossiers and teams for MIA/WDA licensing, regulatory inspection and operational go-live.",
     icon: "building",
     hasPage: true,
-    metaTitle: "MIA & WDA Site Readiness",
+    metaTitle: "MIA & WDA Licence Support",
     metaDescription:
-      "MIA/WDA site readiness — licence-application support, facility and QMS gap assessment, mock pre-licensing inspection and operational go-live for UK pharma.",
+      "MIA and WDA(H) licence application support and site readiness in the UK — facility and QMS gap assessment, mock pre-licensing MHRA inspection and go-live.",
   },
   {
     slug: "supplier-management",
@@ -137,9 +138,9 @@ export const services: Service[] = [
       "GxP supplier qualification, technical/quality agreements (QTA) and ongoing performance oversight.",
     icon: "link",
     hasPage: true,
-    metaTitle: "Supplier & Vendor Management",
+    metaTitle: "Supplier Audit & Qualification",
     metaDescription:
-      "GxP supplier and vendor management — risk-based qualification, technical/quality agreements (QTA), audit programmes and ongoing oversight of your supply chain.",
+      "GxP supplier audit and vendor qualification for pharma — risk-based qualification, quality/technical agreements (QTA) and ongoing supplier oversight.",
   },
   {
     slug: "gdp-supply-chain",
@@ -149,9 +150,9 @@ export const services: Service[] = [
       "Transport validation, cold-chain assurance and distribution compliance across the GDP supply chain.",
     icon: "truck",
     hasPage: true,
-    metaTitle: "GDP Transport & Supply Chain",
+    metaTitle: "GDP Cold-Chain & Transport",
     metaDescription:
-      "GDP transport and distribution compliance — transport validation, cold-chain and temperature mapping, gap assessments and WDA/RP support to EU GDP standards.",
+      "GDP transport and cold-chain compliance for UK pharma — transport validation, temperature mapping and distribution gap assessments to EU GDP, with RP support.",
   },
 ];
 

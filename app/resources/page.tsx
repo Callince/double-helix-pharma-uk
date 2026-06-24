@@ -10,9 +10,10 @@ import { breadcrumbSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
-  title: "Regulatory Resources — MHRA, EMA & EU GMP/GDP Guidance",
+  title: "GMP/GDP Regulatory Resources | Double Helix Pharma",
+  absoluteTitle: true,
   description:
-    "The official UK & EU pharmaceutical compliance sources we work to — MHRA, the MHRA Inspectorate blog, EMA GMP/GDP Q&A and EudraLex Volume 4 (EU GMP), including key chapters and annexes.",
+    "The official UK & EU pharmaceutical compliance sources we work to — MHRA, the MHRA Inspectorate blog, EMA GMP/GDP Q&A and EudraLex Volume 4 (EU GMP).",
   path: "/resources",
 });
 
@@ -87,6 +88,27 @@ export default function ResourcesPage() {
 
       <section className="bg-white py-16 sm:py-20 lg:py-24">
         <Container>
+          <a
+            href="/resources/gmp-inspection-readiness-checklist"
+            className="group mb-12 flex flex-col gap-5 rounded-2xl border border-teal/30 bg-teal/[0.05] p-6 transition-all duration-300 hover:border-teal/50 hover:shadow-[0_26px_55px_-34px_rgba(6,41,92,0.5)] sm:flex-row sm:items-center sm:gap-7 sm:p-8"
+          >
+            <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-teal/15 text-teal-ink">
+              <Icon name="clipboard-check" className="size-7" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="label-mono text-teal-ink">Free download</span>
+              <span className="mt-1.5 block font-display text-xl font-medium text-navy transition-colors group-hover:text-teal-ink">
+                GMP Inspection-Readiness Checklist
+              </span>
+              <span className="mt-1 block text-sm leading-relaxed text-muted">
+                Every area an MHRA inspector examines, in one printable checklist — PQS, data integrity, suppliers, CAPA and more.
+              </span>
+            </span>
+            <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-medium text-white transition-colors group-hover:bg-navy-deep">
+              <Icon name="download" className="size-4" />
+              Get the checklist
+            </span>
+          </a>
           <div className="space-y-14">
             {groups.map((g) => (
               <div key={g.heading}>

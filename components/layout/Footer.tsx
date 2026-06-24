@@ -2,11 +2,13 @@ import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { Icon } from "@/components/ui/Icon";
 import { NewsletterForm } from "@/components/sections/NewsletterForm";
-import { site, services } from "@/lib/site";
+import { services } from "@/lib/site";
+import { getSiteConfig } from "@/lib/site-config";
 
 const year = new Date().getFullYear();
 
-export function Footer() {
+export async function Footer() {
+  const site = await getSiteConfig();
   return (
     <footer className="bg-navy-deep text-white/75">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 lg:px-8">
@@ -20,15 +22,17 @@ export function Footer() {
               Independent EU GMP/GDP audits, contract QP/RP/RPi services and inspection-ready
               quality systems for pharma, biotech and CMOs.
             </p>
-            <a
-              href={site.social.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="mt-7 inline-grid size-11 place-items-center rounded-lg ring-1 ring-white/20 transition-colors hover:bg-white/10"
-            >
-              <Icon name="linkedin" className="size-5" />
-            </a>
+            {site.social.linkedin && (
+              <a
+                href={site.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="mt-7 inline-grid size-11 place-items-center rounded-lg ring-1 ring-white/20 transition-colors hover:bg-white/10"
+              >
+                <Icon name="linkedin" className="size-5" />
+              </a>
+            )}
 
             <div className="mt-8 max-w-sm">
               <p className="text-sm font-semibold text-white/85">Get compliance updates</p>
@@ -83,32 +87,40 @@ export function Footer() {
                   {site.contact.email}
                 </a>
               </li>
-              <li className="flex items-start gap-3">
-                <Icon name="phone" className="mt-0.5 size-4 shrink-0 text-cyan" />
-                <a href={`tel:${site.contact.phoneHref}`} className="hover:text-cyan">
-                  {site.contact.phoneDisplay}
-                </a>
-              </li>
+              {!site.contactIsPlaceholder && (
+                <li className="flex items-start gap-3">
+                  <Icon name="phone" className="mt-0.5 size-4 shrink-0 text-cyan" />
+                  <a href={`tel:${site.contact.phoneHref}`} className="hover:text-cyan">
+                    {site.contact.phoneDisplay}
+                  </a>
+                </li>
+              )}
               <li className="flex items-start gap-3">
                 <Icon name="map-pin" className="mt-0.5 size-4 shrink-0 text-cyan" />
                 <span>
-                  {site.contact.locality}, {site.contact.region}
+                  {site.contact.street}
+                  <br />
+                  {site.contact.locality}, {site.contact.region} {site.contact.postcode}
                   <br />
                   {site.contact.country}
                 </span>
               </li>
             </ul>
-            {site.contactIsPlaceholder && (
-              <p className="mt-5 border-l-2 border-white/15 pl-3 text-xs text-white/60">
-                Contact details are placeholders pending confirmation.
-              </p>
-            )}
           </div>
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-7 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {site.legalName}. Company No. {site.companyNumber} · Registered in England &amp; Wales.
+            © {year} {site.legalName}. Company No.{" "}
+            <a
+              href={`https://find-and-update.company-information.service.gov.uk/company/${site.companyNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-offset-2 hover:text-white hover:underline"
+            >
+              {site.companyNumber}
+            </a>{" "}
+            · Registered in England &amp; Wales.
           </p>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="hover:text-white">

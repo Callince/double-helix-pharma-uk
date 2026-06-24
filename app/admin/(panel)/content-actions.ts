@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { assertAdmin, assertEditor } from "@/lib/admin/guard";
 import * as db from "@/lib/db/content";
+import { pingIndexNow } from "@/lib/indexnow";
 import { stripAutoLinks, getLinkTargets, suggestInterlinks, applyInterlinks, htmlToText } from "@/lib/ai/interlink";
 
 const str = (fd: FormData, k: string) => String(fd.get(k) ?? "").trim();
@@ -60,6 +61,8 @@ export async function savePost(fd: FormData) {
   });
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
+  // Tell Bing immediately when a post goes (or stays) live.
+  if (status === "published") await pingIndexNow(slug ? [`/blog/${slug}`, "/blog"] : ["/blog"]);
   redirect("/admin/blog");
 }
 export async function deletePostAction(id: string) {
@@ -91,15 +94,17 @@ export async function setAllPostsDraftAction() {
 /* -------------------------------------------------------------------- faqs */
 export async function saveFaq(fd: FormData) {
   await assertEditor();
+  const published = fd.get("published") === "on";
   await db.upsertFaq({
     id: str(fd, "id") || undefined,
     question: str(fd, "question"),
     answer: str(fd, "answer"),
     category: str(fd, "category"),
-    published: fd.get("published") === "on",
+    published,
   });
   revalidatePath("/admin/faqs");
   revalidatePath("/faq");
+  if (published) await pingIndexNow(["/faq"]);
   redirect("/admin/faqs");
 }
 export async function deleteFaqAction(id: string) {
@@ -128,19 +133,22 @@ export async function saveService(fd: FormData) {
 /* ------------------------------------------------------------- case studies */
 export async function saveCaseStudy(fd: FormData) {
   await assertEditor();
+  const status = str(fd, "status") || "draft";
+  const slug = str(fd, "slug");
   await db.upsertCaseStudy({
     id: str(fd, "id") || undefined,
     title: str(fd, "title"),
-    slug: str(fd, "slug"),
+    slug,
     sector: str(fd, "sector"),
     summary: str(fd, "summary"),
     challenge: str(fd, "challenge"),
     approach: str(fd, "approach"),
     outcome: str(fd, "outcome"),
-    status: str(fd, "status") || "draft",
+    status,
   });
   revalidatePath("/admin/case-studies");
   revalidatePath("/case-studies");
+  if (status === "published") await pingIndexNow(slug ? [`/case-studies/${slug}`, "/case-studies"] : ["/case-studies"]);
   redirect("/admin/case-studies");
 }
 export async function deleteCaseStudyAction(id: string) {
@@ -161,5 +169,7 @@ export async function saveSettings(fd: FormData) {
   });
   await db.saveSetting("social", { linkedin: str(fd, "social_linkedin") });
   await db.saveSetting("seo", { metaTitle: str(fd, "seo_title"), metaDescription: str(fd, "seo_description") });
+  // Re-render every page so the footer + JSON-LD (in the root layout) pick up the change.
+  revalidatePath("/", "layout");
   revalidatePath("/admin/settings");
 }

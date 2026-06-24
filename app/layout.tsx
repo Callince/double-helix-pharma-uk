@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { ScrollAnimations } from "@/components/anim/ScrollAnimations";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
+import { getSiteConfig } from "@/lib/site-config";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -27,63 +28,57 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    default: `${site.name} — ${site.tagline}`,
-    template: `%s | Double Helix Pharma UK`,
-  },
-  description: site.description,
-  applicationName: site.shortName,
-  authors: [{ name: site.legalName }],
-  creator: site.legalName,
-  keywords: [
-    "pharmaceutical quality consultant",
-    "GMP audit consulting",
-    "GDP audit",
-    "cGMP audit",
-    "contract Qualified Person",
-    "QP services UK",
-    "Responsible Person RP RPi",
-    "PQS QMS implementation",
-    "inspection readiness",
-    "EU GMP compliance",
-  ],
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    locale: site.locale,
-    url: site.url,
-    siteName: site.name,
-    title: `${site.name} — ${site.tagline}`,
-    description: site.description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${site.name} — ${site.tagline}`,
-    description: site.description,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const cfg = await getSiteConfig();
+  const title = cfg.seo.metaTitle || `${site.name} — ${site.tagline}`;
+  const description = cfg.seo.metaDescription || site.description;
+  return {
+    metadataBase: new URL(site.url),
+    title: {
+      default: title,
+      template: `%s | Double Helix Pharma UK`,
+    },
+    description,
+    applicationName: site.shortName,
+    authors: [{ name: site.legalName }],
+    creator: site.legalName,
+    alternates: { canonical: "/" },
+    openGraph: {
+      type: "website",
+      locale: site.locale,
+      url: site.url,
+      siteName: site.name,
+      title,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#042a63",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const cfg = await getSiteConfig();
   return (
     <html
       lang="en-GB"
       className={`${fraunces.variable} ${hanken.variable} ${plexMono.variable}`}
     >
       <body className="flex min-h-screen flex-col font-sans">
-        <JsonLd data={[organizationSchema(), websiteSchema()]} />
+        <JsonLd data={[organizationSchema(cfg), websiteSchema()]} />
         <ScrollAnimations />
         <ConditionalChrome header={<Header />} footer={<Footer />}>
           {children}

@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
-import { site } from "@/lib/site";
+import { getSiteConfig } from "@/lib/site-config";
 import { ContactForm } from "./ContactForm";
 
 export const metadata: Metadata = pageMeta({
@@ -15,17 +15,19 @@ export const metadata: Metadata = pageMeta({
   path: "/contact",
 });
 
-const methods = [
-  { icon: "mail" as const, label: "Email", value: site.contact.email, href: `mailto:${site.contact.email}` },
-  { icon: "phone" as const, label: "Phone", value: site.contact.phoneDisplay, href: `tel:${site.contact.phoneHref}` },
-  {
-    icon: "map-pin" as const,
-    label: "Location",
-    value: `${site.contact.locality}, ${site.contact.region}, ${site.contact.country}`,
-  },
-];
-
-export default function ContactPage() {
+export default async function ContactPage() {
+  const site = await getSiteConfig();
+  const methods = [
+    { icon: "mail" as const, label: "Email", value: site.contact.email, href: `mailto:${site.contact.email}` },
+    ...(site.contactIsPlaceholder
+      ? []
+      : [{ icon: "phone" as const, label: "Phone", value: site.contact.phoneDisplay, href: `tel:${site.contact.phoneHref}` }]),
+    {
+      icon: "map-pin" as const,
+      label: "Location",
+      value: `${site.contact.street}, ${site.contact.locality}, ${site.contact.region} ${site.contact.postcode}, ${site.contact.country}`,
+    },
+  ];
   return (
     <>
       <JsonLd
@@ -95,11 +97,6 @@ export default function ContactPage() {
                 </p>
               </div>
 
-              {site.contactIsPlaceholder && (
-                <p className="mt-4 text-xs text-muted">
-                  Note: contact details shown are placeholders pending confirmation.
-                </p>
-              )}
             </div>
 
             <ContactForm />

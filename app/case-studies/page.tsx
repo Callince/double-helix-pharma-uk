@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { Container } from "@/components/ui/Container";
 import { CTABand } from "@/components/sections/CTABand";
@@ -8,11 +9,16 @@ import { pageMeta } from "@/lib/seo";
 import { breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { listPublishedCaseStudies } from "@/lib/db/content";
 
-export const metadata = pageMeta({
-  title: "Case Studies — Pharma Quality & Compliance",
-  description: "Anonymised examples of GMP/GDP audits, contract QP cover, quality systems and inspection-readiness engagements delivered by Double Helix Pharma.",
-  path: "/case-studies",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const studies = await listPublishedCaseStudies().catch(() => []);
+  return pageMeta({
+    title: "Pharma Quality Case Studies | Double Helix Pharma",
+    absoluteTitle: true,
+    description: "Anonymised examples of GMP/GDP audits, contract QP cover, quality systems and inspection-readiness engagements delivered by Double Helix Pharma.",
+    path: "/case-studies",
+    index: studies.length > 0, // noindex while empty (thin-page / soft-404 risk)
+  });
+}
 export const dynamic = "force-dynamic";
 
 export default async function CaseStudiesPage() {

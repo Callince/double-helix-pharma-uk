@@ -45,6 +45,20 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Consolidate to the canonical apex host (www -> non-www, 308).
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.doublehelixpharma.co.uk" }],
+        destination: "https://doublehelixpharma.co.uk/:path*",
+        permanent: true,
+      },
+      // Bounce the Vercel system domain to the canonical host (closes the public duplicate).
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "double-helix-pharma-goodson-s-projects.vercel.app" }],
+        destination: "https://doublehelixpharma.co.uk/:path*",
+        permanent: true,
+      },
       { source: "/insights", destination: "/blog", permanent: true },
       { source: "/insights/:slug", destination: "/blog/:slug", permanent: true },
     ];
