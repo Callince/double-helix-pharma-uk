@@ -41,7 +41,7 @@ export const site = {
   },
 
   social: {
-    linkedin: "", // set the real LinkedIn profile/company URL when ready (hidden while empty)
+    linkedin: "https://www.linkedin.com/company/double-helix-pharma-uk-ltd/",
   },
 
   markets: ["United Kingdom (MHRA)", "European Union (EMA)", "United States (FDA)", "MENA"],
