@@ -11,7 +11,19 @@ import { getPostBySlug, listPublishedPosts, type Post } from "@/lib/db/content";
 import { processArticle } from "@/lib/blog/toc";
 import { sanitizeArticleHtml } from "@/lib/sanitize";
 
-export const dynamic = "force-dynamic";
+// ISR: cache each post + refresh hourly. Publishing/editing in admin calls
+// revalidatePath(`/blog/<slug>`) for an instant update. (Was force-dynamic = slow on every hit.)
+export const revalidate = 3600;
+
+// Pre-build published posts so the first crawl is fast (not generated on demand).
+export async function generateStaticParams() {
+  try {
+    const posts = await listPublishedPosts();
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch {
+    return []; // DB unreachable at build → posts still generate on-demand (ISR-cached after first hit)
+  }
+}
 
 function parseFaqs(json: string | null): { q: string; a: string }[] {
   if (!json) return [];

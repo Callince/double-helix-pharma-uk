@@ -61,6 +61,7 @@ export async function savePost(fd: FormData) {
   });
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
+  if (slug) revalidatePath(`/blog/${slug}`); // refresh the cached (ISR) post page immediately
   // Tell Bing immediately when a post goes (or stays) live.
   if (status === "published") await pingIndexNow(slug ? [`/blog/${slug}`, "/blog"] : ["/blog"]);
   redirect("/admin/blog");

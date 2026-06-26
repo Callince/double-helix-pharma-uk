@@ -85,7 +85,11 @@ export async function listPosts(): Promise<Post[]> {
 }
 export async function listPublishedPosts(): Promise<Post[]> {
   await ensure();
-  return (await getDb().execute("SELECT * FROM posts WHERE status='published' ORDER BY created_at DESC")).rows as unknown as Post[];
+  // Listing / related / sitemap callers never read the large body or faqs columns — omit them
+  // so this query stays light. getPostBySlug() still returns the full row for the article page.
+  return (await getDb().execute(
+    "SELECT id, slug, title, excerpt, cover_image, cover_alt, category, status, author, reading_minutes, views, publish_at, created_at, updated_at FROM posts WHERE status='published' ORDER BY created_at DESC",
+  )).rows as unknown as Post[];
 }
 export async function getPost(id: string): Promise<Post | null> {
   await ensure();
