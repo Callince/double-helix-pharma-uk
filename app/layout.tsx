@@ -78,6 +78,8 @@ export default async function RootLayout({
       className={`${fraunces.variable} ${hanken.variable} ${plexMono.variable}`}
     >
       <body className="flex min-h-screen flex-col font-sans">
+        {/* The header logo is the LCP element — preload it first, high priority. */}
+        <link rel="preload" href="/logo-web.webp" as="image" fetchPriority="high" />
         <JsonLd data={[organizationSchema(cfg), websiteSchema()]} />
         <ScrollAnimations />
         <ConditionalChrome header={<Header />} footer={<Footer />}>
