@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
     index: studies.length > 0, // noindex while empty (thin-page / soft-404 risk)
   });
 }
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: cached + refreshed hourly (instant via revalidatePath on save)
 
 export default async function CaseStudiesPage() {
   const studies = await listPublishedCaseStudies().catch(() => []);

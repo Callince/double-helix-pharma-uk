@@ -149,6 +149,7 @@ export async function saveCaseStudy(fd: FormData) {
   });
   revalidatePath("/admin/case-studies");
   revalidatePath("/case-studies");
+  if (slug) revalidatePath(`/case-studies/${slug}`); // refresh the cached (ISR) case-study page now
   if (status === "published") await pingIndexNow(slug ? [`/case-studies/${slug}`, "/case-studies"] : ["/case-studies"]);
   redirect("/admin/case-studies");
 }

@@ -13,7 +13,7 @@ export const metadata = pageMeta({
     "Answers on GMP/GDP audits, contract QP/RP/RPi cover, QMS implementation, site readiness, supplier management and GDP distribution compliance.",
   path: "/faq",
 });
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: cached + refreshed hourly (instant via revalidatePath on FAQ save)
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 

@@ -6,9 +6,19 @@ import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMeta, seoTitle } from "@/lib/seo";
 import { breadcrumbSchema, caseStudySchema } from "@/lib/schema";
-import { getCaseStudyBySlug } from "@/lib/db/content";
+import { getCaseStudyBySlug, listPublishedCaseStudies } from "@/lib/db/content";
 
-export const dynamic = "force-dynamic";
+// ISR: cache each case study + refresh hourly (instant via revalidatePath on save).
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  try {
+    const studies = await listPublishedCaseStudies();
+    return studies.map((c) => ({ slug: c.slug }));
+  } catch {
+    return []; // DB unreachable at build → generated on-demand (still ISR-cached)
+  }
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
