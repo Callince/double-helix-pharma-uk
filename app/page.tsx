@@ -11,6 +11,7 @@ import { DosageForms } from "@/components/sections/DosageForms";
 import { PullQuote } from "@/components/sections/PullQuote";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTABand } from "@/components/sections/CTABand";
+import { LatestPosts } from "@/components/sections/LatestPosts";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqSchema, howToSchema } from "@/lib/schema";
 import { faqsHome, ctaHref, ctaLabel } from "@/lib/site";
@@ -22,6 +23,9 @@ export const metadata: Metadata = pageMeta({
     "UK pharmaceutical quality consultant — independent GMP/GDP audits, contract QP/RP/RPi cover and inspection-ready quality systems from a QP with 20+ years.",
   path: "/",
 });
+
+// The homepage now shows the latest blog posts (DB-driven) — cache it as ISR, refresh hourly.
+export const revalidate = 3600;
 
 export default function HomePage() {
   return (
@@ -51,6 +55,7 @@ export default function HomePage() {
       <Methodology />
       <DosageForms />
       <PullQuote />
+      <LatestPosts />
       <FAQ faqs={faqsHome} />
       <CTABand />
     </>

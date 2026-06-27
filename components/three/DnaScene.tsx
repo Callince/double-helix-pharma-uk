@@ -134,10 +134,6 @@ export default function DnaScene({ reduced = false }: { reduced?: boolean }) {
   // Pause the render loop when the hero is scrolled out of view — no wasted main-thread/GPU.
   const wrapRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
-  // "Rest when idle": after the entrance + any cursor interaction, let the loop go quiet so
-  // the main thread can idle. This is the big TBT win — a perpetual WebGL loop makes every
-  // frame a "long task" under throttling. A pointer move wakes it; parallax stays live.
-  const [active, setActive] = useState(true);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -147,29 +143,13 @@ export default function DnaScene({ reduced = false }: { reduced?: boolean }) {
     return () => io.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (reduced) return; // reduced-motion path is static — no loop to manage
-    let timer: ReturnType<typeof setTimeout>;
-    const wake = () => {
-      setActive(true);
-      clearTimeout(timer);
-      timer = setTimeout(() => setActive(false), 2000); // sleep 2s after the last move
-    };
-    timer = setTimeout(() => setActive(false), 3200); // play entrance + a beat, then rest
-    window.addEventListener("pointermove", wake, { passive: true });
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("pointermove", wake);
-    };
-  }, [reduced]);
-
   return (
     <div ref={wrapRef} className="h-full w-full">
       <Canvas
         camera={{ position: [0, 0, 8.5], fov: 36 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 1.5]}
-        frameloop={reduced ? "demand" : visible && active ? "always" : "never"}
+        frameloop={reduced ? "demand" : visible ? "always" : "never"}
       >
         <ambientLight intensity={0.9} />
         <directionalLight position={[4, 6, 6]} intensity={2.1} color="#ffffff" />

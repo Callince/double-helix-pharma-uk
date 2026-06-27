@@ -17,11 +17,11 @@ export function Pillars() {
           {pillars.map((p) => (
             <div
               key={p.title}
-              className="group relative overflow-hidden rounded-lg border border-line bg-white p-8 transition-colors hover:border-navy/20"
+              className="group relative overflow-hidden rounded-2xl border border-line/70 bg-white p-8 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan/40 hover:shadow-float"
             >
-              <span className="absolute inset-x-0 top-0 h-0.5 bg-brand-gradient" />
+              <span className="absolute inset-x-0 top-0 h-1 bg-brand-gradient" />
               <div className="flex items-center justify-between">
-                <span className="grid size-11 place-items-center rounded-md bg-navy text-white">
+                <span className="grid size-11 place-items-center rounded-xl bg-brand-gradient text-white shadow-soft transition-transform duration-300 group-hover:scale-105">
                   <Icon name={p.icon} className="size-5" />
                 </span>
                 <span className="label-mono text-teal-ink">{p.tag}</span>
@@ -30,7 +30,9 @@ export function Pillars() {
               <ul className="mt-5 space-y-3">
                 {p.items.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm text-ink">
-                    <Icon name="check" className="mt-0.5 size-4 shrink-0 text-green" />
+                    <span className="mt-0.5 grid size-4 shrink-0 place-items-center rounded-full bg-green/15">
+                      <Icon name="check" className="size-3 text-green-ink" />
+                    </span>
                     {item}
                   </li>
                 ))}

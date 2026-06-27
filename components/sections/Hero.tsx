@@ -73,12 +73,14 @@ export function Hero({
       )}
 
       {eyebrow && (
-        <div
-          className={`rise label-mono flex items-center gap-2.5 text-teal-ink ${centered ? "justify-center" : ""}`}
-          style={{ animationDelay: "80ms" }}
-        >
-          <span className="h-px w-7 bg-teal" />
-          {eyebrow}
+        <div className={`rise ${centered ? "flex justify-center" : ""}`} style={{ animationDelay: "80ms" }}>
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-cyan/30 bg-white/70 px-3.5 py-1.5 label-mono text-teal-ink shadow-soft backdrop-blur-sm">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal opacity-60" />
+              <span className="relative inline-flex size-2 rounded-full bg-teal" />
+            </span>
+            {eyebrow}
+          </span>
         </div>
       )}
 
@@ -115,12 +117,14 @@ export function Hero({
 
       {chips && (
         <ul
-          className={`rise mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 ${centered ? "justify-center" : ""}`}
+          className={`rise mt-9 flex flex-wrap items-center gap-2.5 ${centered ? "justify-center" : ""}`}
           style={{ animationDelay: "400ms" }}
         >
           {chips.map((chip) => (
-            <li key={chip} className="flex items-center gap-2 text-sm text-muted">
-              <Icon name="check" className="size-4 text-green" />
+            <li key={chip} className="inline-flex items-center gap-2 rounded-full bg-white/75 px-3 py-1.5 text-sm font-medium text-navy shadow-soft backdrop-blur-sm">
+              <span className="grid size-4 place-items-center rounded-full bg-green/15">
+                <Icon name="check" className="size-3 text-green-ink" />
+              </span>
               {chip}
             </li>
           ))}
@@ -130,10 +134,11 @@ export function Hero({
   );
 
   return (
-    <section className="relative isolate overflow-hidden bg-hero-light text-ink">
-      {/* Atmosphere */}
+    <section className="relative isolate overflow-hidden bg-hero-modern text-ink">
+      {/* Atmosphere — biotech precision: cyan halo, soft depth */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-        <div data-parallax="0.35" className="absolute right-[-10%] top-[-22%] h-[36rem] w-[36rem] rounded-full bg-teal/10 blur-[120px]" />
+        <div data-parallax="0.3" className="absolute right-[3%] top-[4%] h-[34rem] w-[34rem] rounded-full bg-cyan/20 blur-[120px]" />
+        <div data-parallax="0.18" className="absolute -left-[8%] bottom-[-18%] h-[26rem] w-[26rem] rounded-full bg-teal/12 blur-[110px]" />
         <div className="absolute inset-0 opacity-[0.05]" style={dotPattern} />
         {/* Subtle helix accent only when there's no side image and no 3D */}
         {!panel && !image && (

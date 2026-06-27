@@ -48,7 +48,7 @@ export function Methodology({ tone = "light" }: { tone?: "light" | "dark" }) {
                 className={`rounded-2xl p-6 transition-colors duration-300 ${
                   isDark
                     ? "bg-white/[0.04] ring-1 ring-white/10 hover:bg-white/[0.07]"
-                    : "bg-surface ring-1 ring-line/70 hover:bg-paper"
+                    : "bg-white border border-line/60 shadow-soft hover:-translate-y-0.5 hover:shadow-float"
                 }`}
               >
                 <h3 className={`font-display text-xl font-medium ${isDark ? "text-white" : "text-navy"}`}>

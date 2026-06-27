@@ -7,6 +7,10 @@
 /.next/
 /out/
 
+# cloudflare / opennext build output
+/.open-next/
+/.wrangler/
+
 # production
 /build
 
@@ -41,7 +45,8 @@ next-env.d.ts
 
 # scratch / temp doc artifacts
 docs/_*
-~$*    # office lock files (e.g. open .xlsx)
+# office lock files (e.g. an open .xlsx)
+~$*
 
 # third-party Claude skills (installed locally, not committed)
 .claude/skills/

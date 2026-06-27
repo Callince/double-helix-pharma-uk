@@ -101,6 +101,20 @@
   background-image: radial-gradient(125% 130% at 80% -10%, #e4eff8 0%, #eef5fa 40%, #ffffff 100%);
 }
 
+/* ---- Modern "biotech precision" atmosphere + soft depth ---- */
+@utility bg-hero-modern {
+  background-image:
+    radial-gradient(58% 52% at 86% 6%, rgba(69, 199, 242, 0.22) 0%, transparent 58%),
+    radial-gradient(46% 42% at 4% 2%, rgba(10, 166, 226, 0.10) 0%, transparent 56%),
+    linear-gradient(180deg, #ecf6fc 0%, #f6fbfd 44%, #ffffff 100%);
+}
+@utility shadow-soft {
+  box-shadow: 0 18px 50px -22px rgba(4, 42, 99, 0.26), 0 4px 14px -8px rgba(4, 42, 99, 0.1);
+}
+@utility shadow-float {
+  box-shadow: 0 26px 60px -26px rgba(4, 42, 99, 0.38), 0 6px 18px -10px rgba(4, 42, 99, 0.14);
+}
+
 /* GSAP scroll reveal — elements hide only after JS marks the doc ready
    (keeps content visible with no JS, and prevents any reveal flash). */
 html.gsap-ready [data-reveal],

@@ -11,7 +11,7 @@ export function FounderAbout() {
         <div data-reveal-group className="grid items-center gap-14 lg:grid-cols-[0.82fr_1.18fr]">
           {/* Portrait */}
           <div className="mx-auto w-full max-w-sm">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-lg border border-navy/10 bg-surface">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-navy/10 bg-surface shadow-float">
               <Image
                 src="/founder-web.webp"
                 alt={`${site.founder.name} — ${site.founder.role} at ${site.shortName}`}
@@ -55,9 +55,9 @@ export function FounderAbout() {
               {credentials.map((c) => (
                 <li
                   key={c}
-                  className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 font-mono text-[0.68rem] tracking-tight text-navy"
+                  className="inline-flex items-center gap-2 rounded-full border border-line/70 bg-white px-3 py-1.5 font-mono text-[0.68rem] tracking-tight text-navy shadow-soft"
                 >
-                  <Icon name="badge-check" className="size-4 text-green" />
+                  <Icon name="badge-check" className="size-4 text-green-ink" />
                   {c}
                 </li>
               ))}
