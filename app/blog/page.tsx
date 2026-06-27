@@ -7,10 +7,10 @@ import { Icon } from "@/components/ui/Icon";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMeta } from "@/lib/seo";
 import { breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
-import { listPublishedPosts, type Post } from "@/lib/db/content";
+import { listPublishedPostsCached, type Post } from "@/lib/db/content";
 
-export const dynamic = "force-dynamic";
-
+// Dynamic (reads searchParams for category + pagination), but the posts query is
+// served from the data cache (listPublishedPostsCached) so it skips the DB per request.
 const PER_PAGE = 9;
 const catSlug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -49,7 +49,7 @@ export async function generateMetadata({
 
 export default async function BlogPage({ searchParams }: { searchParams: Promise<{ page?: string; category?: string }> }) {
   const sp = await searchParams;
-  const all = await listPublishedPosts().catch(() => [] as Post[]);
+  const all = await listPublishedPostsCached().catch(() => [] as Post[]);
 
   // Category chips (distinct categories with counts)
   const catMap = new Map<string, { name: string; slug: string; count: number }>();

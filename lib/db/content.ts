@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { getDb } from "./client";
 import { services as siteServices, faqsHome, faqsGmp, faqsContractQp, faqsQms, faqsSiteReadiness, faqsSupplier, faqsGdp, site } from "@/lib/site";
 
@@ -91,6 +92,13 @@ export async function listPublishedPosts(): Promise<Post[]> {
     "SELECT id, slug, title, excerpt, cover_image, cover_alt, category, status, author, reading_minutes, views, publish_at, created_at, updated_at FROM posts WHERE status='published' ORDER BY created_at DESC",
   )).rows as unknown as Post[];
 }
+/** Cached published-posts listing for the dynamic /blog page (it reads searchParams, so it
+ *  can't be ISR). Served from the data cache so the page skips the DB + schema-init on most
+ *  requests; invalidated instantly via revalidateTag("posts") whenever a post changes. */
+export const listPublishedPostsCached = unstable_cache(listPublishedPosts, ["published-posts"], {
+  revalidate: 3600,
+  tags: ["posts"],
+});
 export async function getPost(id: string): Promise<Post | null> {
   await ensure();
   return ((await getDb().execute({ sql: "SELECT * FROM posts WHERE id=?", args: [id] })).rows[0] as unknown as Post) ?? null;

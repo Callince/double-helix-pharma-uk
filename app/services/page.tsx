@@ -22,7 +22,7 @@ export const metadata: Metadata = pageMeta({
   path: "/services",
 });
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR — cached + refreshed hourly; saveService revalidatePath("/services") makes edits instant
 
 export default async function ServicesPage() {
   const dbServices = await listServices().catch(() => []);
