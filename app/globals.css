@@ -44,6 +44,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 6rem; /* fixed-header offset for anchor jumps (was Lenis) */
     -webkit-text-size-adjust: 100%;
   }
   body {
@@ -115,35 +116,53 @@
   box-shadow: 0 26px 60px -26px rgba(4, 42, 99, 0.38), 0 6px 18px -10px rgba(4, 42, 99, 0.14);
 }
 
-/* GSAP scroll reveal — elements hide only after JS marks the doc ready
-   (keeps content visible with no JS, and prevents any reveal flash). */
-html.gsap-ready [data-reveal],
-html.gsap-ready [data-reveal-group] > * {
+/* Scroll reveal — an IntersectionObserver adds `.is-revealed`; elements hide
+   only after JS sets `.reveal-ready`, so content stays visible with no JS and
+   never flashes. (Replaced GSAP + Lenis with CSS transitions.) */
+html.reveal-ready [data-reveal],
+html.reveal-ready [data-reveal-group] > * {
   opacity: 0;
+  transform: translateY(38px) scale(0.985);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform, opacity;
 }
-
-/* Parallax layers (scroll-linked depth) */
-[data-parallax] {
-  will-change: transform;
+html.reveal-ready [data-reveal="left"] {
+  transform: translateX(-52px);
+}
+html.reveal-ready [data-reveal="right"] {
+  transform: translateX(52px);
+}
+html.reveal-ready [data-reveal="scale"] {
+  transform: translateY(26px) scale(0.9);
+}
+html.reveal-ready [data-reveal="fade"] {
+  transform: none;
+}
+html.reveal-ready [data-reveal].is-revealed,
+html.reveal-ready [data-reveal-group].is-revealed > * {
+  opacity: 1;
+  transform: none;
 }
 
-/* Lenis smooth scroll */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
+/* Parallax depth — pure CSS scroll-driven where supported, static otherwise. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    [data-parallax] {
+      will-change: transform;
+      animation: parallax-drift linear both;
+      animation-timeline: scroll(root block);
+    }
+    @keyframes parallax-drift {
+      from {
+        transform: translateY(-7%);
+      }
+      to {
+        transform: translateY(7%);
+      }
+    }
+  }
 }
 @utility text-gradient-brand {
   background-image: linear-gradient(120deg, #0aa6e2, #042a63 72%);
@@ -175,36 +194,6 @@ html.lenis body {
 .rise {
   opacity: 0;
   animation: rise 0.85s cubic-bezier(0.21, 0.7, 0.25, 1) both;
-}
-
-/* ---- Services wheel entrance (each wedge scales out from the centre) ---- */
-@keyframes dh-wedge-pop {
-  from {
-    opacity: 0;
-    transform: scale(0.18);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes dh-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.dh-wedge {
-  opacity: 0;
-  transform-box: view-box;
-  transform-origin: 150px 150px;
-  animation: dh-wedge-pop 0.55s cubic-bezier(0.34, 1.4, 0.5, 1) both;
-}
-.dh-center {
-  opacity: 0;
-  animation: dh-fade 0.5s ease-out 0.66s both;
 }
 
 /* ---- Standards marquee ---- */
@@ -323,9 +312,10 @@ html.lenis body {
   .marquee-track {
     animation: none;
   }
-  html.gsap-ready [data-reveal],
-  html.gsap-ready [data-reveal-group] > * {
+  html.reveal-ready [data-reveal],
+  html.reveal-ready [data-reveal-group] > * {
     opacity: 1 !important;
+    transform: none !important;
   }
   *,
   *::before,
