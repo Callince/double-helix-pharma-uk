@@ -11,8 +11,8 @@ export function ServiceCards() {
         <SectionHeading
           split
           eyebrow="Services"
-          title="Quality & compliance, end to end"
-          intro="From a single supplier audit to ongoing QP/RP cover and full quality-system builds — delivered by one senior expert."
+          title="Pharmaceutical quality & compliance, end to end"
+          intro="Independent GMP & GDP audits, contract QP/RP/RPi cover, QMS/PQS implementation, MIA & WDA licence support, supplier qualification and GDP supply-chain compliance — a complete pharmaceutical quality and compliance consultancy delivered by one senior expert."
         />
         <div className="mt-14">
           <ServiceGrid />

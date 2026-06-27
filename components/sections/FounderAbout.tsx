@@ -38,8 +38,9 @@ export function FounderAbout() {
             </h2>
             <div className="mt-6 space-y-4 text-[1.02rem] leading-relaxed text-ink">
               <p>
-                Double Helix Pharma is led by {site.founder.name}, a Qualified Person (QP),
-                Responsible Person (RP) and RP for import (RPi) with{" "}
+                Double Helix Pharma is an independent UK pharmaceutical quality and compliance
+                consultancy led by {site.founder.name} — a Qualified Person (QP), Responsible
+                Person (RP) and RP for import (RPi) with{" "}
                 <strong className="font-semibold text-navy">20+ years in pharmaceutical quality</strong>{" "}
                 across the UK, EU, US and MENA markets.
               </p>

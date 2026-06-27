@@ -57,7 +57,7 @@ export default function HomePage() {
       <PullQuote />
       <LatestPosts />
       <FAQ faqs={faqsHome} />
-      <CTABand />
+      <CTABand subtitle="Book a no-obligation discovery call with a UK pharmaceutical quality consultant to talk through your GMP/GDP audit, contract QP/RP/RPi or quality-system needs." />
     </>
   );
 }
