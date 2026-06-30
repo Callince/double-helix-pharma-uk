@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Fraunces, Hanken_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
@@ -77,6 +78,16 @@ export default async function RootLayout({
       lang="en-GB"
       className={`${fraunces.variable} ${hanken.variable} ${plexMono.variable}`}
     >
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-2PZ929X9HJ"
+        strategy="afterInteractive"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2PZ929X9HJ');`}
+      </Script>
       <body className="flex min-h-screen flex-col font-sans">
         {/* The header logo is the LCP element — preload it first, high priority. */}
         <link rel="preload" href="/logo-web.webp" as="image" fetchPriority="high" />
